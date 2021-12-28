@@ -36,15 +36,7 @@ class Member extends Migration
 				'constraint' => ['male', 'female'],
 				'null'		=> true,
 			],
-            'role'       => [
-				'type'       => 'ENUM',
-				'constraint' => ['root', 'admin'],
-				'null'		=> true,
-			],
-			'img'       => [
-				'type'       => 'VARCHAR',
-				'constraint' => '255',
-			],
+			
 			'created_at'       => [
 				'type'       => 'DATETIME',
 				'null'		=> true,

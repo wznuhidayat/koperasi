@@ -24,14 +24,31 @@
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="pages/gallery.html" class="nav-link active">
+                    <a href="<?= base_url('/main')?>" class="nav-link <?= $title == 'Dashboard' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
                         </p>
                     </a>
                 </li>
-               
+                <li class="nav-item">
+                    <a href="<?= base_url('/main/member')?>" class="nav-link  <?= $title == 'Member' ? 'active' : '' ?>">
+
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Anggota
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url('/main/typesaving')?>" class="nav-link  <?= $title == 'Root' ? 'active' : '' ?>">
+
+                        <i class="nav-icon fas fa-hashtag"></i>
+                        <p>
+                            Root Menu
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="pages/widgets.html" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
