@@ -19,14 +19,7 @@ class TypeLoan extends Migration
 				'type'       => 'VARCHAR',
 				'constraint' => '30',
 			],
-            'amount'       => [
-				'type'       => 'INT',
-				'constraint'		=> 12,
-			],
-			'installment_fee'       => [
-				'type'       => 'DECIMAL',
-				'constraint' => 5,
-			],
+            
 			'description'       => [
 				'type'       => 'VARCHAR',
 				'constraint' => '255',

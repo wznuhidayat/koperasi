@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\M_admin;
 use App\Models\M_member;
 use App\Models\M_type_saving;
+use App\Models\M_type_loan;
 use Config\Services;
 
 
@@ -16,6 +17,7 @@ class Main extends BaseController
         $request = Services::request();
         $this->M_member = new M_member($request);
         $this->M_type_saving = new M_type_saving();
+        $this->M_type_loan = new M_type_loan();
         helper('url', 'form', 'html');
     }
     public function index()
@@ -215,7 +217,7 @@ class Main extends BaseController
                         </i>
                         Edit
                     </a>
-                    <a class=\"btn btn-danger btn-sm\" href=\"/main/member/delete/". $list->id_member ."\">
+                    <a class=\"btn btn-danger btn-delete btn-sm\" href=\"/main/member/delete/". $list->id_member ."\">
                         <i class=\"fas fa-trash\">
                         </i>
                         Delete
@@ -358,6 +360,115 @@ class Main extends BaseController
             'type' => $this->M_type_saving->getType(),
         ];
         return view('admin_root/type_saving/type_view', $data);
+    }
+    public function typeloan($url = 'index', $id = null)
+    {
+        if ($url == 'create') {
+            $data = [
+                'title' => 'Tipe Simpanan',
+                'validation' => \Config\Services::validation()
+            ];
+            return view('admin_root/type_loan/add_type', $data);
+        } elseif ($url == 'save') {
+            if (!$this->validate([
+                'name' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Masukkan nama anggota baru!',
+                    ],
+
+                ],
+            
+                'description' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Masukkan deskripsi tipe!',
+                    ],
+
+                ],
+              
+
+            ])) {
+                // return ;
+                $validation = \Config\Services::validation();
+                return redirect()->to('/main/typeloan/create')->withInput()->with('validation', $validation);
+            }
+
+            $str = "";
+            $characters = array_merge(range('0', '6'));
+            $max = count($characters) - 1;
+            for ($i = 0; $i < 5; $i++) {
+                $rand = mt_rand(0, $max);
+                $str .= $characters[$rand];
+            }
+            $data = [
+                'id_loan_type' => $str,
+                'name_type' => $this->request->getPost('name'),
+                'description' => $this->request->getPost('description'),
+                'created_at' => date('Y/m/d h:i:s'),
+
+            ];
+            $this->M_type_loan->saveType($data);
+            if ($this->M_type_loan->affectedRows() > 0) {
+                session()->setFLashdata('success', 'Data telah disimpan.');
+            }
+            return redirect()->to('/main/typeloan');
+        }  elseif ($url == 'edit' && $id != null) {
+            $query_type = $this->M_type_loan->getType($id);
+            $data = [
+                'title' => 'Edit Tipe',
+                'type' => $query_type,
+                'validation' => \Config\Services::validation(),
+            ];
+            return view('admin_root/type_loan/edit_type', $data);
+        } elseif ($url == 'update' && $id != null) {
+            $query_type = $this->M_type_loan->getType($id);
+            if (!$this->validate([
+                'name' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Masukkan nama anggota baru!',
+                    ],
+
+                ],
+                
+                'description' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Masukkan deskipsi tipe!',
+                    ],
+
+                ],
+                
+
+            ])) {
+                // return ;
+                $validation = \Config\Services::validation();
+                return redirect()->to('/main/typeloan/edit', $id)->withInput()->with('validation', $validation);
+            }
+
+            $data = array(
+                'name_type' => $this->request->getPost('name'),
+                'description' => $this->request->getPost('description'),
+                'created_at' => $query_type["created_at"],
+            );
+            $this->M_type_loan->updateType($data, $this->request->getPost('id'));
+            if ($this->M_type_loan->affectedRows() > 0) {
+                session()->setFLashdata('edited', 'Data telah diubah.');
+            }
+            return redirect()->to('/main/typeloan');
+        } elseif ($url == 'delete' && $id != null) {
+            $this->M_type_loan->delete($id);
+            if ($this->M_type_loan->affectedRows() > 0) {
+                session()->setFLashdata('deleted', 'Data telah dihapus!');
+            }
+            return redirect()->to('/main/typeloan');
+        } 
+        $data = [
+            'title' => "Type loan",
+            'type' => $this->M_type_loan->getType(),
+        ];
+        return view('admin_root/type_loan/type_view', $data);
     }
     
 }

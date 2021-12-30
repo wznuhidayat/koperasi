@@ -28,7 +28,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Daftar Tipe Simpanan</h3>
                             <div class="float-sm-right">
-                                <a href="<?= base_url('main/typesaving/create') ?>" class="btn btn-sm btn-primary"><i class="nav-icon fas fa-plus"></i> Tambah Tipe</a>
+                                <a href="<?= base_url('main/typeloan/create') ?>" class="btn btn-sm btn-primary"><i class="nav-icon fas fa-plus"></i> Tambah Tipe</a>
                             </div>
                         </div>
                         <!-- /.card-header -->
@@ -51,11 +51,11 @@
                                             <tbody>
                                                 <?php $i = 1 ?>
                                                 <?php foreach ($type as $types) : ?>
-                                                    <tr id="<?php echo $types['id_saving_type']; ?>">
+                                                    <tr id="<?php echo $types['id_loan_type']; ?>">
                                                         <td>
                                                             <?= $i++; ?>
                                                         </td>
-                                                        <td><?= $types["id_saving_type"] ?></td>
+                                                        <td><?= $types["id_loan_type"] ?></td>
                                                         <td><?= $types["name_type"] ?></td>
                                                         <td class="project-actions">
                                                             <a class="btn btn-primary btn-sm" href="#">
@@ -63,12 +63,12 @@
                                                                 </i>
                                                                 View
                                                             </a>
-                                                            <a class="btn btn-info btn-sm" href="/main/typesaving/edit/<?= $types['id_saving_type'] ?>">
+                                                            <a class="btn btn-info btn-sm" href="/main/typeloan/edit/<?= $types['id_loan_type'] ?>">
                                                                 <i class="fas fa-pencil-alt">
                                                                 </i>
                                                                 Edit
                                                             </a>
-                                                            <a class="btn btn-danger btn-sm btn-delete" href="/main/typesaving/delete/<?= $types['id_saving_type'] ?>">
+                                                            <a class="btn btn-danger btn-sm btn-delete" href="/main/typeloan/delete/<?= $types['id_loan_type'] ?>">
                                                                 <i class="fas fa-trash">
                                                                 </i>
                                                                 Delete

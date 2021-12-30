@@ -29,6 +29,14 @@ class Loan extends Migration
 				'constraint' => '30',
 				'null'	=> true,
 			],
+			'amount'       => [
+				'type'       => 'INT',
+				'constraint'		=> 12,
+			],
+			'installment_fee'       => [
+				'type'       => 'DECIMAL',
+				'constraint' => 5,
+			],
 			'status'       => [
 				'type'       => 'INT',
 				'constraint' => 5,
@@ -41,6 +49,11 @@ class Loan extends Migration
 				'type'       => 'DATETIME',
 				'null'		=> true,
 			],
+			'updated_at'       => [
+				'type'       => 'DATETIME',
+				'null'		=> true,
+			],
+			
 			
 		]);
 		$this->forge->addKey('id_loan', true);
