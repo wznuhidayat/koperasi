@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\M_admin;
 use App\Models\M_member;
 use App\Models\M_type_saving;
+use App\Models\M_saving;
 use App\Models\M_type_loan;
 use Config\Services;
 
@@ -17,6 +18,7 @@ class Main extends BaseController
         $request = Services::request();
         $this->M_member = new M_member($request);
         $this->M_type_saving = new M_type_saving();
+        $this->M_saving = new M_saving();
         $this->M_type_loan = new M_type_loan();
         helper('url', 'form', 'html');
     }
@@ -483,16 +485,56 @@ class Main extends BaseController
     
     public function searchbyid($id)
     {
-        $data = $this->M_member->getMember($id);
+        $saldo = $this->M_saving->getsaldo($id);
+        $data = [
+            'member' => $this->M_member->getMember($id),
+            'saldo' => $saldo['saldo'],
+        ];
         echo json_encode($data);
     }
 
-    public function addsaving()
+    public function addsaving($url = 'index')
     {
+        if ($url == 'save') {
+            if (!$this->validate([
+                'amount' => [
+                    'rules'  => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Silahkan masukkan nominal uang yang disimpan!',
+                        'numeric' => 'Anda hanya dapat memasukkan angka!'
+                    ],
+
+                ],
+              
+
+            ])) {
+                // return ;
+                $validation = \Config\Services::validation();
+                return redirect()->to('/main/addsaving')->withInput()->with('validation', $validation);
+            }
+            $str = "";
+            $characters = array_merge(range('0', '6'));
+            $max = count($characters) - 1;
+            for ($i = 0; $i < 10; $i++) {
+                $rand = mt_rand(0, $max);
+                $str .= $characters[$rand];
+            }
+            $data = array(
+                'id_saving' => $str,
+                'id_member' => $this->request->getPost('id_member'),
+                'id_type' => 40355,
+                'amount' => $this->request->getPost('amount'),
+                'description' => $this->request->getPost('description'),
+                'created_at' => date('Y/m/d h:i:s'),
+            );
+            $this->M_saving->saveDeposit($data);
+
+        }
+        
         $data = [
             'title' => "Setor Tunai",
             'menu' => 'Transaction',
-            // 'transaction' => $this->M_member->getMember(),
+            'validation' => \Config\Services::validation()
         ];
         return view('transaction/add_saving', $data);
     }
@@ -504,5 +546,10 @@ class Main extends BaseController
             'transaction' => $this->M_member->getMember(),
         ];
         return view('member/member_view', $data);
+    }
+    public function saldo($id)
+    {
+        $data = $this->M_saving->getsaldo($id);
+        dd($data['saldo']);
     }
 }

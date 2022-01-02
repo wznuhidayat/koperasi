@@ -24,10 +24,6 @@ class Saving extends Migration
 				'constraint'     => 8,
 				// 'unsigned'       => true,
 			],
-			'name'       => [
-				'type'       => 'VARCHAR',
-				'constraint' => '30',
-			],
 			'amount'       => [
 				'type'       => 'INT',
 				'constraint' => 12,
