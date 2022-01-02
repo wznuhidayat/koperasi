@@ -1,3 +1,4 @@
+<?php $request = \Config\Services::request(); ?>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -24,7 +25,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="<?= base_url('/main')?>" class="nav-link <?= $title == 'Dashboard' ? 'active' : '' ?>">
+                    <a href="<?= base_url('/main')?>" class="nav-link <?= $menu == 'Dashboard' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -32,7 +33,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('/main/member')?>" class="nav-link  <?= $title == 'Member' ? 'active' : '' ?>">
+                    <a href="<?= base_url('/main/member')?>" class="nav-link  <?= $menu == 'Member' ? 'active' : '' ?>">
 
                         <i class="nav-icon fas fa-users"></i>
                         <p>
@@ -40,82 +41,61 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="<?= base_url('/main/typesaving')?>" class="nav-link  <?= $title == 'Root' ? 'active' : '' ?>">
+                <!-- <li class="nav-item">
+                    <a href="<?= base_url('/main/typesaving')?>" class="nav-link  ">
 
                         <i class="nav-icon fas fa-hashtag"></i>
                         <p>
                             Root Menu
                         </p>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a href="pages/widgets.html" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
+                </li> -->
+                <li class="nav-item  <?= $menu == 'Transaction' ? 'menu-is-opening menu-open' : '' ?>">
+                    <a href="#" class="nav-link <?= $menu == 'Master' ? 'active' : '' ?>">
+                        <i class="nav-icon fas fa-exchange-alt"></i>
                         <p>
-                            Widgets
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p>
-                            Layout Options
+                            Transaksi
                             <i class="fas fa-angle-left right"></i>
-                            <span class="badge badge-info right">6</span>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="pages/layout/top-nav.html" class="nav-link">
+                        <li class="nav-item ">
+                            <a href="<?= base_url('/main/addsaving')?>" class="nav-link <?= $request->uri->getSegment(2) == 'saving' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Top Navigation</p>
+                                <p>Setor Tunai</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                            <a href="<?= base_url('/main/typeloan')?>" class="nav-link <?= $request->uri->getSegment(2) == 'typeloan' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Top Navigation + Sidebar</p>
+                                <p>Penarikan</p>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </li>
+                <li class="nav-item  <?= $menu == 'Master' ? 'menu-is-opening menu-open' : '' ?>">
+                    <a href="#" class="nav-link <?= $menu == 'Master' ? 'active' : '' ?>">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            Data Master
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item ">
+                            <a href="<?= base_url('/main/typesaving')?>" class="nav-link <?= $request->uri->getSegment(2) == 'typesaving' ? 'active' : '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Jenis Simpanan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/layout/boxed.html" class="nav-link">
+                            <a href="<?= base_url('/main/typeloan')?>" class="nav-link <?= $request->uri->getSegment(2) == 'typeloan' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Boxed</p>
+                                <p>Jenis Pinjaman</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-sidebar.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Sidebar</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-sidebar-custom.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Sidebar <small>+ Custom Area</small></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-topnav.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Navbar</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-footer.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Footer</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/collapsed-sidebar.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Collapsed Sidebar</p>
-                            </a>
-                        </li>
+                       
                     </ul>
                 </li>
                 <li class="nav-item">

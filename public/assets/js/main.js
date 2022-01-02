@@ -18,3 +18,17 @@ $('.btn-delete').on('click', function(e){
       })
 });
 
+$(".search").click(function(){
+  var id = $('#id_member').val();
+  $.ajax({
+      url : "searchbyid/" + id,
+      type: "GET",
+      dataType: "JSON",
+      success: function(data)
+      {
+          $('#name_member').val(data.name);
+          $('#address').text(data.address);
+          $('#telp').val(data.phone);
+      }
+  });     
+});

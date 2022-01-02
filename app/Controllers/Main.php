@@ -23,7 +23,8 @@ class Main extends BaseController
     public function index()
     {
         $data = [
-            'title' => "Dashboard"
+            'title' => "Dashboard",
+            'menu' => 'Dashboard'
         ];
         return view('dashboard', $data);
     }
@@ -32,6 +33,7 @@ class Main extends BaseController
         if ($url == 'create') {
             $data = [
                 'title' => 'Add Member',
+                'menu' => 'Member',
                 'validation' => \Config\Services::validation()
             ];
             return view('member/add_member', $data);
@@ -108,6 +110,7 @@ class Main extends BaseController
             $data = [
                 'title' => 'Edit Member',
                 'member' => $query_member,
+                'menu' => 'Member',
                 'validation' => \Config\Services::validation(),
             ];
             return view('member/edit_member', $data);
@@ -182,6 +185,7 @@ class Main extends BaseController
         } 
         $data = [
             'title' => "Member",
+            'menu' => 'Member',
             'member' => $this->M_member->getMember(),
         ];
         return view('member/member_view', $data);
@@ -257,6 +261,7 @@ class Main extends BaseController
         if ($url == 'create') {
             $data = [
                 'title' => 'Tipe Simpanan',
+                'menu' => 'Master',
                 'validation' => \Config\Services::validation()
             ];
             return view('admin_root/type_saving/add_type', $data);
@@ -309,6 +314,7 @@ class Main extends BaseController
             $data = [
                 'title' => 'Edit Tipe',
                 'type' => $query_type,
+                'menu' => 'Master',
                 'validation' => \Config\Services::validation(),
             ];
             return view('admin_root/type_saving/edit_type', $data);
@@ -357,6 +363,7 @@ class Main extends BaseController
         } 
         $data = [
             'title' => "Type Saving",
+            'menu' => 'Master',
             'type' => $this->M_type_saving->getType(),
         ];
         return view('admin_root/type_saving/type_view', $data);
@@ -366,6 +373,7 @@ class Main extends BaseController
         if ($url == 'create') {
             $data = [
                 'title' => 'Tipe Simpanan',
+                'menu' => 'Master',
                 'validation' => \Config\Services::validation()
             ];
             return view('admin_root/type_loan/add_type', $data);
@@ -417,6 +425,7 @@ class Main extends BaseController
             $query_type = $this->M_type_loan->getType($id);
             $data = [
                 'title' => 'Edit Tipe',
+                'menu' => 'Master',
                 'type' => $query_type,
                 'validation' => \Config\Services::validation(),
             ];
@@ -466,9 +475,34 @@ class Main extends BaseController
         } 
         $data = [
             'title' => "Type loan",
+            'menu' => 'Master',
             'type' => $this->M_type_loan->getType(),
         ];
         return view('admin_root/type_loan/type_view', $data);
     }
     
+    public function searchbyid($id)
+    {
+        $data = $this->M_member->getMember($id);
+        echo json_encode($data);
+    }
+
+    public function addsaving()
+    {
+        $data = [
+            'title' => "Setor Tunai",
+            'menu' => 'Transaction',
+            // 'transaction' => $this->M_member->getMember(),
+        ];
+        return view('transaction/add_saving', $data);
+    }
+    public function withdraw()
+    {
+        $data = [
+            'title' => "Member",
+            'menu' => 'Transaction',
+            'transaction' => $this->M_member->getMember(),
+        ];
+        return view('member/member_view', $data);
+    }
 }

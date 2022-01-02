@@ -42,6 +42,15 @@
                                     <span class="error invalid-feedback"><?= $validation->getError('name'); ?></span>
                                 </div>
                                 <div class="form-group">
+                                    <label for="inputStatus">Jenis Kelamin</label>
+                                    <select id="inputStatus" class="form-control custom-select <?= ($validation->hasError('gender')) ? 'is-invalid' : '' ?>" name="gender">
+                                        <option selected disabled>Select one</option>
+                                        <option value="male" <?php echo ($member['gender'] == "male" ? 'selected="selected "' : ''); ?>>Laki-laki</option>
+                                        <option value="female" <?php echo ($member['gender'] == "female" ? 'selected="selected "' : ''); ?>>Perempuan</option>
+                                    </select>
+                                    <span class="error invalid-feedback"><?= $validation->getError('gender'); ?></span>
+                                </div>
+                                <div class="form-group">
                                     <label>Tanggal lahir</label>
                                     <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input <?= ($validation->hasError('birth')) ? 'is-invalid' : '' ?>" data-target="#reservationdate" name="birth"  value="<?= $member['date_of_birth'] ?>" />
@@ -61,15 +70,7 @@
                                     <textarea id="inputaddress" class="form-control <?= ($validation->hasError('address')) ? 'is-invalid' : '' ?>" rows="4" name="address" ><?= $member['address'] ?></textarea>
                                     <span class="error invalid-feedback"><?= $validation->getError('address'); ?></span>
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputStatus">Jenis Kelamin</label>
-                                    <select id="inputStatus" class="form-control custom-select <?= ($validation->hasError('gender')) ? 'is-invalid' : '' ?>" name="gender">
-                                        <option selected disabled>Select one</option>
-                                        <option value="male" <?php echo ($member['gender'] == "male" ? 'selected="selected "' : ''); ?>>Laki-laki</option>
-                                        <option value="female" <?php echo ($member['gender'] == "female" ? 'selected="selected "' : ''); ?>>Perempuan</option>
-                                    </select>
-                                    <span class="error invalid-feedback"><?= $validation->getError('gender'); ?></span>
-                                </div>
+                               
 
                                 <button type="submit" class="btn btn-md btn-primary"><i class="nav-icon fas fa-save"></i> Simpan</button>
                             </form>
