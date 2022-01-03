@@ -7,7 +7,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Setor Tunai</h1>
+                    <h1><?= ucfirst($title) ?></h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -26,7 +26,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Setor Tunai</h3>
+                            <h3 class="card-title"><?= ucfirst($title) ?></h3>
 
                         </div>
                         <!-- /.card-header -->
@@ -36,7 +36,7 @@
                                     <div class="form-group input-group ">
                                         <input type="text" class="form-control" placeholder="Masukkan ID Anggota!" id="id_member">
                                         <span class="input-group-append ml-1">
-                                            <button type="button" class="btn btn-info btn-flat search-saving"><i class="fas fa-search"></i></button>
+                                            <button type="button" class="btn btn-info btn-flat search-wd"><i class="fas fa-search"></i></button>
                                         </span>
                                         <span class="error invalid-feedback"> ID anggota tidak ditemukkan! </span>
                                     </div>
@@ -50,20 +50,6 @@
                                             <input type="text" class="form-control" id="name_member" placeholder="Nama Anggota" disabled>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="phone" class="col-sm-2 col-form-label">No Telp</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="telp" placeholder="No telp" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="address" class="col-sm-2 col-form-label">Alamat</label>
-                                        <div class="col-sm-10">
-                                            <textarea class="form-control" rows="3" placeholder="Alamat" disabled="" id="address"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Jenis Kelamin</label>
                                         <div class="col-sm-10 gender">
@@ -80,8 +66,31 @@
                                             <input type="text" class="form-control" id="birth" placeholder="Tanggal lahir" disabled>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <form action="/main/addsaving/save" method="post">
+                                    <div class="form-group row">
+                                        <label for="phone" class="col-sm-2 col-form-label">No Telp</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="telp" placeholder="No telp" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="address" class="col-sm-2 col-form-label">Alamat</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control" rows="3" placeholder="Alamat" disabled="" id="address"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    
+                                    <div class="form-group bg-gray py-2 px-3 ">
+                                        <h2 class="mb-0">
+                                            Rp. <span id="saldo">0</span>
+                                        </h2>
+                                        <h4 class="mt-0">
+                                            <small id="text1">Not found </small>
+                                        </h4>
+                                    </div>
+                                    <hr class="mt-4">
+                                    <form action="/main/withdraw/save" method="post">
                                         <?= csrf_field() ?>
                                         <div class="form-group row">
                                             <input type="hidden" id="id_member_hidden" name="id_member">
@@ -92,12 +101,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-sm-2 col-form-label">Jenis </label>
-                                            <div class="col-sm-10">
-                                                <?= form_dropdown('id_saving_type', $type, $selected, ['class' => 'form-control show-tick', 'required' => 'required']) ?>
-                                            </div>
-                                        </div>
+                                        
                                         <div class="form-group row">
                                             <label for="description" class="col-sm-2 col-form-label">Note</label>
                                             <div class="col-sm-10">

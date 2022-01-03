@@ -6,6 +6,7 @@ use App\Models\M_admin;
 use App\Models\M_member;
 use App\Models\M_type_saving;
 use App\Models\M_saving;
+use App\Models\M_withdraw;
 use App\Models\M_type_loan;
 use Config\Services;
 
@@ -19,6 +20,7 @@ class Main extends BaseController
         $this->M_member = new M_member($request);
         $this->M_type_saving = new M_type_saving();
         $this->M_saving = new M_saving();
+        $this->M_withdraw = new M_withdraw();
         $this->M_type_loan = new M_type_loan();
         helper('url', 'form', 'html');
     }
@@ -86,7 +88,7 @@ class Main extends BaseController
             }
 
             $str = "";
-            $characters = array_merge(range('0', '6'));
+            $characters = array_merge(range('0', '9'));
             $max = count($characters) - 1;
             for ($i = 0; $i < 8; $i++) {
                 $rand = mt_rand(0, $max);
@@ -184,7 +186,7 @@ class Main extends BaseController
                 session()->setFLashdata('deleted', 'Data telah dihapus!');
             }
             return redirect()->to('/main/member');
-        } 
+        }
         $data = [
             'title' => "Member",
             'menu' => 'Member',
@@ -195,68 +197,68 @@ class Main extends BaseController
     public function memberlist()
     {
         $csrfName = csrf_token();
-            $csrfHash = csrf_hash();
-            
-            $request = Services::request();
-            // $datatable = new Sales_Datatable($request);
+        $csrfHash = csrf_hash();
 
-            if ($request->getMethod(true) === 'POST') {
-                $lists = $this->M_member->getDatatables();
-                $data = [];
-                $no = $request->getPost('start');
-    
-                foreach ($lists as $list) {
-    
-                    $no++;
-                    $row = [];
-                    // $btnEdit = "<a href=\"/main/product/edit/".$list->id_product."\" class=\"btn btn-info btn-sm\">Edit</a>";
-                    $btnDetail = "<a href=\"/main/sales/detail/" . $list->id_member . "\" class=\"btn btn-light btn-sm\">Detail</a>";
+        $request = Services::request();
+        // $datatable = new Sales_Datatable($request);
 
-                    $btn = " <td class=\"project-actions\">
+        if ($request->getMethod(true) === 'POST') {
+            $lists = $this->M_member->getDatatables();
+            $data = [];
+            $no = $request->getPost('start');
+
+            foreach ($lists as $list) {
+
+                $no++;
+                $row = [];
+                // $btnEdit = "<a href=\"/main/product/edit/".$list->id_product."\" class=\"btn btn-info btn-sm\">Edit</a>";
+                $btnDetail = "<a href=\"/main/sales/detail/" . $list->id_member . "\" class=\"btn btn-light btn-sm\">Detail</a>";
+
+                $btn = " <td class=\"project-actions\">
                     <a class=\"btn btn-primary btn-sm\" href=\"#\">
                         <i class=\"fas fa-folder\">
                         </i>
                         View
                     </a>
-                    <a class=\"btn btn-info btn-sm\" href=\"/main/member/edit/". $list->id_member ."\">
+                    <a class=\"btn btn-info btn-sm\" href=\"/main/member/edit/" . $list->id_member . "\">
                         <i class=\"fas fa-pencil-alt\">
                         </i>
                         Edit
                     </a>
-                    <a class=\"btn btn-danger btn-delete btn-sm\" href=\"/main/member/delete/". $list->id_member ."\">
+                    <a class=\"btn btn-danger btn-delete btn-sm\" href=\"/main/member/delete/" . $list->id_member . "\">
                         <i class=\"fas fa-trash\">
                         </i>
                         Delete
                     </a>
                 </td>";
-                    
 
-                    //     $btnDelete = " <form action=\"/main/product/delete/".$list->id_product."\" class=\"d-inline\" method=\"post\">
-                    //     ". csrf_field()." 
-                    //     <input type=\"hidden\" name=\"_method\" value=\"DELETE\">
-                    //     <button type=\"submit\" class=\"btn btn-danger btn-sm rm\">Delete</button>
-                    // </form>";
-    
-                    // $btnDelete = "<a href=\"#\" class=\"btn btn-danger btn-sm rm-product\" value=\"".$list->id_product."\">delete</a>";
-                    $row[] = $no;
-                    $row[] = $list->id_member;
-                    $row[] = $list->name;
-                    $row[] = $list->phone;
-                    $row[] = $list->gender;
-                    $row[] = $btn;
-                    $row[] = '';
-                    $data[] = $row;
-                }
-    
-                $output = [
-                    'draw' => $request->getPost('draw'),
-                    'recordsTotal' => $this->M_member->countAll(),
-                    'recordsFiltered' => $this->M_member->countFiltered(),
-                    'data' => $data
-                ];
-                $output[$csrfName] = $csrfHash;
-                echo json_encode($output);
+
+                //     $btnDelete = " <form action=\"/main/product/delete/".$list->id_product."\" class=\"d-inline\" method=\"post\">
+                //     ". csrf_field()." 
+                //     <input type=\"hidden\" name=\"_method\" value=\"DELETE\">
+                //     <button type=\"submit\" class=\"btn btn-danger btn-sm rm\">Delete</button>
+                // </form>";
+
+                // $btnDelete = "<a href=\"#\" class=\"btn btn-danger btn-sm rm-product\" value=\"".$list->id_product."\">delete</a>";
+                $row[] = $no;
+                $row[] = $list->id_member;
+                $row[] = $list->name;
+                $row[] = $list->phone;
+                $row[] = $list->gender;
+                $row[] = $btn;
+                $row[] = '';
+                $data[] = $row;
             }
+
+            $output = [
+                'draw' => $request->getPost('draw'),
+                'recordsTotal' => $this->M_member->countAll(),
+                'recordsFiltered' => $this->M_member->countFiltered(),
+                'data' => $data
+            ];
+            $output[$csrfName] = $csrfHash;
+            echo json_encode($output);
+        }
     }
     public function typesaving($url = 'index', $id = null)
     {
@@ -276,7 +278,7 @@ class Main extends BaseController
                     ],
 
                 ],
-            
+
                 'description' => [
                     'rules' => 'required',
                     'errors' => [
@@ -284,7 +286,7 @@ class Main extends BaseController
                     ],
 
                 ],
-              
+
 
             ])) {
                 // return ;
@@ -293,7 +295,7 @@ class Main extends BaseController
             }
 
             $str = "";
-            $characters = array_merge(range('0', '6'));
+            $characters = array_merge(range('0', '9'));
             $max = count($characters) - 1;
             for ($i = 0; $i < 5; $i++) {
                 $rand = mt_rand(0, $max);
@@ -311,7 +313,7 @@ class Main extends BaseController
                 session()->setFLashdata('success', 'Data telah disimpan.');
             }
             return redirect()->to('/main/typesaving');
-        }  elseif ($url == 'edit' && $id != null) {
+        } elseif ($url == 'edit' && $id != null) {
             $query_type = $this->M_type_saving->getType($id);
             $data = [
                 'title' => 'Edit Tipe',
@@ -330,7 +332,7 @@ class Main extends BaseController
                     ],
 
                 ],
-                
+
                 'description' => [
                     'rules' => 'required',
                     'errors' => [
@@ -338,7 +340,7 @@ class Main extends BaseController
                     ],
 
                 ],
-                
+
 
             ])) {
                 // return ;
@@ -362,7 +364,7 @@ class Main extends BaseController
                 session()->setFLashdata('deleted', 'Data telah dihapus!');
             }
             return redirect()->to('/main/typesaving');
-        } 
+        }
         $data = [
             'title' => "Type Saving",
             'menu' => 'Master',
@@ -388,7 +390,7 @@ class Main extends BaseController
                     ],
 
                 ],
-            
+
                 'description' => [
                     'rules' => 'required',
                     'errors' => [
@@ -396,7 +398,7 @@ class Main extends BaseController
                     ],
 
                 ],
-              
+
 
             ])) {
                 // return ;
@@ -405,7 +407,7 @@ class Main extends BaseController
             }
 
             $str = "";
-            $characters = array_merge(range('0', '6'));
+            $characters = array_merge(range('0', '9'));
             $max = count($characters) - 1;
             for ($i = 0; $i < 5; $i++) {
                 $rand = mt_rand(0, $max);
@@ -423,7 +425,7 @@ class Main extends BaseController
                 session()->setFLashdata('success', 'Data telah disimpan.');
             }
             return redirect()->to('/main/typeloan');
-        }  elseif ($url == 'edit' && $id != null) {
+        } elseif ($url == 'edit' && $id != null) {
             $query_type = $this->M_type_loan->getType($id);
             $data = [
                 'title' => 'Edit Tipe',
@@ -442,7 +444,7 @@ class Main extends BaseController
                     ],
 
                 ],
-                
+
                 'description' => [
                     'rules' => 'required',
                     'errors' => [
@@ -450,7 +452,7 @@ class Main extends BaseController
                     ],
 
                 ],
-                
+
 
             ])) {
                 // return ;
@@ -474,7 +476,7 @@ class Main extends BaseController
                 session()->setFLashdata('deleted', 'Data telah dihapus!');
             }
             return redirect()->to('/main/typeloan');
-        } 
+        }
         $data = [
             'title' => "Type loan",
             'menu' => 'Master',
@@ -482,13 +484,19 @@ class Main extends BaseController
         ];
         return view('admin_root/type_loan/type_view', $data);
     }
-    
+    public function saldo($id)
+    {
+        $saving = $this->M_saving->getsaldo($id);
+        $withdraw = $this->M_withdraw->allWithdraw($id);
+        $data =  $saving['saldo'] - $withdraw['saldo'];
+        return $data;
+    }
+
     public function searchbyid($id)
     {
-        $saldo = $this->M_saving->getsaldo($id);
         $data = [
             'member' => $this->M_member->getMember($id),
-            'saldo' => $saldo['saldo'],
+            'saldo' => $this->saldo($id),
         ];
         echo json_encode($data);
     }
@@ -505,7 +513,7 @@ class Main extends BaseController
                     ],
 
                 ],
-              
+
 
             ])) {
                 // return ;
@@ -513,43 +521,77 @@ class Main extends BaseController
                 return redirect()->to('/main/addsaving')->withInput()->with('validation', $validation);
             }
             $str = "";
-            $characters = array_merge(range('0', '6'));
+            $characters = array_merge(range('0', '9'));
             $max = count($characters) - 1;
-            for ($i = 0; $i < 10; $i++) {
+            for ($i = 0; $i < 9; $i++) {
                 $rand = mt_rand(0, $max);
                 $str .= $characters[$rand];
             }
             $data = array(
                 'id_saving' => $str,
                 'id_member' => $this->request->getPost('id_member'),
-                'id_type' => 40355,
+                'id_type' => $this->request->getPost('id_saving_type'),
                 'amount' => $this->request->getPost('amount'),
                 'description' => $this->request->getPost('description'),
                 'created_at' => date('Y/m/d h:i:s'),
             );
             $this->M_saving->saveDeposit($data);
-
         }
-        
+        $query_type = $this->M_type_saving->findAll();
+        $type[null] = '- Pilih Jenis Simpanan -';
+        foreach ($query_type as $typ) {
+            $type[$typ['id_saving_type']] = $typ['name_type'];
+        }
         $data = [
             'title' => "Setor Tunai",
             'menu' => 'Transaction',
-            'validation' => \Config\Services::validation()
+            'validation' => \Config\Services::validation(),
+            'type' => $type,
+            'selected' => null,
         ];
         return view('transaction/add_saving', $data);
     }
-    public function withdraw()
+    public function withdraw($url = 'index')
     {
+        if ($url == 'save') {
+            if (!$this->validate([
+                'amount' => [
+                    'rules'  => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Silahkan masukkan nominal uang yang disimpan!',
+                        'numeric' => 'Anda hanya dapat memasukkan angka!'
+                    ],
+
+                ],
+
+
+            ])) {
+                // return ;
+                $validation = \Config\Services::validation();
+                return redirect()->to('/main/withdraw')->withInput()->with('validation', $validation);
+            }
+            $str = "";
+            $characters = array_merge(range('0', '9'));
+            $max = count($characters) - 1;
+            for ($i = 0; $i < 9; $i++) {
+                $rand = mt_rand(0, $max);
+                $str .= $characters[$rand];
+            }
+            $data = array(
+                'id_withdraw' => $str,
+                'id_member' => $this->request->getPost('id_member'),
+                'amount' => $this->request->getPost('amount'),
+                'description' => $this->request->getPost('description'),
+                'created_at' => date('Y/m/d h:i:s'),
+            );
+            $this->M_withdraw->saveWithdraw($data);
+        }
         $data = [
-            'title' => "Member",
+            'title' => "Penarikkan",
             'menu' => 'Transaction',
-            'transaction' => $this->M_member->getMember(),
+            'validation' => \Config\Services::validation(),
         ];
-        return view('member/member_view', $data);
+        return view('transaction/withdraw_view', $data);
     }
-    public function saldo($id)
-    {
-        $data = $this->M_saving->getsaldo($id);
-        dd($data['saldo']);
-    }
+    
 }

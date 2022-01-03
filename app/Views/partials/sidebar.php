@@ -51,7 +51,7 @@
                     </a>
                 </li> -->
                 <li class="nav-item  <?= $menu == 'Transaction' ? 'menu-is-opening menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= $menu == 'Master' ? 'active' : '' ?>">
+                    <a href="#" class="nav-link <?= $menu == 'Transaction' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-exchange-alt"></i>
                         <p>
                             Transaksi
@@ -60,13 +60,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item ">
-                            <a href="<?= base_url('/main/addsaving')?>" class="nav-link <?= $request->uri->getSegment(2) == 'saving' ? 'active' : '' ?>">
+                            <a href="<?= base_url('/main/addsaving')?>" class="nav-link <?= $request->uri->getSegment(2) == 'addsaving' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Setor Tunai</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('/main/typeloan')?>" class="nav-link <?= $request->uri->getSegment(2) == 'typeloan' ? 'active' : '' ?>">
+                            <a href="<?= base_url('/main/withdraw')?>" class="nav-link <?= $request->uri->getSegment(2) == 'withdraw' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Penarikan</p>
                             </a>
