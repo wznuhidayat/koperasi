@@ -18,8 +18,11 @@
             </div>
         </div><!-- /.container-fluid -->
     </section>
-
+    <div>
+</div>
     <!-- Main content -->
+    <div class="flash-data-amount-error" data-flashdata="<?= session()->getFlashdata('amount-error'); ?>"></div>
+    
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -80,7 +83,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    
+
                                     <div class="form-group bg-gray py-2 px-3 ">
                                         <h2 class="mb-0">
                                             Rp. <span id="saldo">0</span>
@@ -90,18 +93,19 @@
                                         </h4>
                                     </div>
                                     <hr class="mt-4">
-                                    <form action="/main/withdraw/save" method="post">
+                                    <form action="/main/withdraw/save" method="post" id="form-wd">
                                         <?= csrf_field() ?>
                                         <div class="form-group row">
                                             <input type="hidden" id="id_member_hidden" name="id_member">
+                                            <input type="hidden" id="id_admin" name="id_admin" value="<?= session()->get('id_admin') ?>">
                                             <label for="deposit" class="col-sm-2 col-form-label">Setor</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control  <?= ($validation->hasError('amount')) ? 'is-invalid' : '' ?>" id="telp" placeholder="Masukkan nominal" name="amount">
+                                                <input type="text" class="form-control  <?= ($validation->hasError('amount')) ? 'is-invalid' : '' ?>" id="amount" placeholder="Masukkan nominal" name="amount">
                                                 <span class="error invalid-feedback"><?= $validation->getError('amount'); ?></span>
                                             </div>
 
                                         </div>
-                                        
+
                                         <div class="form-group row">
                                             <label for="description" class="col-sm-2 col-form-label">Note</label>
                                             <div class="col-sm-10">
@@ -110,6 +114,7 @@
                                         </div>
                                         <button type="submit" class="btn btn-info btn-block">Setor</button>
                                     </form>
+                                    
                                 </div>
                             </div>
 

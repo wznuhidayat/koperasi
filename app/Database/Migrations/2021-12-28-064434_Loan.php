@@ -24,6 +24,10 @@ class Loan extends Migration
 				'constraint'     => 8,
 				// 'unsigned'       => true,
 			],
+			'id_admin'          => [
+				'type'           => 'INT',
+				'constraint'     => 8,
+			],
 			'name'       => [
 				'type'       => 'VARCHAR',
 				'constraint' => '30',
@@ -59,6 +63,7 @@ class Loan extends Migration
 		$this->forge->addKey('id_loan', true);
 		$this->forge->addForeignKey('id_member','member','id_member');
 		$this->forge->addForeignKey('id_type','type_of_loan','id_loan_type');
+		$this->forge->addForeignKey('id_admin','admin','id_admin');
 		$this->forge->createTable('loan');
     }
 

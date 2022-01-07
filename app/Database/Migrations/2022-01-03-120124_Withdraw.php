@@ -19,6 +19,10 @@ class Withdraw extends Migration
 				'constraint'     => 8,
 				// 'unsigned'       => true,
 			],
+			'id_admin'          => [
+				'type'           => 'INT',
+				'constraint'     => 8,
+			],
 			'amount'       => [
 				'type'       => 'INT',
 				'constraint' => 12,
@@ -35,6 +39,7 @@ class Withdraw extends Migration
 		]);
 		$this->forge->addKey('id_withdraw', true);
         $this->forge->addForeignKey('id_member','member','id_member');
+        $this->forge->addForeignKey('id_admin','admin','id_admin');
 		$this->forge->createTable('withdraw');
     }
 

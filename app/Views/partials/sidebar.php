@@ -71,6 +71,18 @@
                                 <p>Penarikan</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('/main/typeloan')?>" class="nav-link <?= $request->uri->getSegment(2) == 'typeloan' ? 'active' : '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Daftar Setor Tunai</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('/main/typeloan')?>" class="nav-link <?= $request->uri->getSegment(2) == 'typeloan' ? 'active' : '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Daftar Pinjaman</p>
+                            </a>
+                        </li>
                        
                     </ul>
                 </li>

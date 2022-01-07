@@ -30,6 +30,8 @@
 <script src="<?= base_url() ?>/assets/template/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 <!-- SweetAlert2 -->
 <script src="<?= base_url() ?>/assets/template/plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- Toastr -->
+<!-- <script src="<?= base_url() ?>/assets/template/plugins/toastr/toastr.min.js"></script> -->
 <script src="<?= base_url() ?>/assets/js/main.js"></script>
 <script>
   $(function() {
@@ -64,13 +66,15 @@
       "ajax": {
         "url": "<?= site_url('main/memberlist') ?>",
         "type": "POST",
-        "data": {"csrf_test_name" :  $('input[name=csrf_test_name]').val()},
-        "data": function(data){
+        "data": {
+          "csrf_test_name": $('input[name=csrf_test_name]').val()
+        },
+        "data": function(data) {
           data.csrf_test_name = $('input[name=csrf_test_name]').val()
         },
-        'dataSrc' :function(response){
-         $('input[name=csrf_test_name]').val(response.csrf_test_name)
-         return response.data;
+        'dataSrc': function(response) {
+          $('input[name=csrf_test_name]').val(response.csrf_test_name)
+          return response.data;
         }
       },
       "columnDefs": [{
@@ -79,7 +83,10 @@
       }, ],
     });
   });
+
+  
 </script>
+
 </body>
 
 </html>

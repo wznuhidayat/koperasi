@@ -1,5 +1,6 @@
 
 
+
 $('.btn-delete').on('click', function (e) {
   e.preventDefault();
   const href = $(this).attr('href');
@@ -25,20 +26,20 @@ $(".search-saving").click(function () {
     type: "GET",
     dataType: "JSON",
     success: function (data) {
-      if(data.member != null){
+      if (data.member != null) {
         $('#name_member').val(data.member.name);
         $('#address').text(data.member.address);
         $('#telp').val(data.member.phone);
-        if(data.member.gender == 'male'){
+        if (data.member.gender == 'male') {
           $(".gender select").val("male").change();
-        }else{
+        } else {
           $(".gender select").val("female").change();
         }
         $('#birth').val(data.member.date_of_birth);
         $('#id_member_hidden').val(id);
         $('#text1').text('Saldo saat ini.');
         $('#id_member').removeClass('is-invalid');
-      }else{
+      } else {
         $('#name_member').val(null);
         $(".gender select").val("null").change();
         $('#address').text(null);
@@ -58,25 +59,25 @@ $(".search-wd").click(function () {
     type: "GET",
     dataType: "JSON",
     success: function (data) {
-      if(data.member != null){
+      if (data.member != null) {
         $('#name_member').val(data.member.name);
         $('#address').text(data.member.address);
         $('#telp').val(data.member.phone);
-        if(data.member.gender == 'male'){
+        if (data.member.gender == 'male') {
           $(".gender select").val("male").change();
-        }else{
+        } else {
           $(".gender select").val("female").change();
         }
-        if(data.saldo != null){
+        if (data.saldo != null) {
           $('#saldo').text(data.saldo);
-        }else{
+        } else {
           $('#saldo').text(0);
         }
         $('#birth').val(data.member.date_of_birth);
         $('#id_member_hidden').val(id);
         $('#text1').text('Saldo saat ini.');
         $('#id_member').removeClass('is-invalid');
-      }else{
+      } else {
         $('#name_member').val(null);
         $(".gender select").val("null").change();
         $('#address').text(null);
@@ -89,3 +90,26 @@ $(".search-wd").click(function () {
     }
   });
 });
+  var Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+  });
+
+  const flashDataSuccess = $('.flash-data-success').data('flashdata');
+  const flashDataAmountError = $('.flash-data-amount-error').data('flashdata');
+  if(flashDataSuccess){
+    Toast.fire({
+      icon: 'success',
+      title: flashDataSuccess
+    })
+  }
+  if(flashDataAmountError){
+    Toast.fire({
+      icon: 'error',
+      title: flashDataAmountError
+    })
+  }
+  //input form
+  

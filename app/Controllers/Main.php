@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+// use App\Libraries\Mypdf;
+use Dompdf\Dompdf;
 use App\Models\M_admin;
 use App\Models\M_member;
 use App\Models\M_type_saving;
@@ -22,6 +24,7 @@ class Main extends BaseController
         $this->M_saving = new M_saving();
         $this->M_withdraw = new M_withdraw();
         $this->M_type_loan = new M_type_loan();
+        // $this->Mypdf = new Mypdf();
         helper('url', 'form', 'html');
     }
     public function index()
@@ -486,6 +489,7 @@ class Main extends BaseController
     }
     public function saldo($id)
     {
+        $withdraw = 0;
         $saving = $this->M_saving->getsaldo($id);
         $withdraw = $this->M_withdraw->allWithdraw($id);
         $data =  $saving['saldo'] - $withdraw['saldo'];
@@ -501,7 +505,7 @@ class Main extends BaseController
         echo json_encode($data);
     }
 
-    public function addsaving($url = 'index')
+    public function addsaving($url = 'index',$id = null)
     {
         if ($url == 'save') {
             if (!$this->validate([
@@ -531,12 +535,28 @@ class Main extends BaseController
                 'id_saving' => $str,
                 'id_member' => $this->request->getPost('id_member'),
                 'id_type' => $this->request->getPost('id_saving_type'),
+                'id_admin' => $this->request->getPost('id_admin'),
                 'amount' => $this->request->getPost('amount'),
                 'description' => $this->request->getPost('description'),
                 'created_at' => date('Y/m/d h:i:s'),
             );
             $this->M_saving->saveDeposit($data);
+            if ($this->M_saving->affectedRows() > 0) {
+                session()->setFLashdata('success', 'Setor tunai berhasil ditambahkan.');
+            }
+            return redirect()->to('/main/addsaving/invoice/' . $str);
+        }elseif ($url == 'invoice' && $id != null) {
+            $query = $this->M_saving->getInvoice($id);
+            $data = [
+                'title' => "Stor Tunai",
+                'menu' => 'Transaction',
+                'invoice' => $this->M_saving->getInvoice($id),
+                'saldo' => $this->saldo($query['id_member'])
+            ];
+            // dd($data);
+            return view('transaction/invoice_save', $data);
         }
+        
         $query_type = $this->M_type_saving->findAll();
         $type[null] = '- Pilih Jenis Simpanan -';
         foreach ($query_type as $typ) {
@@ -551,40 +571,58 @@ class Main extends BaseController
         ];
         return view('transaction/add_saving', $data);
     }
-    public function withdraw($url = 'index')
+    public function withdraw($url = 'index', $id = null)
     {
         if ($url == 'save') {
-            if (!$this->validate([
-                'amount' => [
-                    'rules'  => 'required|numeric',
-                    'errors' => [
-                        'required' => 'Silahkan masukkan nominal uang yang disimpan!',
-                        'numeric' => 'Anda hanya dapat memasukkan angka!'
-                    ],
-
-                ],
-
-
-            ])) {
-                // return ;
+            if ($this->saldo($this->request->getPost('id_member')) - $this->request->getPost('amount') <= 0) {
+                session()->setFLashdata('amount-error', 'Jumlah saldo tidak mencukupi!');
                 $validation = \Config\Services::validation();
                 return redirect()->to('/main/withdraw')->withInput()->with('validation', $validation);
+            } else {
+                if (!$this->validate([
+                    'amount' => [
+                        'rules'  => 'required|numeric',
+                        'errors' => [
+                            'required' => 'Silahkan masukkan nominal uang yang disimpan!',
+                            'numeric' => 'Anda hanya dapat memasukkan angka!'
+                        ],
+
+                    ],
+                ])) {
+                    $validation = \Config\Services::validation();
+                    return redirect()->to('/main/withdraw')->withInput()->with('validation', $validation);
+                }
+                $str = "";
+                $characters = array_merge(range('0', '9'));
+                $max = count($characters) - 1;
+                for ($i = 0; $i < 9; $i++) {
+                    $rand = mt_rand(0, $max);
+                    $str .= $characters[$rand];
+                }
+                $data = array(
+                    'id_withdraw' => $str,
+                    'id_member' => $this->request->getPost('id_member'),
+                    'id_admin' => $this->request->getPost('id_admin'),
+                    'amount' => $this->request->getPost('amount'),
+                    'description' => $this->request->getPost('description'),
+                    'created_at' => date('Y/m/d h:i:s'),
+                );
+                $this->M_withdraw->saveWithdraw($data);
+                if ($this->M_withdraw->affectedRows() > 0) {
+                    session()->setFLashdata('success', 'Penarikkan saldo berhasil.');
+                }
+                return redirect()->to('/main/withdraw/invoice/' . $str);
             }
-            $str = "";
-            $characters = array_merge(range('0', '9'));
-            $max = count($characters) - 1;
-            for ($i = 0; $i < 9; $i++) {
-                $rand = mt_rand(0, $max);
-                $str .= $characters[$rand];
-            }
-            $data = array(
-                'id_withdraw' => $str,
-                'id_member' => $this->request->getPost('id_member'),
-                'amount' => $this->request->getPost('amount'),
-                'description' => $this->request->getPost('description'),
-                'created_at' => date('Y/m/d h:i:s'),
-            );
-            $this->M_withdraw->saveWithdraw($data);
+        } elseif ($url == 'invoice' && $id != null) {
+            $query = $this->M_withdraw->getInvoice($id);
+            $data = [
+                'title' => "Penarikkan",
+                'menu' => 'Transaction',
+                'invoice' => $this->M_withdraw->getInvoice($id),
+                'saldo' => $this->saldo($query['id_member'])
+            ];
+            // dd($data);
+            return view('transaction/invoice_view', $data);
         }
         $data = [
             'title' => "Penarikkan",
@@ -593,5 +631,47 @@ class Main extends BaseController
         ];
         return view('transaction/withdraw_view', $data);
     }
-    
+    public function printLoan($id)
+    {
+        $query = $this->M_withdraw->getInvoice($id);
+        $data = [
+            'invoice' => $this->M_withdraw->getInvoice($id),
+            'saldo' => $this->saldo($query['id_member'])
+            
+        ];
+        // $this->mypdf->genrate('transaction/print_withdraw',$this->M_withdraw->getInvoice($id));
+        $dompdf = new Dompdf();
+        $html = view('transaction/print_withdraw',$data);
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream("sample.pdf",array("Attachment"=>0));
+    }
+    public function printSaving($id)
+    {
+        $query = $this->M_saving->getInvoice($id);
+        $data = [
+            'invoice' => $this->M_saving->getInvoice($id),
+            'saldo' => $this->saldo($query['id_member'])
+            
+        ];
+        $dompdf = new Dompdf();
+        $html = view('transaction/print_saving',$data);
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream("sample.pdf",array("Attachment"=>0));
+    }
 }

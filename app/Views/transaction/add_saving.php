@@ -85,6 +85,7 @@
                                         <?= csrf_field() ?>
                                         <div class="form-group row">
                                             <input type="hidden" id="id_member_hidden" name="id_member">
+                                            <input type="hidden" id="id_admin" name="id_admin" value="<?= session()->get('id_admin') ?>">
                                             <label for="deposit" class="col-sm-2 col-form-label">Setor</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control  <?= ($validation->hasError('amount')) ? 'is-invalid' : '' ?>" id="telp" placeholder="Masukkan nominal" name="amount">
