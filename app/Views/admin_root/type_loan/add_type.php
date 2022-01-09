@@ -37,10 +37,14 @@
                                 <?= csrf_field() ?>
                                 <div class="form-group">
                                     <label for="inputName">Nama</label>
-                                    <input type="text" id="inputName" class="form-control  <?= ($validation->hasError('name')) ? 'is-invalid' : '' ?>" name="name">
+                                    <input type="text" id="inputName" class="form-control  <?= ($validation->hasError('name')) ? 'is-invalid' : '' ?>" name="name" placeholder="Nama">
                                     <span class="error invalid-feedback"><?= $validation->getError('name'); ?></span>
                                 </div>
-                             
+                                <div class="form-group">
+                                    <label for="inputloanterm">Lama Angsuran</label>
+                                    <input type="text" id="inputloanterm" class="form-control  <?= ($validation->hasError('loan_term')) ? 'is-invalid' : '' ?>" name="loan_term" placeholder="Jumlah bulan">
+                                    <span class="error invalid-feedback"><?= $validation->getError('loan_term'); ?></span>
+                                </div>
                                 <div class="form-group">
                                     <label for="inputdescription">Deskripsi</label>
                                     <textarea id="inputdescription" class="form-control <?= ($validation->hasError('description')) ? 'is-invalid' : '' ?>" rows="4" name="description"></textarea>

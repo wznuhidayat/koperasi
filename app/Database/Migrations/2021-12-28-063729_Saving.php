@@ -43,7 +43,7 @@ class Saving extends Migration
 			
 		]);
 		$this->forge->addKey('id_saving', true);
-        $this->forge->addForeignKey('id_member','member','id_member');
+        $this->forge->addForeignKey('id_member','member','id_member','CASCADE','CASCADE');
 		$this->forge->addForeignKey('id_type','type_of_saving','id_saving_type');
         $this->forge->addForeignKey('id_admin','admin','id_admin');
 		$this->forge->createTable('saving');

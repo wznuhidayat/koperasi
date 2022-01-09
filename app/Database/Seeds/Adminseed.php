@@ -21,5 +21,6 @@ class Adminseed extends Seeder
 
 		// Using Query Builder
 		$this->db->table('admin')->insert($data);
+		
     }
 }

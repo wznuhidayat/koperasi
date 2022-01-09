@@ -14,12 +14,15 @@ class TypeLoan extends Migration
 				'constraint'     => 5,
 				
 			],
-            
 			'name_type'       => [
 				'type'       => 'VARCHAR',
 				'constraint' => '30',
 			],
-            
+			'loan_term'          => [
+				'type'           => 'INT',
+				'constraint'     => 3,
+				
+			],
 			'description'       => [
 				'type'       => 'VARCHAR',
 				'constraint' => '255',

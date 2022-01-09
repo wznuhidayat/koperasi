@@ -42,6 +42,11 @@
                                     <span class="error invalid-feedback"><?= $validation->getError('name_type'); ?></span>
                                 </div>
                                 <div class="form-group">
+                                    <label for="inputLoanTerm">Lama Angsuran</label>
+                                    <input type="text" id="inputLoanTerm" class="form-control  <?= ($validation->hasError('loan_term')) ? 'is-invalid' : '' ?>" name="loan_term" value="<?= $type['loan_term'] ?>">
+                                    <span class="error invalid-feedback"><?= $validation->getError('loan_term'); ?></span>
+                                </div>
+                                <div class="form-group">
                                     <label for="inputdescription">Alamat</label>
                                     <textarea id="inputdescription" class="form-control <?= ($validation->hasError('description')) ? 'is-invalid' : '' ?>" rows="4" name="description" ><?= $type['description'] ?></textarea>
                                     <span class="error invalid-feedback"><?= $validation->getError('description'); ?></span>

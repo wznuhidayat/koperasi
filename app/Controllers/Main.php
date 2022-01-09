@@ -8,6 +8,7 @@ use App\Models\M_admin;
 use App\Models\M_member;
 use App\Models\M_type_saving;
 use App\Models\M_saving;
+use App\Models\M_loan;
 use App\Models\M_withdraw;
 use App\Models\M_type_loan;
 use Config\Services;
@@ -22,6 +23,7 @@ class Main extends BaseController
         $this->M_member = new M_member($request);
         $this->M_type_saving = new M_type_saving();
         $this->M_saving = new M_saving();
+        $this->M_loan = new M_loan();
         $this->M_withdraw = new M_withdraw();
         $this->M_type_loan = new M_type_loan();
         // $this->Mypdf = new Mypdf();
@@ -393,7 +395,14 @@ class Main extends BaseController
                     ],
 
                 ],
+                'loan_term' => [
+                    'rules' => 'numeric|required',
+                    'errors' => [
+                        'numeric' => 'Hanya diperbolehkan input angka!',
+                        'required' => 'Masukkan deskripsi tipe!',
+                    ],
 
+                ],
                 'description' => [
                     'rules' => 'required',
                     'errors' => [
@@ -419,6 +428,7 @@ class Main extends BaseController
             $data = [
                 'id_loan_type' => $str,
                 'name_type' => $this->request->getPost('name'),
+                'loan_term' => $this->request->getPost('loan_term'),
                 'description' => $this->request->getPost('description'),
                 'created_at' => date('Y/m/d h:i:s'),
 
@@ -447,7 +457,14 @@ class Main extends BaseController
                     ],
 
                 ],
+                'loan_term' => [
+                    'rules' => 'numeric|required',
+                    'errors' => [
+                        'numeric' => 'Hanya diperbolehkan input angka!',
+                        'required' => 'Masukkan deskripsi tipe!',
+                    ],
 
+                ],
                 'description' => [
                     'rules' => 'required',
                     'errors' => [
@@ -465,6 +482,7 @@ class Main extends BaseController
 
             $data = array(
                 'name_type' => $this->request->getPost('name'),
+                'loan_term' => $this->request->getPost('loan_term'),
                 'description' => $this->request->getPost('description'),
                 'created_at' => $query_type["created_at"],
             );
@@ -631,7 +649,7 @@ class Main extends BaseController
         ];
         return view('transaction/withdraw_view', $data);
     }
-    public function printLoan($id)
+    public function printWd($id)
     {
         $query = $this->M_withdraw->getInvoice($id);
         $data = [
@@ -674,4 +692,89 @@ class Main extends BaseController
         // Output the generated PDF to Browser
         $dompdf->stream("sample.pdf",array("Attachment"=>0));
     }
+
+    public function loan($url = 'index', $id = null)
+    {
+        if ($url == 'save') {
+            if (!$this->validate([
+                'name' => [
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required' => 'Silahkan masukkan nama kebutuhan!',
+                    ],
+                    
+                ],
+                'amount' => [
+                    'rules'  => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Silahkan masukkan nominal uang yang disimpan!',
+                        'numeric' => 'Anda hanya dapat memasukkan angka!'
+                    ],
+                    
+                ],
+                'installment_fee' => [
+                    'rules'  => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Silahkan besar bunga!',
+                        'numeric' => 'Anda hanya dapat memasukkan angka!'
+                    ],
+                    
+                ],
+
+
+            ])) {
+                // return ;
+                $validation = \Config\Services::validation();
+                return redirect()->to('/main/loan')->withInput()->with('validation', $validation);
+            }
+            $str = "";
+            $characters = array_merge(range('0', '9'));
+            $max = count($characters) - 1;
+            for ($i = 0; $i < 9; $i++) {
+                $rand = mt_rand(0, $max);
+                $str .= $characters[$rand];
+            }
+            $data = array(
+                'id_loan' => $str,
+                'id_member' => $this->request->getPost('id_member'),
+                'id_type' => $this->request->getPost('id_loan_type'),
+                'id_admin' => $this->request->getPost('id_admin'),
+                'name' => $this->request->getPost('name'),
+                'amount' => $this->request->getPost('amount'),
+                'installment_fee' => $this->request->getPost('installment_fee'),
+                'description' => $this->request->getPost('description'),
+                'created_at' => date('Y/m/d h:i:s'),
+            );
+            $this->M_loan->saveLoan($data);
+            if ($this->M_loan->affectedRows() > 0) {
+                session()->setFLashdata('success', 'Setor tunai berhasil ditambahkan.');
+            }
+            return redirect()->to('/main/loan/invoice/' . $str);
+        }elseif ($url == 'invoice' && $id != null) {
+            $query = $this->M_saving->getInvoice($id);
+            $data = [
+                'title' => "Stor Tunai",
+                'menu' => 'Transaction',
+                'invoice' => $this->M_saving->getInvoice($id),
+                'saldo' => $this->saldo($query['id_member'])
+            ];
+            // dd($data);
+            return view('transaction/invoice_save', $data);
+        }
+        
+        $query_type = $this->M_type_loan->findAll();
+        $type[null] = '- Pilih Jenis Simpanan -';
+        foreach ($query_type as $typ) {
+            $type[$typ['id_loan_type']] = $typ['name_type'];
+        }
+        $data = [
+            'title' => "Pinjam Tunai",
+            'menu' => 'Transaction',
+            'validation' => \Config\Services::validation(),
+            'type' => $type,
+            'selected' => null,
+        ];
+        return view('transaction/loan_view', $data);
+    }
+    
 }

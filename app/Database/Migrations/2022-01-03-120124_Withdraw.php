@@ -38,7 +38,7 @@ class Withdraw extends Migration
 			
 		]);
 		$this->forge->addKey('id_withdraw', true);
-        $this->forge->addForeignKey('id_member','member','id_member');
+        $this->forge->addForeignKey('id_member','member','id_member','CASCADE','CASCADE');
         $this->forge->addForeignKey('id_admin','admin','id_admin');
 		$this->forge->createTable('withdraw');
     }

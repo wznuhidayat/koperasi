@@ -19,7 +19,7 @@ $('.btn-delete').on('click', function (e) {
   })
 });
 
-$(".search-saving").click(function () {
+$(".search-member").click(function () {
   var id = $('#id_member').val();
   $.ajax({
     url: "searchbyid/" + id,

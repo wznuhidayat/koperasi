@@ -62,8 +62,6 @@
                                             <textarea class="form-control" rows="3" placeholder="Alamat" disabled="" id="address"></textarea>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Jenis Kelamin</label>
                                         <div class="col-sm-10 gender">
@@ -80,23 +78,37 @@
                                             <input type="text" class="form-control" id="birth" placeholder="Tanggal lahir" disabled>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <form action="/main/addsaving/save" method="post">
+                                </div>
+                                <div class="col-md-6">
+                                    <form action="/main/loan/save" method="post">
                                         <?= csrf_field() ?>
                                         <div class="form-group row">
                                             <input type="hidden" id="id_member_hidden" name="id_member">
                                             <input type="hidden" id="id_admin" name="id_admin" value="<?= session()->get('id_admin') ?>">
-                                            <label for="deposit" class="col-sm-2 col-form-label">Setor</label>
+                                            <label for="name" class="col-sm-2 col-form-label">Nama</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control  <?= ($validation->hasError('amount')) ? 'is-invalid' : '' ?>" id="telp" placeholder="Masukkan nominal" name="amount">
+                                                <input type="text" class="form-control  <?= ($validation->hasError('name')) ? 'is-invalid' : '' ?>" id="telp" placeholder="Kebutuhan" name="name">
+                                                <span class="error invalid-feedback"><?= $validation->getError('name'); ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="deposit" class="col-sm-2 col-form-label">Jumlah</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control  <?= ($validation->hasError('amount')) ? 'is-invalid' : '' ?>" id="telp" placeholder="Jumlah nominal yang dipinjam" name="amount">
                                                 <span class="error invalid-feedback"><?= $validation->getError('amount'); ?></span>
                                             </div>
-
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="installment_fee" class="col-sm-2 col-form-label">Bunga</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control  <?= ($validation->hasError('installment_fee')) ? 'is-invalid' : '' ?>" id="telp" placeholder="Masukkan bunga" name="installment_fee">
+                                                <span class="error invalid-feedback"><?= $validation->getError('installment_fee'); ?></span>
+                                            </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="" class="col-sm-2 col-form-label">Jenis </label>
                                             <div class="col-sm-10">
-                                                <?= form_dropdown('id_saving_type', $type, $selected, ['class' => 'form-control show-tick', 'required' => 'required']) ?>
+                                                <?= form_dropdown('id_loan_type', $type, $selected, ['class' => 'form-control show-tick', 'required' => 'required']) ?>
                                             </div>
                                         </div>
                                         <div class="form-group row">
