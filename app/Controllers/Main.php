@@ -744,6 +744,7 @@ class Main extends BaseController
                 'installment_fee' => $this->request->getPost('installment_fee'),
                 'description' => $this->request->getPost('description'),
                 'created_at' => date('Y/m/d h:i:s'),
+                'updated_at' => date('Y/m/d h:i:s'),
             );
             $this->M_loan->saveLoan($data);
             if ($this->M_loan->affectedRows() > 0) {
@@ -751,15 +752,14 @@ class Main extends BaseController
             }
             return redirect()->to('/main/loan/invoice/' . $str);
         }elseif ($url == 'invoice' && $id != null) {
-            $query = $this->M_saving->getInvoice($id);
+            $query = $this->M_loan->getInvoice($id);
             $data = [
                 'title' => "Stor Tunai",
                 'menu' => 'Transaction',
-                'invoice' => $this->M_saving->getInvoice($id),
-                'saldo' => $this->saldo($query['id_member'])
+                'invoice' => $this->M_loan->getInvoice($id),
             ];
             // dd($data);
-            return view('transaction/invoice_save', $data);
+            return view('transaction/invoice_loan', $data);
         }
         
         $query_type = $this->M_type_loan->findAll();

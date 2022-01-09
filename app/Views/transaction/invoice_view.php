@@ -67,8 +67,8 @@
                       <td><?= $invoice['id_withdraw'] ?></td>
                       <td><?= $invoice['description'] ?></td>
                       <td>Rp. <?= number_format($saldo + $invoice['amount'], 0, ',', '.') ?></td>
-                      <td>Rp. <?= $invoice['amount'] ?></td>
-                      <td>Rp. <?= $saldo ?></td>
+                      <td>Rp.  <?= number_format($invoice['amount'], 0, ',', '.') ?></td>
+                      <td>Rp.  <?= number_format($saldo, 0, ',', '.') ?></td>
                     </tr>
 
                   </tbody>

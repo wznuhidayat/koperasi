@@ -40,14 +40,14 @@
             <hr>
             <div class="detail row">
               <div class="col-6 detail-left">
-                <p>Nama &emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp; : <?= $invoice['member_name'] ?> </p>
+                <p>Nama &emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp; : <?= $invoice['name'] ?> </p>
                 <p>Jenis Kelamin &emsp;  : <?= ($invoice['phone'] == 'male') ? "Laki-laki" : "Perempuan" ?> </p>
                 <p>Tgl Lahir &emsp;&emsp;&emsp;&nbsp; : <?= tanggal(date($invoice['date_of_birth'])) ?> </p>
               </div>
               <div class="col-6 detail-right">
                 <p>No Telp &emsp;&emsp;&ensp;&nbsp; : <?= $invoice['phone'] ?> </p>
                 <p>Transaksi &emsp;&emsp; : <b>Setor tunai</b> </p>
-                <p>Jam &emsp;&emsp;&emsp;&emsp;&nbsp; : <?= date('H:m', strtotime($invoice['saving_created'])); ?> </p>
+                <p>Jam &emsp;&emsp;&emsp;&emsp;&nbsp; : <?= date('H:m', strtotime($invoice['loan_created'])); ?> </p>
               </div>
             </div>
             <div class="row">
@@ -56,19 +56,19 @@
                   <thead>
                     <tr>
                       <th>No Transaksi</th>
-                      <th>Deskripsi</th>
-                      <th>Saldo</th>
-                      <th>Jumlah Setor</th>
-                      <th>Sisa Saldo</th>
+                      <th>Kebutuhan</th>
+                      <th>Jumlah Uang</th>
+                      <th>Jumlah Ansuran</th>
+                      <th>Bunga</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td><?= $invoice['id_saving'] ?></td>
-                      <td><?= $invoice['description'] ?></td>
-                      <td>Rp. <?= number_format($saldo - $invoice['amount'], 0, ',', '.') ?></td>
-                      <td>Rp.  <?= number_format($invoice['amount'], 0, ',', '.') ?></td>
-                      <td>Rp.  <?= number_format($saldo , 0, ',', '.') ?></td>
+                      <td><?= $invoice['id_loan'] ?></td>
+                      <td><?= $invoice['name'] ?></td>
+                      <td>Rp. <?= number_format($invoice['amount'], 0, ',', '.') ?></td>
+                      <td><?= $invoice['installment_term'] ?></td>
+                      <td><?= $invoice['installment_fee'] ?>%</td>
                     </tr>
 
                   </tbody>
@@ -99,7 +99,7 @@
             <!-- this row will not appear when printing -->
             <div class="row no-print">
               <div class="col-12">
-                <a href="/main/printsaving/<?= $invoice['id_saving']; ?>" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
+                <a href="/main/printloan/<?= $invoice['id_loan']; ?>" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
                 <button type="button" class="btn btn-success float-right"><i class="far fa-check-circle"></i> Done
                 </button>
                 <button type="button" class="btn btn-info float-right" style="margin-right: 5px;">
