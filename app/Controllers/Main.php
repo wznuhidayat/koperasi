@@ -776,5 +776,22 @@ class Main extends BaseController
         ];
         return view('transaction/loan_view', $data);
     }
-    
+    public function printLoan($id)
+    {
+        $data = [
+            'invoice' => $this->M_loan->getInvoice($id),
+        ];
+        $dompdf = new Dompdf();
+        $html = view('transaction/print_loan',$data);
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream("sample.pdf",array("Attachment"=>0));
+    }
 }
