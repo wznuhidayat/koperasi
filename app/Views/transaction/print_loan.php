@@ -109,7 +109,7 @@
             <td style="width: 20%;">Rp. <span style="float: right;"><?= number_format($invoice['amount'], 0, ',', '.') ?></td>
             <td style="width: 20%;"><?= $invoice['installment_term']; ?>  <span style="float: right;">kali</span></td>
             <td style="width: 10%;"><span style="float: right;"><?= $invoice['installment_fee']; ?>  %</span></td>
-            <td style="width: 20%;"><span style="float: right;"><?= $invoice['installment_fee']; ?>  %</span></td>
+            <td style="width: 20%;">Rp. <span style="float: right;"><?= number_format($invoice['installment_amount'], 0, ',', '.') ?> </span></td>
           </tr>
 
         </tbody>

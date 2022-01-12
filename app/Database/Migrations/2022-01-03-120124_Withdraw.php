@@ -24,8 +24,7 @@ class Withdraw extends Migration
 				'constraint'     => 8,
 			],
 			'amount'       => [
-				'type'       => 'INT',
-				'constraint' => 12,
+				'type'       => 'BIGINT',
 			],
 			'description'       => [
 				'type'       => 'VARCHAR',

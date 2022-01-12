@@ -78,7 +78,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('/main/typeloan')?>" class="nav-link <?= $request->uri->getSegment(2) == 'installment' ? 'active' : '' ?>">
+                            <a href="<?= base_url('/main/installmentpay')?>" class="nav-link <?= $request->uri->getSegment(2) == 'installmentpay' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Angsur Pinjaman</p>
                             </a>

@@ -8,7 +8,7 @@ class M_type_loan extends Model
     protected $table = 'type_of_loan';
     protected $primaryKey = 'id_loan_type';
     protected $useTimestamps = true;
-    protected $allowedFields = ['id_loan_type','name_type','description'];
+    protected $allowedFields = ['id_loan_type','name_type','loan_term','description'];
 
     public function getType($id = false)
     {

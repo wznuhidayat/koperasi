@@ -111,12 +111,6 @@
                                                 <?= form_dropdown('id_loan_type', $type, $selected, ['class' => 'form-control show-tick', 'required' => 'required']) ?>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label for="description" class="col-sm-2 col-form-label">Note</label>
-                                            <div class="col-sm-10">
-                                                <textarea class="form-control" rows="3" placeholder="Deskripsi" id="description" name="description"></textarea>
-                                            </div>
-                                        </div>
                                         <button type="submit" class="btn btn-info btn-block">Setor</button>
                                     </form>
                                 </div>

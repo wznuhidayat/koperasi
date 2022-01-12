@@ -31,16 +31,14 @@ class Loan extends Migration
 				'null'	=> true,
 			],
 			'amount'       => [
-				'type'       => 'INT',
-				'constraint'		=> 12,
+				'type'       => 'BIGINT',
 			],
 			'installment_fee'       => [
 				'type'       => 'DECIMAL',
 				'constraint' => 5,
 			],
-			'description'       => [
-				'type'       => 'VARCHAR',
-				'constraint' => '255',
+			'installment_amount'       => [
+				'type'       => 'BIGINT',
 			],
 			'created_at'       => [
 				'type'       => 'DATETIME',

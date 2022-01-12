@@ -60,6 +60,7 @@
                       <th>Jumlah Uang</th>
                       <th>Jumlah Ansuran</th>
                       <th>Bunga</th>
+                      <th>Angsuran Perbulan</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -69,6 +70,7 @@
                       <td>Rp. <?= number_format($invoice['amount'], 0, ',', '.') ?></td>
                       <td><?= $invoice['installment_term'] ?></td>
                       <td><?= $invoice['installment_fee'] ?>%</td>
+                      <td>Rp. <?= number_format($invoice['installment_amount'], 0, ',', '.') ?></td>
                     </tr>
 
                   </tbody>

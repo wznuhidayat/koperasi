@@ -35,7 +35,6 @@
                         <?= $this->include('messege') ?>
                         <div class="card-body">
                             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <table id="member-table" class="table table-bordered table-hover">
