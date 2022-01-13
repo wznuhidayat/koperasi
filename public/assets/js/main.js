@@ -90,26 +90,69 @@ $(".search-wd").click(function () {
     }
   });
 });
-  var Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000
-  });
 
-  const flashDataSuccess = $('.flash-data-success').data('flashdata');
-  const flashDataAmountError = $('.flash-data-amount-error').data('flashdata');
-  if(flashDataSuccess){
-    Toast.fire({
-      icon: 'success',
-      title: flashDataSuccess
-    })
-  }
-  if(flashDataAmountError){
-    Toast.fire({
-      icon: 'error',
-      title: flashDataAmountError
-    })
-  }
+$(".search-installment").click(function () {
+  var id = $('#id_member').val();
+  $.ajax({
+    url: "listinstallment/" + id,
+    type: "GET",
+    dataType: "JSON",
+    success: function (response) {
+      
+      var len = 0;
+      $('#listloantable tbody').empty(); // Empty <tbody>
+      if(response['installment'] != null){
+         len = response['installment'].length;
+      }
+      if (len != null) {
+        $('#name_member').val(len);
+        for (var i = 0; i < len; i++) {
+          var id = response['installment'][i].id_installment;
+          var id_loan = response['installment'][i].id_loan;
+          var period = response['installment'][i].period;
+          var amount = response['installment'][i].amount;
+          var status = response['installment'][i].status;
+
+          var tr_str = "<tr>" +
+            "<td align='center'>" + id + "</td>" +
+            "<td align='center'>" + id_loan + "</td>" +
+            "<td align='center'>" + period + "</td>" +
+            "<td align='center'>" + amount + "</td>" +
+            "<td align='center'>" + status + "</td>" +
+            "</tr>";
+
+          $("#listloantable tbody").append(tr_str);
+        }
+      } else {
+        var tr_str = "<tr>" +
+          "<td align='center' colspan='4'>No record found.</td>" +
+          "</tr>";
+
+        $("#listloantable tbody").append(tr_str);
+      }
+    }
+  });
+});
+var Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000
+});
+
+const flashDataSuccess = $('.flash-data-success').data('flashdata');
+const flashDataAmountError = $('.flash-data-amount-error').data('flashdata');
+if (flashDataSuccess) {
+  Toast.fire({
+    icon: 'success',
+    title: flashDataSuccess
+  })
+}
+if (flashDataAmountError) {
+  Toast.fire({
+    icon: 'error',
+    title: flashDataAmountError
+  })
+}
   //input form
-  
+

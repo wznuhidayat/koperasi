@@ -834,4 +834,12 @@ class Main extends BaseController
         // dd($data);
         return view('transaction/installment_pay/pay_view', $data);
     }
+    public function listInstallment($id)
+    {
+        $data = [
+            'member' => $this->M_member->getMember($id),
+            'installment' => $this->M_installment->getInstallment($id),
+        ];
+        echo json_encode($data);
+    }
 }
