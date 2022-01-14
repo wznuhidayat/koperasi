@@ -29,39 +29,49 @@
                         <div class="card-header">
                             <h3 class="card-title">Daftar Ansuran</h3>
                         </div>
-                        <div class="card-body ">
+                        <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group input-group ">
-                                        <input type="text" class="form-control" placeholder="Masukkan ID Anggota!" id="id_member">
+                                        <input type="text" class="form-control" placeholder="Masukkan ID Anggota!" id="id_member" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
                                         <span class="input-group-append ml-1">
                                             <button type="button" class="btn btn-info btn-flat search-installment"><i class="fas fa-search"></i></button>
                                         </span>
                                         <span class="error invalid-feedback"> ID anggota tidak ditemukkan! </span>
                                     </div>
                                 </div>
+
                             </div>
-                            <div class="form-group row">
-                                        <label for="name_member" class="col-sm-2 col-form-label">Nama</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="name_member" placeholder="Nama Anggota" disabled>
-                                        </div>
-                                    </div>
-                            <div class="row table-responsive p-0"></div>
-                            <table class="table table-head-fixed text-nowrap" id="listloantable">
-                                <thead >
-                                    <tr>
-                                        <th>No Transaksi</th>
-                                        <th>No Pinjaman</th>
-                                        <th>Period</th>
-                                        <th>Nominal Ansuran</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                   
-                                </tbody>
-                            </table>
+                            <!-- <div class="form-group row">
+                                <label for="name_member" class="col-sm-2 col-form-label">Nama</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="name_member" placeholder="Nama Anggota" disabled>
+                                </div>
+                            </div> -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <form id="form-installment" method="POST">
+                                        <pre id="view-row"></pre>
+                                       
+                                        <table class="table table-bordered table-hover" id="listloantable">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>No Transaksi</th>
+                                                    <th>No Pinjaman</th>
+                                                    <th>Period</th>
+                                                    <th>Nominal Ansuran</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+
+                                        </table>
+                                        <button class="btn btn-info"  type="button">Select</button>
+                                    </form>
+                                </div>
+                            </div>
+
+
                         </div>
                         <div class="card-footer">
 

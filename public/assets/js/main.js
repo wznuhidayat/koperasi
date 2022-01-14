@@ -91,47 +91,72 @@ $(".search-wd").click(function () {
   });
 });
 
-$(".search-installment").click(function () {
-  var id = $('#id_member').val();
-  $.ajax({
-    url: "listinstallment/" + id,
-    type: "GET",
-    dataType: "JSON",
-    success: function (response) {
-      
-      var len = 0;
-      $('#listloantable tbody').empty(); // Empty <tbody>
-      if(response['installment'] != null){
-         len = response['installment'].length;
-      }
-      if (len != null) {
-        $('#name_member').val(len);
-        for (var i = 0; i < len; i++) {
-          var id = response['installment'][i].id_installment;
-          var id_loan = response['installment'][i].id_loan;
-          var period = response['installment'][i].period;
-          var amount = response['installment'][i].amount;
-          var status = response['installment'][i].status;
+// $(".search-installment").click(function () {
+//   var id = $('#id_member').val();
+//   $.ajax({
+//     url: "listinstallment/" + id,
+//     type: "GET",
+//     dataType: "JSON",
+//     success: function (response) {
+//       $('#listloantable').DataTable({
+//         "paging": true,
+//         "lengthChange": false,
+//         "searching": false,
+//         "ordering": true,
+//         "info": true,
+//         "autoWidth": false,
+//         "responsive": true,
+//         "columns": [
+//           {"data" : response['installment'][0].id_installment},
+//           {"data" : response['installment'][0].id_installment},
+//           {"data" : response['installment'][0].id_installment},
+//           {"data" : response['installment'][0].id_installment},
+//           {"data" : response['installment'][0].id_installment},
+//           {"data" : response['installment'][0].id_installment},
 
-          var tr_str = "<tr>" +
-            "<td align='center'>" + id + "</td>" +
-            "<td align='center'>" + id_loan + "</td>" +
-            "<td align='center'>" + period + "</td>" +
-            "<td align='center'>" + amount + "</td>" +
-            "<td align='center'>" + status + "</td>" +
-            "</tr>";
+//         ]
+//       });
+//       // var len = 0;
+//       // $('#listloantable tbody').empty(); // Empty <tbody>
+//       // if(response['installment'] != null){
+//       //    len = response['installment'].length;
+//       // }
+//       // if (len != null) {
+//       //   $('#name_member').val(len);
+//       //   for (var i = 0; i < len; i++) {
+//       //     var id = response['installment'][i].id_installment;
+//       //     var id_loan = response['installment'][i].id_loan;
+//       //     var period = response['installment'][i].period;
+//       //     var amount = response['installment'][i].amount;
+//       //     var status = response['installment'][i].status;
+//       //     if (status = 'unpaid'){
+//       //       status = '<span class="badge badge-danger">Unpaid</span>'
+//       //     }else{
+//       //       status = '<span class="badge badge-success">Success</span>'
+//       //     }
+//       //     var tr_str = "<tr>" +
+//       //       "<td align='center'><input class='form-check-input' type='checkbox'></td>" +
+//       //       "<td align='center'>" + id + "</td>" +
+//       //       "<td align='center'>" + id_loan + "</td>" +
+//       //       "<td align='center'>" + period + "</td>" +
+//       //       "<td align='center'>" + amount + "</td>" +
+//       //       "<td align='center'>" + status + "</td>" +
+//       //       "</tr>";
 
-          $("#listloantable tbody").append(tr_str);
-        }
-      } else {
-        var tr_str = "<tr>" +
-          "<td align='center' colspan='4'>No record found.</td>" +
-          "</tr>";
+//       //     $("#listloantable tbody").append(tr_str);
+//       //   }
+//       // } else {
+//       //   var tr_str = "<tr>" +
+//       //     "<td align='center' colspan='4'>No record found.</td>" +
+//       //     "</tr>";
 
-        $("#listloantable tbody").append(tr_str);
-      }
-    }
-  });
+//       //   $("#listloantable tbody").append(tr_str);
+//       // }
+//     }
+//   });
+// });
+$("#checkall").click(function () {
+  $('input:checkbox').not(this).prop('checked', this.checked);
 });
 var Toast = Swal.mixin({
   toast: true,
@@ -154,5 +179,7 @@ if (flashDataAmountError) {
     title: flashDataAmountError
   })
 }
+
+
   //input form
 

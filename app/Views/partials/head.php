@@ -23,6 +23,9 @@
   <link rel="stylesheet" href="<?= base_url() ?>/assets/template/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= base_url() ?>/assets/template/dist/css/adminlte.min.css">
+  
+  <link rel="stylesheet" href="<?= base_url() ?>/assets/template/plugins/datatables-checkbox/dataTables.checkboxes.css">
+
 
 
 </head>

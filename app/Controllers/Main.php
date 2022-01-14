@@ -28,7 +28,7 @@ class Main extends BaseController
         $this->M_saving = new M_saving();
         $this->M_loan = new M_loan();
         $this->M_withdraw = new M_withdraw();
-        $this->M_installment = new M_installment();
+        $this->M_installment = new M_installment($request);
         $this->M_type_loan = new M_type_loan();
         // $this->Mypdf = new Mypdf();
         helper('url', 'form', 'html');
@@ -841,5 +841,41 @@ class Main extends BaseController
             'installment' => $this->M_installment->getInstallment($id),
         ];
         echo json_encode($data);
+    }
+    public function searchInstallment()
+    {
+        $csrfName = csrf_token();
+        $csrfHash = csrf_hash();
+
+        $request = Services::request();
+        if ($request->getMethod(true) === 'POST') {
+            $lists = $this->M_installment->getDatatables();
+            $data = [];
+            $no = $request->getPost('start');
+
+            foreach ($lists as $list) {
+
+                $row = [];
+                // $check = "<td align='center'><input class='form-check-input' type='checkbox'></td>";
+              
+                // $row[] = $check;
+                $row[] = $list->id_installment;
+                $row[] = $list->id_installment;
+                $row[] = $list->id_loan;
+                $row[] = $list->period;
+                $row[] = $list->amount;
+                $row[] = $list->status;
+                $data[] = $row;
+            }
+
+            $output = [
+                'draw' => $request->getPost('draw'),
+                'recordsTotal' => $this->M_installment->countAll(),
+                'recordsFiltered' => $this->M_installment->countFiltered(),
+                'data' => $data
+            ];
+            $output[$csrfName] = $csrfHash;
+            echo json_encode($output);
+        }
     }
 }
