@@ -46,7 +46,7 @@
               </div>
               <div class="col-6 detail-right">
                 <p>No Telp &emsp;&emsp;&ensp;&nbsp; : <?= $invoice['phone'] ?> </p>
-                <p>Transaksi &emsp;&emsp; : <b>Setor tunai</b> </p>
+                <p>Transaksi &emsp;&emsp; : <b>Pinjam tunai</b> </p>
                 <p>Jam &emsp;&emsp;&emsp;&emsp;&nbsp; : <?= date('H:m', strtotime($invoice['loan_created'])); ?> </p>
               </div>
             </div>
@@ -104,9 +104,7 @@
                 <a href="/main/printloan/<?= $invoice['id_loan']; ?>" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
                 <button type="button" class="btn btn-success float-right"><i class="far fa-check-circle"></i> Done
                 </button>
-                <button type="button" class="btn btn-info float-right" style="margin-right: 5px;">
-                  <i class="fas fa-print"></i> Print
-                </button>
+                
               </div>
             </div>
           </div>

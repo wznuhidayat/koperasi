@@ -85,9 +85,9 @@
       }, ],
     });
 
-    
+
   });
-  
+
   // });
   //   $(".search-installment").click(function () {
   //   var id = $('#id_member').val();
@@ -119,7 +119,6 @@
   //     }
   //   });
   // });
-  // function search_loan(id) {
   var dataTable = $('#listloantable').DataTable({
     "processing": true,
     "serverSide": true,
@@ -131,7 +130,8 @@
         "csrf_test_name": $('input[name=csrf_test_name]').val()
       },
       "data": function(data) {
-        data.csrf_test_name = $('input[name=csrf_test_name]').val()
+        data.csrf_test_name = $('input[name=csrf_test_name]').val(),
+          data.id_member = $('#id_member').val()
       },
       'dataSrc': function(response) {
         $('input[name=csrf_test_name]').val(response.csrf_test_name)
@@ -146,31 +146,61 @@
       }
     }, ],
     "select": {
-         "style": "multi"
-      },
-      "order": [[1, "asc"]]
+      "style": "multi"
+    },
+    "order": [
+      [1, "asc"]
+    ]
   })
-  // }
-  // $('#form-installment').on('submit', function(e){
-  //     var form = this;
 
-  //     var rows_selected = table.column(0).checkboxes.selected();
-
-  //     // Iterate over all selected checkboxes
-  //     $.each(rows_selected, function(index, rowId){
-  //        // Create a hidden element
-  //        $(form).append(
-  //            $('<input>')
-  //               .attr('type', 'hidden')
-  //               .attr('name', 'id[]')
-  //               .val(rowId)
-  //        );
-  //     });
-  //     $('#view-row').text(rows_selected);
-  //  });
   $(".search-installment").click(function() {
     var id = $('#id_member').val();
-    search_loan(id);
+    $.ajax({
+      url: "searchbyid/" + id,
+      type: "GET",
+      dataType: "JSON",
+      success: function(data) {
+        if (data.member != null) {
+          $('#name_member').val(data.member.name);
+          $('#address').text(data.member.address);
+          $('#telp').val(data.member.phone);
+          if (data.member.gender == 'male') {
+            $(".gender select").val("male").change();
+          } else {
+            $(".gender select").val("female").change();
+          }
+          $('#birth').val(data.member.date_of_birth);
+          $('#id_member_hidden').val(id);
+          $('#text1').text('Saldo saat ini.');
+          $('#id_member').removeClass('is-invalid');
+        } else {
+          $('#name_member').val(null);
+          $(".gender select").val("null").change();
+          $('#address').text(null);
+          $('#telp').val(null);
+          $('#birth').val(null);
+          $('#text1').text('tidak ditemukan.');
+          $('#id_member').addClass('is-invalid');
+        }
+      }
+    });
+    dataTable.draw();
+  });
+
+
+  $('#frm-example').on('submit', function(e) {
+    var form = this;
+    var rows_selected = dataTable.column(0).checkboxes.selected();
+    $.each(rows_selected, function(index, rowId) {
+      // Create a hidden element
+      $(form).append(
+        $('<input>')
+        .attr('type', 'hidden')
+        .attr('name', 'id[]')
+        .val(rowId)
+      );
+    });
+    // e.preventDefault();
   });
 </script>
 

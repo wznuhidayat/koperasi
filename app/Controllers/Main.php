@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 // use App\Libraries\Mypdf;
 use CodeIgniter\I18n\Time;
-use \DateTime; 
+use \DateTime;
 use Dompdf\Dompdf;
 use App\Models\M_admin;
 use App\Models\M_member;
@@ -740,7 +740,7 @@ class Main extends BaseController
             }
             $query_type = $this->M_type_loan->getType($this->request->getPost('id_loan_type'));
             $p = $this->request->getPost('amount') / $query_type['loan_term'];
-            $b = ($this->request->getPost('amount') * $this->request->getPost('installment_fee'))  / 100 / $query_type['loan_term'] ;
+            $b = ($this->request->getPost('amount') * $this->request->getPost('installment_fee'))  / 100 / $query_type['loan_term'];
             $i = date("Y-m-d");
             $data = array(
                 'id_loan' => $str,
@@ -750,24 +750,24 @@ class Main extends BaseController
                 'name' => $this->request->getPost('name'),
                 'amount' => $this->request->getPost('amount'),
                 'installment_fee' => $this->request->getPost('installment_fee'),
-                'installment_amount' => $p+$b,
+                'installment_amount' => $p + $b,
                 'created_at' => date('Y/m/d h:i:s'),
                 'updated_at' => date('Y/m/d h:i:s'),
             );
 
             $this->M_loan->saveLoan($data);
-            
-            
+
+
             for ($x = 0; $x < $query_type['loan_term']; $x++) {
 
                 $d = new DateTime($i);
                 // $id = $str.$d->format('Y') . $d->format('m');
                 // echo $str.$d->format('Y') . $d->format('m');
                 // echo '</br>';
-                
+
                 $d->modify('first day of next month');
                 $data = array(
-                    'id_installment' => $str.$d->format('y') . $d->format('m'),
+                    'id_installment' => $str . $d->format('y') . $d->format('m'),
                     'id_loan' => $str,
                     'period' => $d->format('Y') . $d->format('m'),
                     'amount' => $p + $b,
@@ -784,7 +784,7 @@ class Main extends BaseController
         } elseif ($url == 'invoice' && $id != null) {
             $query = $this->M_loan->getInvoice($id);
             $data = [
-                'title' => "Stor Tunai",
+                'title' => "Pinjam Tunai",
                 'menu' => 'Transaction',
                 'invoice' => $this->M_loan->getInvoice($id),
             ];
@@ -834,13 +834,35 @@ class Main extends BaseController
         // dd($data);
         return view('transaction/installment_pay/pay_view', $data);
     }
-    public function listInstallment($id)
+    public function invoiceInstallment()
     {
-        $data = [
-            'member' => $this->M_member->getMember($id),
-            'installment' => $this->M_installment->getInstallment($id),
-        ];
-        echo json_encode($data);
+        $invoice = array();
+        foreach ($this->request->getPost('id') as $pay) {
+            $inv = $this->M_installment->getInvoiceInstallment($pay);
+            if ($inv['status'] == 'unpaid') {
+                $data = [
+                    'id_installment' => intval($pay),
+                    'status' => 'paid',
+                    'paid_at' => date('Y/m/d h:i:s'),
+                ];
+                $this->M_installment->pay($data, $pay);
+                $invoice[] = $inv;
+            }
+        }
+        if (count($invoice) == 0) {
+            session()->setFLashdata('amount-error', ' Ansuran yang anda pilih telah lunas');
+            return redirect()->to('/main/installmentpay')->withInput();
+        } else {
+            $data = [
+                'title' => "Faktur Ansuran",
+                'menu' => 'Transaction',
+                'invoice' => $invoice,
+                'member' => $this->M_member->getMember($invoice[0]['id_member']),
+                'admin' => $this->M_admin->getAdmin($this->request->getPost('id_admin'))
+            ];
+            // dd($data);
+            return view('transaction/installment_pay/invoice_installment', $data);
+        }
     }
     public function searchInstallment()
     {
@@ -848,8 +870,9 @@ class Main extends BaseController
         $csrfHash = csrf_hash();
 
         $request = Services::request();
+        $id_member = $this->request->getPost('id_member');
         if ($request->getMethod(true) === 'POST') {
-            $lists = $this->M_installment->getDatatables();
+            $lists = $this->M_installment->getDatatables($id_member);
             $data = [];
             $no = $request->getPost('start');
 
@@ -857,25 +880,63 @@ class Main extends BaseController
 
                 $row = [];
                 // $check = "<td align='center'><input class='form-check-input' type='checkbox'></td>";
-              
+
                 // $row[] = $check;
                 $row[] = $list->id_installment;
                 $row[] = $list->id_installment;
-                $row[] = $list->id_loan;
                 $row[] = $list->period;
-                $row[] = $list->amount;
-                $row[] = $list->status;
+                $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
+                $row[] = $amt;
+                if ($list->status == 'paid') {
+                    $sts = "<td ><span class='badge badge-success'>Lunas</span></td>";
+                } else {
+                    $sts = "<td><span class='badge badge-danger'>Belum dibayar</span></td>";
+                }
+                $row[] = $sts;
+                if ($list->paid_at != null) {
+                    $paided = "<td >" . tanggal(date($list->paid_at)) . "</td>";
+                } else {
+                    $paided = "<td > - </td>";
+                }
+                $row[] = $paided;
                 $data[] = $row;
             }
 
             $output = [
                 'draw' => $request->getPost('draw'),
-                'recordsTotal' => $this->M_installment->countAll(),
-                'recordsFiltered' => $this->M_installment->countFiltered(),
+                'recordsTotal' => $this->M_installment->countAll($id_member),
+                'recordsFiltered' => $this->M_installment->countFiltered($id_member),
                 'data' => $data
             ];
             $output[$csrfName] = $csrfHash;
             echo json_encode($output);
         }
+    }
+    public function printinstallment()
+    {
+        $invoice = array();
+        foreach ($this->request->getPost('id') as $pay) {
+            $inv = $this->M_installment->getInvoiceInstallment($pay);
+            $invoice[] = $inv;
+        }
+        $data = [
+            'title' => "Faktur Ansuran",
+            'menu' => 'Transaction',
+            'invoice' => $invoice,
+            'member' => $this->M_member->getMember($invoice[0]['id_member']),
+            'admin' => $this->M_admin->getAdmin($this->request->getPost('id_admin'))
+        ];
+        $dompdf = new Dompdf();
+        $html = view('transaction/installment_pay/print_installment',$data);
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream("sample.pdf", array("Attachment" => 0));
     }
 }
