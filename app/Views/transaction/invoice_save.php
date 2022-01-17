@@ -41,7 +41,7 @@
             <div class="detail row">
               <div class="col-6 detail-left">
                 <p>Nama &emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp; : <?= $invoice['member_name'] ?> </p>
-                <p>Jenis Kelamin &emsp;  : <?= ($invoice['phone'] == 'male') ? "Laki-laki" : "Perempuan" ?> </p>
+                <p>Jenis Kelamin &emsp;  : <?= ($invoice['gender'] == 'male') ? "Laki-laki" : "Perempuan" ?> </p>
                 <p>Tgl Lahir &emsp;&emsp;&emsp;&nbsp; : <?= tanggal(date($invoice['date_of_birth'])) ?> </p>
               </div>
               <div class="col-6 detail-right">

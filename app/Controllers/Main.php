@@ -210,7 +210,7 @@ class Main extends BaseController
 
         $request = Services::request();
         // $datatable = new Sales_Datatable($request);
-
+        $segment = 'member';
         if ($request->getMethod(true) === 'POST') {
             $lists = $this->M_member->getDatatables();
             $data = [];
@@ -234,13 +234,14 @@ class Main extends BaseController
                         </i>
                         Edit
                     </a>
-                    <a class=\"btn btn-danger btn-delete btn-sm\" href=\"/main/member/delete/" . $list->id_member . "\">
+                    <a class=\"btn btn-danger btn-sm\" href=\"#\" onclick=\"rm_member(".$list->id_member.")\">
                         <i class=\"fas fa-trash\">
+                        
                         </i>
                         Delete
                     </a>
+                    
                 </td>";
-
 
                 //     $btnDelete = " <form action=\"/main/product/delete/".$list->id_product."\" class=\"d-inline\" method=\"post\">
                 //     ". csrf_field()." 
@@ -731,6 +732,15 @@ class Main extends BaseController
                 $validation = \Config\Services::validation();
                 return redirect()->to('/main/loan')->withInput()->with('validation', $validation);
             }
+            $query_installment = $this->M_installment->getInstallment($this->request->getPost('id_member'));
+            foreach($query_installment as $installment){
+                if($installment['status'] == 'unpaid'){
+                    session()->setFLashdata('amount-error', 'Gagal, karena pinjaman sebelumnya masih belum lunas');
+                    $validation = \Config\Services::validation();
+                    return redirect()->to('/main/loan')->withInput()->with('validation', $validation);
+                }
+            }
+
             $str = "";
             $characters = array_merge(range('0', '9'));
             $max = count($characters) - 1;
@@ -756,7 +766,6 @@ class Main extends BaseController
             );
 
             $this->M_loan->saveLoan($data);
-
 
             for ($x = 0; $x < $query_type['loan_term']; $x++) {
 
@@ -829,9 +838,7 @@ class Main extends BaseController
         $data = [
             'title' => "Bayar Angsuran",
             'menu' => 'Transaction',
-            'installment' => $this->M_installment->getInstallment(),
         ];
-        // dd($data);
         return view('transaction/installment_pay/pay_view', $data);
     }
     public function invoiceInstallment()
@@ -871,8 +878,17 @@ class Main extends BaseController
 
         $request = Services::request();
         $id_member = $this->request->getPost('id_member');
+        $lastLoan = $this->M_loan->getLastRecord($id_member);
         if ($request->getMethod(true) === 'POST') {
-            $lists = $this->M_installment->getDatatables($id_member);
+            if($lastLoan == null){
+                $lists = $this->M_installment->getDatatables($id_member);
+                $recordsTotal = $this->M_installment->countAll($id_member);
+                $recordsFiltered = $this->M_installment->countFiltered($id_member);
+            }else{
+                $lists = $this->M_installment->getDatatables($id_member,$lastLoan['id_loan']);
+                $recordsTotal = $this->M_installment->countAll($id_member,$lastLoan['id_loan']);
+                $recordsFiltered = $this->M_installment->countFiltered($id_member,$lastLoan['id_loan']);
+            }
             $data = [];
             $no = $request->getPost('start');
 
@@ -904,8 +920,8 @@ class Main extends BaseController
 
             $output = [
                 'draw' => $request->getPost('draw'),
-                'recordsTotal' => $this->M_installment->countAll($id_member),
-                'recordsFiltered' => $this->M_installment->countFiltered($id_member),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
                 'data' => $data
             ];
             $output[$csrfName] = $csrfHash;
@@ -927,7 +943,7 @@ class Main extends BaseController
             'admin' => $this->M_admin->getAdmin($this->request->getPost('id_admin'))
         ];
         $dompdf = new Dompdf();
-        $html = view('transaction/installment_pay/print_installment',$data);
+        $html = view('transaction/installment_pay/print_installment', $data);
         $dompdf->loadHtml($html);
 
         // (Optional) Setup the paper size and orientation

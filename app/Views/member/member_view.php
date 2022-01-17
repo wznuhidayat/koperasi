@@ -36,9 +36,9 @@
                         <div class="card-body">
                             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
                                 <div class="row">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-12 table-responsive">
                                         <table id="member-table" class="table table-bordered table-hover">
-                                        <?= csrf_field() ?>
+                                            <?= csrf_field() ?>
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
@@ -49,8 +49,9 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                               
+                                            <?php $request = \Config\Services::request(); ?>
+                                            
+                                            <tbody id="<?= $request->uri->getSegment(2); ?>">
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -65,7 +66,6 @@
                                         </table>
                                     </div>
                                 </div>
-                                <button type="button" class="text1 btn btn-dark">test</button>
                             </div>
                         </div>
                         <!-- /.card-body -->

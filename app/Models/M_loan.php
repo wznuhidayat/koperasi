@@ -23,4 +23,8 @@ class M_loan extends Model
             ->Where(['id_loan' => $id])->get()->getRowArray();
         return $query;
     }
+    public function getLastRecord($id)
+    {
+        return $this->where('id_member',$id)->orderBy('created_at','desc')->limit(1)->get()->getRowArray();
+    }
 }

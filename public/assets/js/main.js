@@ -19,6 +19,7 @@ $('.btn-delete').on('click', function (e) {
   })
 });
 
+
 $(".search-member").click(function () {
   var id = $('#id_member').val();
   $.ajax({
@@ -179,6 +180,10 @@ if (flashDataAmountError) {
     title: flashDataAmountError
   })
 }
+
+
+
+
 
 
   //input form

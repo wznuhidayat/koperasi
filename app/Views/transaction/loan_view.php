@@ -30,6 +30,7 @@
 
                         </div>
                         <!-- /.card-header -->
+                        <div class="flash-data-amount-error" data-flashdata="<?= session()->getFlashdata('amount-error'); ?>"></div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">

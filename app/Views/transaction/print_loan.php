@@ -80,7 +80,7 @@
   <div class="detail">
     <div class="detail-left">
       <p>Nama &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <?= $invoice['name'] ?> </p>
-      <p>Jenis Kelamin &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <?= ($invoice['phone'] == 'male') ? "Laki-laki" : "Perempuan" ?> </p>
+      <p>Jenis Kelamin &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <?= ($invoice['gender'] == 'male') ? "Laki-laki" : "Perempuan" ?> </p>
       <p>Tgl Lahir &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <?= tanggal(date($invoice['date_of_birth'])) ?> </p>
     </div>
     <div class="detail-right">

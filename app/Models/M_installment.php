@@ -40,7 +40,7 @@ class M_installment extends Model
             // return $this->where(['id_installment' => $id])->first();
             $query = $this->db->table($this->table)->select('' . $this->table . '.*, id_member')
                 ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')
-                
+
                 ->Where(['id_installment' => $id])->get()->getRowArray();
             return $query;
         }
@@ -51,8 +51,9 @@ class M_installment extends Model
         $query = $this->db->table($this->table)->insert($data);
         return $query;
     }
-    public function pay($data, $id){
-        $query = $this->db->table($this->table)->update($data,['id_installment' => $id]);
+    public function pay($data, $id)
+    {
+        $query = $this->db->table($this->table)->update($data, ['id_installment' => $id]);
         return $query;
     }
     // datatables
@@ -91,30 +92,54 @@ class M_installment extends Model
         }
     }
 
-    public function getDatatables($id)
+    public function getDatatables($id, $loan = false)
     {
-        $this->getDatatablesQuery($id);
-        if ($this->request->getPost('length') != -1)
-            $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
-        $query = $this->dt->getWhere(['id_member' => $id]);
-        return $query->getResult();
-    }
-
-    public function countFiltered($id)
-    {
-        $this->getDatatablesQuery($id);
-        if ($id != null) {
-            return $this->db->table($this->table)->select('' . $this->table . '.*, id_member')
-            ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')->where('id_member',$id)->countAllResults();
+        if ($id === false) {
+            $this->getDatatablesQuery($id);
+            if ($this->request->getPost('length') != -1)
+                $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
+            $query = $this->dt->getWhere(['id_member' => $id]);
+            return $query->getResult();
         } else {
-            return 0;
+            $this->getDatatablesQuery($id);
+            if ($this->request->getPost('length') != -1)
+                $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
+            $query = $this->dt->getWhere(['' . $this->table . '.id_loan' => $loan, 'id_member' => $id]);
+            return $query->getResult();
         }
     }
 
-    public function countAll($id)
+    public function countFiltered($id, $loan = false)
     {
-        $tbl_storage = $this->db->table($this->table)->select('' . $this->table . '.*, id_member')
-            ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')->where('id_member', $id);
-        return $tbl_storage->countAllResults();
+        if ($loan === false) {
+            $this->getDatatablesQuery($id);
+            if ($id != null) {
+                return $this->db->table($this->table)->select('' . $this->table . '.*, id_member')
+                    ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')->where('id_member', $id)->countAllResults();
+            } else {
+                return 0;
+            }
+        } else {
+            $this->getDatatablesQuery($id);
+            if ($id != null) {
+                return $this->db->table($this->table)->select('' . $this->table . '.*, id_member')
+                    ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')->where(['' . $this->table . '.id_loan' => $loan, 'id_member' => $id])->countAllResults();
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    public function countAll($id, $loan = false)
+    {
+        if ($loan === false) {
+            $tbl_storage = $this->db->table($this->table)->select('' . $this->table . '.*, id_member')
+                ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')->where('id_member', $id);
+            return $tbl_storage->countAllResults();
+        } else {
+            $tbl_storage = $this->db->table($this->table)->select('' . $this->table . '.*, id_member')
+                ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')->where(['' . $this->table . '.id_loan' => $loan, 'id_member' => $id]);
+            return $tbl_storage->countAllResults();
+        }
     }
 }

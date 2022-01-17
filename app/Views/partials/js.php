@@ -59,7 +59,12 @@
 
   });
 
-
+  var Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+  });
   $(document).ready(function() {
     var table = $('#member-table').DataTable({
       "processing": true,
@@ -85,9 +90,40 @@
       }, ],
     });
 
-
+    
   });
-
+  function rm_member($id) {
+      var segment = $("tbody").attr("id");
+      Swal.fire({
+        title: 'Apakah anda yakin menghapusnya?',
+        text: "Data yang terhapus tidak dapat dikembalikan!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus data!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '/main/' + segment + '/delete/' + $id,
+            type: 'DELETE',
+            error: function() {
+              Toast.fire({
+                icon: 'error',
+                title: "Data gagal di hapus"
+              })
+            },
+            success: function(data) {
+              $('#member-table').DataTable().ajax.reload();
+              Toast.fire({
+                icon: 'success',
+                title: 'Data telah dihapus!'
+              })
+            }
+          });
+        }
+      })
+    }
   // });
   //   $(".search-installment").click(function () {
   //   var id = $('#id_member').val();
@@ -155,6 +191,7 @@
 
   $(".search-installment").click(function() {
     var id = $('#id_member').val();
+    
     $.ajax({
       url: "searchbyid/" + id,
       type: "GET",
@@ -173,6 +210,7 @@
           $('#id_member_hidden').val(id);
           $('#text1').text('Saldo saat ini.');
           $('#id_member').removeClass('is-invalid');
+          dataTable.draw();
         } else {
           $('#name_member').val(null);
           $(".gender select").val("null").change();
@@ -181,10 +219,11 @@
           $('#birth').val(null);
           $('#text1').text('tidak ditemukan.');
           $('#id_member').addClass('is-invalid');
+          dataTable.draw();
         }
       }
     });
-    dataTable.draw();
+    
   });
 
 
