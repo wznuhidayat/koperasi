@@ -7,19 +7,19 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Anggota</h1>
+                    <h1><?= ucfirst($title) ?></h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
+                        <li class="breadcrumb-item"><a href="#"><?= ucfirst($menu) ?></a></li>
+                        <li class="breadcrumb-item active"><?= ucfirst($title) ?></li>
                     </ol>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
     </section>
-
-    <!-- Main content -->
+    <div>
+    </div>
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -27,10 +27,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex justify-content-between">
-                                <h3 class="card-title">Daftar anggota</h3>
-                                <div class="float-sm-right">
-                                    <a href="<?= base_url('main/member/create') ?>" class="btn btn-sm btn-primary"><i class="nav-icon fas fa-plus"></i> Tambah Anggota</a>
-                                </div>
+                                <h3 class="card-title">Daftar Simpanan</h3>
                             </div>
                         </div>
                         <!-- /.card-header -->
@@ -39,29 +36,31 @@
                             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
                                 <div class="row">
                                     <div class="col-sm-12 table-responsive">
-                                        <table id="member-table" class="table table-bordered table-hover">
+                                        <table id="saving-table" class="table table-bordered table-hover">
                                             <?= csrf_field() ?>
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>ID Anggota</th>
+                                                    <th>ID Simpanan</th>
                                                     <th>Nama</th>
-                                                    <th>No Telp</th>
-                                                    <th>Jenis Kelamin</th>
+                                                    <th>Tipe Simpanan</th>
+                                                    <th>Nominal</th>
+                                                    <th>Tgl Simpan</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <?php $request = \Config\Services::request(); ?>
-                                            
+
                                             <tbody id="<?= $request->uri->getSegment(2); ?>">
                                             </tbody>
                                             <tfoot>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>ID Anggota</th>
+                                                    <th>ID Simpanan</th>
                                                     <th>Nama</th>
-                                                    <th>No Telp</th>
-                                                    <th>Jenis Kelamin</th>
+                                                    <th>Tipe Simpanan</th>
+                                                    <th>Nominal</th>
+                                                    <th>Tgl Simpan</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </tfoot>
@@ -80,6 +79,5 @@
         </div>
         <!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
-</div>
-<?= $this->endSection() ?>
+
+    <?= $this->endSection() ?>

@@ -90,7 +90,53 @@
       }, ],
     });
 
-    
+    var table2 = $('#saving-table').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        "url": "<?= site_url('main/savinglist') ?>",
+        "type": "POST",
+        "data": {
+          "csrf_test_name": $('input[name=csrf_test_name]').val()
+        },
+        "data": function(data) {
+          data.csrf_test_name = $('input[name=csrf_test_name]').val()
+        },
+        'dataSrc': function(response) {
+          $('input[name=csrf_test_name]').val(response.csrf_test_name)
+          return response.data;
+        }
+      },
+      "columnDefs": [{
+        "targets": [],
+        "orderable": false,
+      }, ],
+    });
+
+    var table3 = $('#withdraw-table').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        "url": "<?= site_url('main/withdrawlist') ?>",
+        "type": "POST",
+        "data": {
+          "csrf_test_name": $('input[name=csrf_test_name]').val()
+        },
+        "data": function(data) {
+          data.csrf_test_name = $('input[name=csrf_test_name]').val()
+        },
+        'dataSrc': function(response) {
+          $('input[name=csrf_test_name]').val(response.csrf_test_name)
+          return response.data;
+        }
+      },
+      "columnDefs": [{
+        "targets": [],
+        "orderable": false,
+      }, ],
+    });
   });
   function rm_member($id) {
       var segment = $("tbody").attr("id");

@@ -107,7 +107,18 @@
                                 <p>Jenis Pinjaman</p>
                             </a>
                         </li>
-                       
+                        <li class="nav-item">
+                            <a href="<?= base_url('/main/saving')?>" class="nav-link <?= $request->uri->getSegment(2) == 'saving' ? 'active' : '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Data Simpanan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('/main/wd')?>" class="nav-link <?= $request->uri->getSegment(2) == 'wd' ? 'active' : '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Data Penarikan</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

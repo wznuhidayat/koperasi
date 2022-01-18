@@ -25,9 +25,9 @@ class Main extends BaseController
         $request = Services::request();
         $this->M_member = new M_member($request);
         $this->M_type_saving = new M_type_saving();
-        $this->M_saving = new M_saving();
+        $this->M_saving = new M_saving($request);
         $this->M_loan = new M_loan();
-        $this->M_withdraw = new M_withdraw();
+        $this->M_withdraw = new M_withdraw($request);
         $this->M_installment = new M_installment($request);
         $this->M_type_loan = new M_type_loan();
         // $this->Mypdf = new Mypdf();
@@ -955,4 +955,138 @@ class Main extends BaseController
         // Output the generated PDF to Browser
         $dompdf->stream("sample.pdf", array("Attachment" => 0));
     }
-}
+
+    public function saving()
+    {
+        $data = [
+            'title' => "Data Simpanan",
+            'menu' => 'Master',
+        ];
+        return view('admin_root/saving/saving_view', $data);
+    }
+    public function savinglist(){
+        $csrfName = csrf_token();
+        $csrfHash = csrf_hash();
+
+        $request = Services::request();
+        // $datatable = new Sales_Datatable($request);
+        if ($request->getMethod(true) === 'POST') {
+            $lists = $this->M_saving->getDatatables();
+            $data = [];
+            $no = $request->getPost('start');
+
+            foreach ($lists as $list) {
+
+                $no++;
+                $row = [];
+                // $btnEdit = "<a href=\"/main/product/edit/".$list->id_product."\" class=\"btn btn-info btn-sm\">Edit</a>";
+                $btnDetail = "<a href=\"/main/sales/detail/" . $list->id_saving . "\" class=\"btn btn-light btn-sm\">Detail</a>";
+
+                $btn = " <td class=\"project-actions\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/addsaving/invoice/" . $list->id_saving . "\">
+                        <i class=\"fas fa-folder\">
+                        </i>
+                        View
+                    </a>
+                    
+                   
+                    
+                </td>";
+
+                //     $btnDelete = " <form action=\"/main/product/delete/".$list->id_product."\" class=\"d-inline\" method=\"post\">
+                //     ". csrf_field()." 
+                //     <input type=\"hidden\" name=\"_method\" value=\"DELETE\">
+                //     <button type=\"submit\" class=\"btn btn-danger btn-sm rm\">Delete</button>
+                // </form>";
+
+                // $btnDelete = "<a href=\"#\" class=\"btn btn-danger btn-sm rm-product\" value=\"".$list->id_product."\">delete</a>";
+                $row[] = $no;
+                $row[] = $list->id_saving;
+                $row[] = $list->member_name;
+                $row[] = $list->name_type;
+                $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
+                $row[] = $amt;
+                $created = "<td >" . tanggal(date($list->saving_created)) . "</td>";
+                $row[] = $created;
+                $row[] = $btn;
+                $row[] = '';
+                $data[] = $row;
+            }
+
+            $output = [
+                'draw' => $request->getPost('draw'),
+                'recordsTotal' => $this->M_saving->countAll(),
+                'recordsFiltered' => $this->M_saving->countFiltered(),
+                'data' => $data
+            ];
+            $output[$csrfName] = $csrfHash;
+            echo json_encode($output);
+        }
+    }
+    public function wd()
+    {
+        $data = [
+            'title' => "Data Penarikan",
+            'menu' => 'Master',
+        ];
+        return view('admin_root/withdraw/wd_view', $data);
+    }
+    public function withdrawlist()
+    {
+        $csrfName = csrf_token();
+        $csrfHash = csrf_hash();
+
+        $request = Services::request();
+        // $datatable = new Sales_Datatable($request);
+        if ($request->getMethod(true) === 'POST') {
+            $lists = $this->M_withdraw->getDatatables();
+            $data = [];
+            $no = $request->getPost('start');
+
+            foreach ($lists as $list) {
+
+                $no++;
+                $row = [];
+                // $btnEdit = "<a href=\"/main/product/edit/".$list->id_product."\" class=\"btn btn-info btn-sm\">Edit</a>";
+
+                $btn = " <td class=\"project-actions\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/addsaving/invoice/" . $list->id_withdraw . "\">
+                        <i class=\"fas fa-folder\">
+                        </i>
+                        View
+                    </a>
+                    
+                   
+                    
+                </td>";
+
+                //     $btnDelete = " <form action=\"/main/product/delete/".$list->id_product."\" class=\"d-inline\" method=\"post\">
+                //     ". csrf_field()." 
+                //     <input type=\"hidden\" name=\"_method\" value=\"DELETE\">
+                //     <button type=\"submit\" class=\"btn btn-danger btn-sm rm\">Delete</button>
+                // </form>";
+
+                // $btnDelete = "<a href=\"#\" class=\"btn btn-danger btn-sm rm-product\" value=\"".$list->id_product."\">delete</a>";
+                $row[] = $no;
+                $row[] = $list->id_withdraw;
+                $row[] = $list->member_name;
+                $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
+                $row[] = $amt;
+                $created = "<td >" . tanggal(date($list->wd_created)) . "</td>";
+                $row[] = $created;
+                $row[] = $btn;
+                $row[] = '';
+                $data[] = $row;
+            }
+
+            $output = [
+                'draw' => $request->getPost('draw'),
+                'recordsTotal' => $this->M_withdraw->countAll(),
+                'recordsFiltered' => $this->M_withdraw->countFiltered(),
+                'data' => $data
+            ];
+            $output[$csrfName] = $csrfHash;
+            echo json_encode($output);
+        }
+    }
+}   

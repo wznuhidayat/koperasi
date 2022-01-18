@@ -98,7 +98,7 @@
                                         <div class="form-group row">
                                             <input type="hidden" id="id_member_hidden" name="id_member">
                                             <input type="hidden" id="id_admin" name="id_admin" value="<?= session()->get('id_admin') ?>">
-                                            <label for="deposit" class="col-sm-2 col-form-label">Setor</label>
+                                            <label for="deposit" class="col-sm-2 col-form-label">Nominal</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control  <?= ($validation->hasError('amount')) ? 'is-invalid' : '' ?>" id="amount" placeholder="Masukkan nominal" name="amount">
                                                 <span class="error invalid-feedback"><?= $validation->getError('amount'); ?></span>
