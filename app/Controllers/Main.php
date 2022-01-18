@@ -1089,4 +1089,72 @@ class Main extends BaseController
             echo json_encode($output);
         }
     }
+    public function profile($url = 'index', $id = null)
+    {
+        if ($url == 'update' && $id != null) {
+            $query_admin = $this->M_admin->getadmin($this->request->getPost('id'));
+          
+            if (!$this->validate([
+                'name' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Masukkan nama anggota baru!',
+                    ],
+
+                ], 
+                'phone' => [
+                    'rules'  => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Silahkan masukkan nomor telp terlebih dahulu!',
+                        'numeric' => 'Anda hanya dapat memasukkan angka!'
+                    ],
+
+                ],
+                'passconf' => [
+                    'rules' => 'matches[password]',
+                    'errors' => [
+                        'matches' => 'Password yang anda masukkan tidak sesuai',
+                    ],
+
+                ],
+                'gender' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Jenis kelamin belum anda pilih.',
+                    ],
+
+                ],
+
+            ])) {
+                // return ;
+                $validation = \Config\Services::validation();
+                session()->setFLashdata('amount-error', 'Data gagal telah diubah.');
+                return redirect()->to('/main/profile/index/'. $id)->withInput()->with('validation', $validation);
+            }
+            if (empty($this->request->getPost('password'))) {
+                $pass = $query_admin['password'];
+            } else {
+                $pass = md5($this->request->getPost('password'));
+            }
+            $data = array(
+                'name' => $this->request->getPost('name'),
+                'phone' => $this->request->getPost('phone'),
+                'gender' => $this->request->getPost('gender'),
+                'password' => $pass,
+            );
+            $this->M_admin->updateAdmin($data, $this->request->getPost('id'));
+            if ($this->M_admin->affectedRows() > 0) {
+                session()->setFLashdata('success', 'Data berhasil telah diubah.');
+            }
+            return redirect()->to('/main/profile/index/'.$this->request->getPost('id'));
+        }
+        $data = [
+            'title' => "Profile",
+            'menu' => 'User',
+            'validation' => \Config\Services::validation(),
+            'admin' => $this->M_admin->getAdmin($id)
+        ];
+        // dd($data);
+        return view('setting/profile/profile_view', $data);
+    }
 }   

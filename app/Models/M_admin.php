@@ -35,4 +35,8 @@ class M_admin extends Model
     //     $query = $this->db->table($this->table)->countAll();
     //     return $query;
     // }
+    public function updateAdmin($data, $id){
+        $query = $this->db->table($this->table)->update($data,['id_admin' => $id]);
+        return $query;
+    }
 }
