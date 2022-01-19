@@ -27,7 +27,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex justify-content-between">
-                                <h3 class="card-title">Daftar Penarikan</h3>
+                                <h3 class="card-title">Daftar Pinjaman</h3>
                             </div>
                         </div>
                         <!-- /.card-header -->
@@ -36,15 +36,16 @@
                             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
                                 <div class="row">
                                     <div class="col-sm-12 table-responsive">
-                                        <table id="withdraw-table" class="table table-bordered table-hover">
+                                        <table id="installment-table" class="table table-bordered table-hover">
                                             <?= csrf_field() ?>
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>ID Penarikan</th>
+                                                    <th>ID Pinjaman</th>
                                                     <th>Nama</th>
-                                                    <th>Nominal</th>
-                                                    <th>Tgl Penarikan</th>
+                                                    <th>Jumlah Ansuran</th>
+                                                    <th>Nominal Pinjaman</th>
+                                                    <th>Tgl Pinjaman</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -55,10 +56,11 @@
                                             <tfoot>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>ID Penarikan</th>
+                                                    <th>ID Pinjaman</th>
                                                     <th>Nama</th>
-                                                    <th>Nominal</th>
-                                                    <th>Tgl Penarikan</th>
+                                                    <th>Jumlah Ansuran</th>
+                                                    <th>Nominal Pinjaman</th>
+                                                    <th>Tgl Pinjaman</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </tfoot>
@@ -77,5 +79,5 @@
         </div>
         <!-- /.container-fluid -->
     </section>
-
+ 
     <?= $this->endSection() ?>

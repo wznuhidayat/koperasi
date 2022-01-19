@@ -26,7 +26,7 @@ class Main extends BaseController
         $this->M_member = new M_member($request);
         $this->M_type_saving = new M_type_saving();
         $this->M_saving = new M_saving($request);
-        $this->M_loan = new M_loan();
+        $this->M_loan = new M_loan($request);
         $this->M_withdraw = new M_withdraw($request);
         $this->M_installment = new M_installment($request);
         $this->M_type_loan = new M_type_loan();
@@ -781,7 +781,8 @@ class Main extends BaseController
                     'period' => $d->format('Y') . $d->format('m'),
                     'amount' => $p + $b,
                     'status' => 'unpaid',
-                    'paid_at' => null
+                    'paid_at' => null,
+                    'id_admin' => null,
                 );
                 $this->M_installment->saveInstallment($data);
                 $i = $d->format('Y') . '-' . $d->format('m') . '-' . $d->format('d');
@@ -1047,7 +1048,6 @@ class Main extends BaseController
 
                 $no++;
                 $row = [];
-                // $btnEdit = "<a href=\"/main/product/edit/".$list->id_product."\" class=\"btn btn-info btn-sm\">Edit</a>";
 
                 $btn = " <td class=\"project-actions\">
                     <a class=\"btn btn-primary btn-sm\" href=\"/main/addsaving/invoice/" . $list->id_withdraw . "\">
@@ -1055,18 +1055,9 @@ class Main extends BaseController
                         </i>
                         View
                     </a>
-                    
-                   
-                    
                 </td>";
 
-                //     $btnDelete = " <form action=\"/main/product/delete/".$list->id_product."\" class=\"d-inline\" method=\"post\">
-                //     ". csrf_field()." 
-                //     <input type=\"hidden\" name=\"_method\" value=\"DELETE\">
-                //     <button type=\"submit\" class=\"btn btn-danger btn-sm rm\">Delete</button>
-                // </form>";
-
-                // $btnDelete = "<a href=\"#\" class=\"btn btn-danger btn-sm rm-product\" value=\"".$list->id_product."\">delete</a>";
+               
                 $row[] = $no;
                 $row[] = $list->id_withdraw;
                 $row[] = $list->member_name;
@@ -1083,6 +1074,121 @@ class Main extends BaseController
                 'draw' => $request->getPost('draw'),
                 'recordsTotal' => $this->M_withdraw->countAll(),
                 'recordsFiltered' => $this->M_withdraw->countFiltered(),
+                'data' => $data
+            ];
+            $output[$csrfName] = $csrfHash;
+            echo json_encode($output);
+        }
+    }
+
+    public function allLoan()
+    {
+        $data = [
+            'title' => "Data Pinjaman",
+            'menu' => 'Master',
+        ];
+        return view('admin_root/all_loan/loan_view', $data);
+    }
+    public function loanlist()
+    {
+        $csrfName = csrf_token();
+        $csrfHash = csrf_hash();
+
+        $request = Services::request();
+        // $datatable = new Sales_Datatable($request);
+        if ($request->getMethod(true) === 'POST') {
+            $lists = $this->M_loan->getDatatables();
+            $data = [];
+            $no = $request->getPost('start');
+
+            foreach ($lists as $list) {
+
+                $no++;
+                $row = [];
+
+                $btn = " <td class=\"project-actions\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/loan/invoice/" . $list->id_loan . "\">
+                        <i class=\"fas fa-folder\">
+                        </i>
+                        View
+                    </a>
+                </td>";
+
+               
+                $row[] = $no;
+                $row[] = $list->id_loan;
+                $row[] = $list->member_name;
+                $row[] = $list->loan_term;
+                $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
+                $row[] = $amt;
+                $created = "<td >" . tanggal(date($list->created_at)) . "</td>";
+                $row[] = $created;
+                $row[] = $btn;
+                $row[] = '';
+                $data[] = $row;
+            }
+
+            $output = [
+                'draw' => $request->getPost('draw'),
+                'recordsTotal' => $this->M_loan->countAll(),
+                'recordsFiltered' => $this->M_loan->countFiltered(),
+                'data' => $data
+            ];
+            $output[$csrfName] = $csrfHash;
+            echo json_encode($output);
+        }
+    }
+    public function installment()
+    {
+        $data = [
+            'title' => "Data Ansuran",
+            'menu' => 'Master',
+        ];
+        return view('admin_root/installment/installment_view', $data);
+    }
+    public function installmentlist()
+    {
+        $csrfName = csrf_token();
+        $csrfHash = csrf_hash();
+
+        $request = Services::request();
+        // $datatable = new Sales_Datatable($request);
+        if ($request->getMethod(true) === 'POST') {
+            $lists = $this->M_loan->getDatatables();
+            $data = [];
+            $no = $request->getPost('start');
+
+            foreach ($lists as $list) {
+
+                $no++;
+                $row = [];
+
+                $btn = " <td class=\"project-actions\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/loan/invoice/" . $list->id_loan . "\">
+                        <i class=\"fas fa-folder\">
+                        </i>
+                        View
+                    </a>
+                </td>";
+
+               
+                $row[] = $no;
+                $row[] = $list->id_loan;
+                $row[] = $list->member_name;
+                $row[] = $list->loan_term;
+                $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
+                $row[] = $amt;
+                $created = "<td >" . tanggal(date($list->created_at)) . "</td>";
+                $row[] = $created;
+                $row[] = $btn;
+                $row[] = '';
+                $data[] = $row;
+            }
+
+            $output = [
+                'draw' => $request->getPost('draw'),
+                'recordsTotal' => $this->M_loan->countAll(),
+                'recordsFiltered' => $this->M_loan->countFiltered(),
                 'data' => $data
             ];
             $output[$csrfName] = $csrfHash;
@@ -1124,6 +1230,13 @@ class Main extends BaseController
                     ],
 
                 ],
+                'image' => [
+                    'rules' => 'max_size[image,2048]|mime_in[image,image/jpg,image/jpeg,image/png]',
+                    'errors' => [
+                        'max_size' => 'Ukuran gambar terlalu besar',
+                        'mime_in' => 'Format gambar tidak didukung'
+                    ]
+                ]
 
             ])) {
                 // return ;
@@ -1136,11 +1249,23 @@ class Main extends BaseController
             } else {
                 $pass = md5($this->request->getPost('password'));
             }
+            $fileImg = $this->request->getFile('image');
+            if ($fileImg->getError() == 4) {
+                $nameImg = $this->request->getVar('oldimg');
+            } else {
+                $nameImg = $fileImg->getRandomName();
+                $fileImg->move('img/admin', $nameImg);
+                if ($this->request->getVar('oldimg') != 'default.png') {
+                    unlink('img/admin/' . $this->request->getVar('oldimg'));
+                }
+            }
+
             $data = array(
                 'name' => $this->request->getPost('name'),
                 'phone' => $this->request->getPost('phone'),
                 'gender' => $this->request->getPost('gender'),
                 'password' => $pass,
+                'img' => $nameImg,
             );
             $this->M_admin->updateAdmin($data, $this->request->getPost('id'));
             if ($this->M_admin->affectedRows() > 0) {
@@ -1157,4 +1282,5 @@ class Main extends BaseController
         // dd($data);
         return view('setting/profile/profile_view', $data);
     }
+   
 }   

@@ -30,7 +30,7 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle" src="<?= base_url() ?>/assets/template/dist/img/user4-128x128.jpg" alt="User profile picture">
+                                <img class="profile-user-img img-fluid img-circle img-preview" src="/img/admin/<?= $admin['img']; ?>" alt="User profile picture" style="min-height: 100px;">
                             </div>
 
                             <h3 class="profile-username text-center"><?= $admin['name'] ?></h3>
@@ -58,8 +58,9 @@
                             <div class="tab-content">
 
                                 <div class="tab-pane active" id="settings">
-                                    <form class="form-horizontal" action="/main/profile/update/<?= $admin['id_admin']; ?>" method="post">
+                                    <form class="form-horizontal" action="/main/profile/update/<?= $admin['id_admin']; ?>" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="id" value="<?= $admin['id_admin']; ?>">
+                                        <input type="hidden" name="oldimg" value="<?= $admin['img'] ?>">
                                         <div class="form-group row">
                                             <label for="inputName" class="col-sm-2 col-form-label">Nama</label>
                                             <div class="col-sm-10">
@@ -85,8 +86,8 @@
                                                 <span class="error invalid-feedback"><?= $validation->getError('phone'); ?></span>
                                             </div>
                                         </div>
-                                       
-                                       
+
+
                                         <div class="form-group row">
                                             <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
                                             <div class="col-sm-10">
@@ -99,6 +100,19 @@
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control <?= ($validation->hasError('passconf')) ? 'is-invalid' : '' ?>" id="inputPassword2" placeholder="Konfirmasi Password" name="passconf">
                                                 <span class="error invalid-feedback"><?= $validation->getError('passconf'); ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleInputFile" class="col-sm-2 col-form-label">Image</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="custom-file <?= ($validation->hasError('image')) ? 'is-invalid' : '' ?>">
+                                                        <input type="file" name="image" class="custom-file-input " id="image" onchange="previewImg()">
+                                                        <label class="custom-file-label" for="exampleInputFile">Pilih gambar</label>
+                                                        
+                                                    </div>
+                                                    <span class="error invalid-feedback"><?= $validation->getError('image'); ?></span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">

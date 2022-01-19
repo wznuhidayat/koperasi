@@ -29,7 +29,7 @@
                             <div class="d-flex justify-content-between">
                                 <h3 class="card-title">Daftar Tipe Simpanan</h3>
                                 <div class="float-sm-right">
-                                    <a href="<?= base_url('main/typeloan/create') ?>" class="btn btn-sm btn-primary"><i class="nav-icon fas fa-plus"></i> Tambah Tipe</a>
+                                    <a href="<?= base_url('main/typeloan/create') ?>" class="btn btn-sm btn-info"><i class="nav-icon fas fa-plus"></i> Tambah Tipe</a>
                                 </div>
                             </div>
 

@@ -137,39 +137,87 @@
         "orderable": false,
       }, ],
     });
-  });
-  function rm_member($id) {
-      var segment = $("tbody").attr("id");
-      Swal.fire({
-        title: 'Apakah anda yakin menghapusnya?',
-        text: "Data yang terhapus tidak dapat dikembalikan!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, hapus data!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajax({
-            url: '/main/' + segment + '/delete/' + $id,
-            type: 'DELETE',
-            error: function() {
-              Toast.fire({
-                icon: 'error',
-                title: "Data gagal di hapus"
-              })
-            },
-            success: function(data) {
-              $('#member-table').DataTable().ajax.reload();
-              Toast.fire({
-                icon: 'success',
-                title: 'Data telah dihapus!'
-              })
-            }
-          });
+
+    var table4 = $('#allloan-table').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        "url": "<?= site_url('main/loanlist') ?>",
+        "type": "POST",
+        "data": {
+          "csrf_test_name": $('input[name=csrf_test_name]').val()
+        },
+        "data": function(data) {
+          data.csrf_test_name = $('input[name=csrf_test_name]').val()
+        },
+        'dataSrc': function(response) {
+          $('input[name=csrf_test_name]').val(response.csrf_test_name)
+          return response.data;
         }
-      })
-    }
+      },
+      "columnDefs": [{
+        "targets": [],
+        "orderable": false,
+      }, ],
+    });
+    var table5 = $('#installment-table').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        "url": "<?= site_url('main/installmentlist') ?>",
+        "type": "POST",
+        "data": {
+          "csrf_test_name": $('input[name=csrf_test_name]').val()
+        },
+        "data": function(data) {
+          data.csrf_test_name = $('input[name=csrf_test_name]').val()
+        },
+        'dataSrc': function(response) {
+          $('input[name=csrf_test_name]').val(response.csrf_test_name)
+          return response.data;
+        }
+      },
+      "columnDefs": [{
+        "targets": [],
+        "orderable": false,
+      }, ],
+    });
+  });
+
+  function rm_member($id) {
+    var segment = $("tbody").attr("id");
+    Swal.fire({
+      title: 'Apakah anda yakin menghapusnya?',
+      text: "Data yang terhapus tidak dapat dikembalikan!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, hapus data!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: '/main/' + segment + '/delete/' + $id,
+          type: 'DELETE',
+          error: function() {
+            Toast.fire({
+              icon: 'error',
+              title: "Data gagal di hapus"
+            })
+          },
+          success: function(data) {
+            $('#member-table').DataTable().ajax.reload();
+            Toast.fire({
+              icon: 'success',
+              title: 'Data telah dihapus!'
+            })
+          }
+        });
+      }
+    })
+  }
   // });
   //   $(".search-installment").click(function () {
   //   var id = $('#id_member').val();
@@ -237,7 +285,7 @@
 
   $(".search-installment").click(function() {
     var id = $('#id_member').val();
-    
+
     $.ajax({
       url: "searchbyid/" + id,
       type: "GET",
@@ -269,7 +317,7 @@
         }
       }
     });
-    
+
   });
 
 

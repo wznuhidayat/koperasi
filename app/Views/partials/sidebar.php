@@ -1,6 +1,6 @@
 <?php $request = \Config\Services::request(); ?>
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-info elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
         <img src="<?= base_url() ?>/assets/template/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -117,6 +117,18 @@
                             <a href="<?= base_url('/main/wd')?>" class="nav-link <?= $request->uri->getSegment(2) == 'wd' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Penarikan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('/main/allloan')?>" class="nav-link <?= $request->uri->getSegment(2) == 'allloan' ? 'active' : '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Data Pinjaman</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('/main/installment')?>" class="nav-link <?= $request->uri->getSegment(2) == 'installment' ? 'active' : '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Data Ansuran</p>
                             </a>
                         </li>
                     </ul>

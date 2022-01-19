@@ -34,6 +34,11 @@ class Installment extends Migration
 				'type'       => 'DATETIME',
 				'null'		=> true,
 			],
+			'id_admin'          => [
+				'type'           => 'INT',
+				'constraint'     => 8,
+				'null' => true
+			],
 		
 			
 			

@@ -28,7 +28,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Tambah Tipe Simpanan</h3>
                             <div class="float-sm-right">
-                                <a href="<?= base_url('main/typeloan') ?>" class="btn btn-sm btn-primary"><i class="nav-icon fas fa-arrow-left"></i> Back</a>
+                                <a href="<?= base_url('main/typeloan') ?>" class="btn btn-sm btn-info"><i class="nav-icon fas fa-arrow-left"></i> Back</a>
                             </div>
                         </div>
                         <!-- /.card-header -->
@@ -52,7 +52,7 @@
                                 </div>
                                
 
-                                <button type="submit" class="btn btn-md btn-primary"><i class="nav-icon fas fa-save"></i> Simpan</button>
+                                <button type="submit" class="btn btn-md btn-info"><i class="nav-icon fas fa-save"></i> Simpan</button>
                             </form>
                         </div>
                         <!-- /.card-body -->
