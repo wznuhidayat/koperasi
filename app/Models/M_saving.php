@@ -81,24 +81,42 @@ class M_saving extends Model
         }
     }
 
-    public function getDatatables()
+    public function getDatatables($id = false)
     {
-        $this->getDatatablesQuery();
-        if ($this->request->getPost('length') != -1)
-            $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
-        $query = $this->dt->get();
-        return $query->getResult();
+        if ($id === false) {
+            $this->getDatatablesQuery();
+            if ($this->request->getPost('length') != -1)
+                $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
+            $query = $this->dt->get();
+            return $query->getResult();
+        } else {
+            $this->getDatatablesQuery();
+            if ($this->request->getPost('length') != -1)
+                $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
+            $query = $this->dt->getWhere(['' . $this->table . '.id_member' => $id]);
+            return $query->getResult();
+        }
     }
 
-    public function countFiltered()
+    public function countFiltered($id = false)
     {
-        $this->getDatatablesQuery();
-        return $this->dt->countAllResults();
+        if ($id === false) {
+            $this->getDatatablesQuery();
+            return $this->dt->countAllResults();
+        } else {
+            $this->getDatatablesQuery();
+            return $this->dt->where(['' . $this->table . '.id_member' => $id])->countAllResults();
+        }
     }
 
-    public function countAll()
+    public function countAll($id = false)
     {
-        $tbl_storage = $this->db->table($this->table);
-        return $tbl_storage->countAllResults();
+        if ($id === false) {
+            $tbl_storage = $this->db->table($this->table);
+            return $tbl_storage->countAllResults();
+        }else{
+            $tbl_storage = $this->db->table($this->table)->where(['' . $this->table . '.id_member' => $id]);
+            return $tbl_storage->countAllResults();
+        }
     }
 }

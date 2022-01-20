@@ -46,6 +46,7 @@
                                                     <th>Jumlah Ansuran</th>
                                                     <th>Nominal Pinjaman</th>
                                                     <th>Tgl Pinjaman</th>
+                                                    <th>Admin</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -61,6 +62,7 @@
                                                     <th>Jumlah Ansuran</th>
                                                     <th>Nominal Pinjaman</th>
                                                     <th>Tgl Pinjaman</th>
+                                                    <th>Admin</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </tfoot>

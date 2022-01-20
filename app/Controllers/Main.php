@@ -13,6 +13,7 @@ use App\Models\M_saving;
 use App\Models\M_loan;
 use App\Models\M_withdraw;
 use App\Models\M_installment;
+use App\Models\M_installment_dt;
 use App\Models\M_type_loan;
 use Config\Services;
 
@@ -29,6 +30,7 @@ class Main extends BaseController
         $this->M_loan = new M_loan($request);
         $this->M_withdraw = new M_withdraw($request);
         $this->M_installment = new M_installment($request);
+        $this->M_installment_dt = new M_installment_dt($request);
         $this->M_type_loan = new M_type_loan();
         // $this->Mypdf = new Mypdf();
         helper('url', 'form', 'html');
@@ -195,11 +197,21 @@ class Main extends BaseController
                 session()->setFLashdata('deleted', 'Data telah dihapus!');
             }
             return redirect()->to('/main/member');
+        } elseif ($url == 'profile' && $id != null){
+            $data = [
+                'title' => "Member",
+                'menu' => 'Member',
+                'member' => $this->M_member->getMember($id),
+                'saldo' => $this->saldo($id),
+                
+            ];
+            return view('member/profile_view', $data);
         }
         $data = [
             'title' => "Member",
             'menu' => 'Member',
             'member' => $this->M_member->getMember(),
+            
         ];
         return view('member/member_view', $data);
     }
@@ -220,11 +232,9 @@ class Main extends BaseController
 
                 $no++;
                 $row = [];
-                // $btnEdit = "<a href=\"/main/product/edit/".$list->id_product."\" class=\"btn btn-info btn-sm\">Edit</a>";
-                $btnDetail = "<a href=\"/main/sales/detail/" . $list->id_member . "\" class=\"btn btn-light btn-sm\">Detail</a>";
 
                 $btn = " <td class=\"project-actions\">
-                    <a class=\"btn btn-primary btn-sm\" href=\"#\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/member/profile/" . $list->id_member . "\">
                         <i class=\"fas fa-folder\">
                         </i>
                         View
@@ -243,13 +253,6 @@ class Main extends BaseController
                     
                 </td>";
 
-                //     $btnDelete = " <form action=\"/main/product/delete/".$list->id_product."\" class=\"d-inline\" method=\"post\">
-                //     ". csrf_field()." 
-                //     <input type=\"hidden\" name=\"_method\" value=\"DELETE\">
-                //     <button type=\"submit\" class=\"btn btn-danger btn-sm rm\">Delete</button>
-                // </form>";
-
-                // $btnDelete = "<a href=\"#\" class=\"btn btn-danger btn-sm rm-product\" value=\"".$list->id_product."\">delete</a>";
                 $row[] = $no;
                 $row[] = $list->id_member;
                 $row[] = $list->name;
@@ -264,6 +267,107 @@ class Main extends BaseController
                 'draw' => $request->getPost('draw'),
                 'recordsTotal' => $this->M_member->countAll(),
                 'recordsFiltered' => $this->M_member->countFiltered(),
+                'data' => $data
+            ];
+            $output[$csrfName] = $csrfHash;
+            echo json_encode($output);
+        }
+    }
+    //detail member datatable
+    public function savingid(){
+        $csrfName = csrf_token();
+        $csrfHash = csrf_hash();
+
+        $request = Services::request();
+        // $datatable = new Sales_Datatable($request);
+        $id_member = $this->request->getPost('id_member');
+        if ($request->getMethod(true) === 'POST') {
+            $lists = $this->M_saving->getDatatables($id_member);
+            $data = [];
+            $no = $request->getPost('start');
+
+            foreach ($lists as $list) {
+
+                $no++;
+                $row = [];
+
+                $btn = " <td class=\"project-actions\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/addsaving/invoice/" . $list->id_saving . "\">
+                        <i class=\"fas fa-folder\">
+                        </i>
+                        View
+                    </a>
+                    
+                   
+                    
+                </td>";
+
+                $row[] = $no;
+                $row[] = $list->id_saving;
+                $row[] = $list->member_name;
+                $row[] = $list->name_type;
+                $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
+                $row[] = $amt;
+                $created = "<td >" . tanggal(date($list->saving_created)) . "</td>";
+                $row[] = $created;
+                $row[] = $btn;
+                $row[] = '';
+                $data[] = $row;
+            }
+
+            $output = [
+                'draw' => $request->getPost('draw'),
+                'recordsTotal' => $this->M_saving->countAll($id_member),
+                'recordsFiltered' => $this->M_saving->countFiltered($id_member),
+                'data' => $data
+            ];
+            $output[$csrfName] = $csrfHash;
+            echo json_encode($output);
+        }
+    }
+    public function withdrawid()
+    {
+        $csrfName = csrf_token();
+        $csrfHash = csrf_hash();
+
+        $request = Services::request();
+        // $datatable = new Sales_Datatable($request);
+        $id_member = $this->request->getPost('id_member');
+        if ($request->getMethod(true) === 'POST') {
+            $lists = $this->M_withdraw->getDatatables($id_member);
+            $data = [];
+            $no = $request->getPost('start');
+
+            foreach ($lists as $list) {
+
+                $no++;
+                $row = [];
+
+                $btn = " <td class=\"project-actions\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/addsaving/invoice/" . $list->id_withdraw . "\">
+                        <i class=\"fas fa-folder\">
+                        </i>
+                        View
+                    </a>
+                </td>";
+
+               
+                $row[] = $no;
+                $row[] = $list->id_withdraw;
+                $row[] = $list->member_name;
+                $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
+                $row[] = $amt;
+                $created = "<td >" . tanggal(date($list->wd_created)) . "</td>";
+                $row[] = $created;
+                $row[] = $btn;
+                $row[] = '';
+                $data[] = $row;
+            }
+
+            $output = [
+                'draw' => $request->getPost('draw'),
+                'recordsTotal' => $this->M_withdraw->countAll($id_member),
+                'recordsFiltered' => $this->M_withdraw->countFiltered($id_member),
                 'data' => $data
             ];
             $output[$csrfName] = $csrfHash;
@@ -1050,7 +1154,7 @@ class Main extends BaseController
                 $row = [];
 
                 $btn = " <td class=\"project-actions\">
-                    <a class=\"btn btn-primary btn-sm\" href=\"/main/addsaving/invoice/" . $list->id_withdraw . "\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/withdraw/invoice/" . $list->id_withdraw . "\">
                         <i class=\"fas fa-folder\">
                         </i>
                         View
@@ -1154,7 +1258,7 @@ class Main extends BaseController
         $request = Services::request();
         // $datatable = new Sales_Datatable($request);
         if ($request->getMethod(true) === 'POST') {
-            $lists = $this->M_loan->getDatatables();
+            $lists = $this->M_installment_dt->getDatatables();
             $data = [];
             $no = $request->getPost('start');
 
@@ -1164,7 +1268,7 @@ class Main extends BaseController
                 $row = [];
 
                 $btn = " <td class=\"project-actions\">
-                    <a class=\"btn btn-primary btn-sm\" href=\"/main/loan/invoice/" . $list->id_loan . "\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/loan/invoice/" . $list->id_installment . "\">
                         <i class=\"fas fa-folder\">
                         </i>
                         View
@@ -1173,13 +1277,14 @@ class Main extends BaseController
 
                
                 $row[] = $no;
-                $row[] = $list->id_loan;
+                $row[] = $list->id_installment;
                 $row[] = $list->member_name;
-                $row[] = $list->loan_term;
+                $row[] = $list->period;
                 $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
                 $row[] = $amt;
-                $created = "<td >" . tanggal(date($list->created_at)) . "</td>";
+                $created = "<td >" . tanggal(date($list->paid_at)) . "</td>";
                 $row[] = $created;
+                $row[] = $list->admin_name;
                 $row[] = $btn;
                 $row[] = '';
                 $data[] = $row;
@@ -1187,8 +1292,8 @@ class Main extends BaseController
 
             $output = [
                 'draw' => $request->getPost('draw'),
-                'recordsTotal' => $this->M_loan->countAll(),
-                'recordsFiltered' => $this->M_loan->countFiltered(),
+                'recordsTotal' => $this->M_installment_dt->countAll(),
+                'recordsFiltered' => $this->M_installment_dt->countFiltered(),
                 'data' => $data
             ];
             $output[$csrfName] = $csrfHash;
