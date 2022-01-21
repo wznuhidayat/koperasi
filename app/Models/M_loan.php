@@ -13,7 +13,7 @@ class M_loan extends Model
     protected $allowedFields = ['id_loan', 'id_member', 'id_type', 'id_admin', 'name', 'amount', 'installment_fee', 'description'];
     // datatables
     protected $column_order = [null, 'id_loan', 'member_name', 'loan_term', null, null, null];
-    protected $column_search = ['member_name', 'id_loan'];
+    protected $column_search = ['id_loan'];
     protected $order = ['created_at' => 'DESC'];
     protected $request;
     protected $db;
@@ -73,24 +73,42 @@ class M_loan extends Model
         }
     }
 
-    public function getDatatables()
+    public function getDatatables($id = false)
     {
-        $this->getDatatablesQuery();
-        if ($this->request->getPost('length') != -1)
-            $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
-        $query = $this->dt->get();
-        return $query->getResult();
+        if ($id === false) {
+            $this->getDatatablesQuery();
+            if ($this->request->getPost('length') != -1)
+                $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
+            $query = $this->dt->get();
+            return $query->getResult();
+        } else {
+            $this->getDatatablesQuery();
+            if ($this->request->getPost('length') != -1)
+                $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
+            $query = $this->dt->getWhere(['' . $this->table . '.id_member' => $id]);
+            return $query->getResult();
+        }
     }
 
-    public function countFiltered()
+    public function countFiltered($id = false)
     {
-        $this->getDatatablesQuery();
-        return $this->dt->countAllResults();
+        if ($id === false) {
+            $this->getDatatablesQuery();
+            return $this->dt->countAllResults();
+        } else {
+            $this->getDatatablesQuery();
+            return $this->dt->where(['' . $this->table . '.id_member' => $id])->countAllResults();
+        }
     }
 
-    public function countAll()
+    public function countAll($id = false)
     {
-        $tbl_storage = $this->db->table($this->table);
-        return $tbl_storage->countAllResults();
+        if ($id === false) {
+            $tbl_storage = $this->db->table($this->table);
+            return $tbl_storage->countAllResults();
+        }else{
+            $tbl_storage = $this->db->table($this->table)->where(['' . $this->table . '.id_member' => $id]);
+            return $tbl_storage->countAllResults();
+        }
     }
 }

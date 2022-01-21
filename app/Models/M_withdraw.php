@@ -13,7 +13,7 @@ class M_withdraw extends Model
 
      // datatables
      protected $column_order = [null,'id_withdraw', 'member_name',null,null,null];
-     protected $column_search = ['name','id_withdraw'];
+     protected $column_search = ['id_withdraw'];
      protected $order = ['withdraw.created_at' => 'DESC'];
      protected $request;
      protected $db;

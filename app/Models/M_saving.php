@@ -14,7 +14,7 @@ class M_saving extends Model
 
     // datatables
     protected $column_order = [null, 'id_saving', 'member_name', 'name_type', null, null, null];
-    protected $column_search = ['name', 'id_saving'];
+    protected $column_search = [ 'id_saving'];
     protected $order = ['saving.created_at' => 'DESC'];
     protected $request;
     protected $db;

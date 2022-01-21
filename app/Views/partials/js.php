@@ -233,6 +233,54 @@
         "orderable": false,
       }, ],
     });
+    var table7 = $('#loan-id').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        "url": "<?= site_url('main/loanlistid') ?>",
+        "type": "POST",
+        "data": {
+          "csrf_test_name": $('input[name=csrf_test_name]').val()
+        },
+        "data": function(data) {
+          data.csrf_test_name = $('input[name=csrf_test_name]').val(),
+          data.id_member = $('#id_member').val()
+        },
+        'dataSrc': function(response) {
+          $('input[name=csrf_test_name]').val(response.csrf_test_name)
+          return response.data;
+        }
+      },
+      "columnDefs": [{
+        "targets": [],
+        "orderable": false,
+      }, ],
+    });
+    var table8 = $('#installment-id').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        "url": "<?= site_url('main/installmentid') ?>",
+        "type": "POST",
+        "data": {
+          "csrf_test_name": $('input[name=csrf_test_name]').val()
+        },
+        "data": function(data) {
+          data.csrf_test_name = $('input[name=csrf_test_name]').val(),
+          data.id_member = $('#id_member').val()
+        },
+        'dataSrc': function(response) {
+          $('input[name=csrf_test_name]').val(response.csrf_test_name)
+          return response.data;
+        }
+      },
+      "columnDefs": [{
+        "targets": [],
+        "orderable": false,
+      }, ],
+    });
   });
 
   function rm_member($id) {

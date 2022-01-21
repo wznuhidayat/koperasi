@@ -344,7 +344,7 @@ class Main extends BaseController
                 $row = [];
 
                 $btn = " <td class=\"project-actions\">
-                    <a class=\"btn btn-primary btn-sm\" href=\"/main/addsaving/invoice/" . $list->id_withdraw . "\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/withdraw/invoice/" . $list->id_withdraw . "\">
                         <i class=\"fas fa-folder\">
                         </i>
                         View
@@ -368,6 +368,105 @@ class Main extends BaseController
                 'draw' => $request->getPost('draw'),
                 'recordsTotal' => $this->M_withdraw->countAll($id_member),
                 'recordsFiltered' => $this->M_withdraw->countFiltered($id_member),
+                'data' => $data
+            ];
+            $output[$csrfName] = $csrfHash;
+            echo json_encode($output);
+        }
+    }
+    public function loanlistid()
+    {
+        $csrfName = csrf_token();
+        $csrfHash = csrf_hash();
+
+        $request = Services::request();
+        $id_member = $this->request->getPost('id_member');
+        if ($request->getMethod(true) === 'POST') {
+            $lists = $this->M_loan->getDatatables($id_member);
+            $data = [];
+            $no = $request->getPost('start');
+
+            foreach ($lists as $list) {
+
+                $no++;
+                $row = [];
+
+                $btn = " <td class=\"project-actions\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/loan/invoice/" . $list->id_loan . "\">
+                        <i class=\"fas fa-folder\">
+                        </i>
+                        View
+                    </a>
+                </td>";
+
+               
+                $row[] = $no;
+                $row[] = $list->id_loan;
+                $row[] = $list->member_name;
+                $row[] = $list->loan_term;
+                $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
+                $row[] = $amt;
+                $created = "<td >" . tanggal(date($list->created_at)) . "</td>";
+                $row[] = $created;
+                $row[] = $btn;
+                $row[] = '';
+                $data[] = $row;
+            }
+
+            $output = [
+                'draw' => $request->getPost('draw'),
+                'recordsTotal' => $this->M_loan->countAll($id_member),
+                'recordsFiltered' => $this->M_loan->countFiltered($id_member),
+                'data' => $data
+            ];
+            $output[$csrfName] = $csrfHash;
+            echo json_encode($output);
+        }
+    }
+    public function installmentid()
+    {
+        $csrfName = csrf_token();
+        $csrfHash = csrf_hash();
+
+        $request = Services::request();
+        $id_member = $this->request->getPost('id_member');
+        if ($request->getMethod(true) === 'POST') {
+            $lists = $this->M_installment_dt->getDatatables();
+            $data = [];
+            $no = $request->getPost('start');
+
+            foreach ($lists as $list) {
+
+                $no++;
+                $row = [];
+
+                $btn = " <td class=\"project-actions\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/loan/invoice/" . $list->id_installment . "\">
+                        <i class=\"fas fa-folder\">
+                        </i>
+                        View
+                    </a>
+                </td>";
+
+               
+                $row[] = $no;
+                $row[] = $list->id_installment;
+                $row[] = $list->member_name;
+                $row[] = $list->period;
+                $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
+                $row[] = $amt;
+                $created = "<td >" . tanggal(date($list->paid_at)) . "</td>";
+                $row[] = $created;
+                $row[] = $list->admin_name;
+                $row[] = $btn;
+                $row[] = '';
+                $data[] = $row;
+            }
+
+            $output = [
+                'draw' => $request->getPost('draw'),
+                'recordsTotal' => $this->M_installment_dt->countAll(),
+                'recordsFiltered' => $this->M_installment_dt->countFiltered(),
                 'data' => $data
             ];
             $output[$csrfName] = $csrfHash;
