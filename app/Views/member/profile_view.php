@@ -32,7 +32,15 @@
                             <input type="hidden" id="id_member" value="<?= $member['id_member'] ?>">
                             <h3 class="profile-username text-center"><?= $member['name'] ?></h3>
 
-                            <p class="text-muted text-center"><?= $saldo ?></p>
+                            <p class="text-muted text-center"><?= $member['id_member'] ?></p>
+                            <div class="bg-gray py-2 px-3 mt-4">
+                                <h2 class="mb-0">
+                                Rp. <?= number_format($saldo, 0, ',', '.') ?>
+                                </h2>
+                                <h4 class="mt-0">
+                                    <small>Saldo tersisa. </small>
+                                </h4>
+                            </div>
 
                         </div>
                         <!-- /.card-body -->

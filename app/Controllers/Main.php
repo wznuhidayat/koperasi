@@ -431,7 +431,7 @@ class Main extends BaseController
         $request = Services::request();
         $id_member = $this->request->getPost('id_member');
         if ($request->getMethod(true) === 'POST') {
-            $lists = $this->M_installment_dt->getDatatables();
+            $lists = $this->M_installment_dt->getDatatables($id_member);
             $data = [];
             $no = $request->getPost('start');
 
@@ -465,8 +465,8 @@ class Main extends BaseController
 
             $output = [
                 'draw' => $request->getPost('draw'),
-                'recordsTotal' => $this->M_installment_dt->countAll(),
-                'recordsFiltered' => $this->M_installment_dt->countFiltered(),
+                'recordsTotal' => $this->M_installment_dt->countAll($id_member),
+                'recordsFiltered' => $this->M_installment_dt->countFiltered($id_member),
                 'data' => $data
             ];
             $output[$csrfName] = $csrfHash;
@@ -1055,6 +1055,7 @@ class Main extends BaseController
                     'id_installment' => intval($pay),
                     'status' => 'paid',
                     'paid_at' => date('Y/m/d h:i:s'),
+                    'id_admin' => $this->request->getPost('id_admin')
                 ];
                 $this->M_installment->pay($data, $pay);
                 $invoice[] = $inv;
