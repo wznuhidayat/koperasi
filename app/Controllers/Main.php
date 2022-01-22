@@ -1342,8 +1342,19 @@ class Main extends BaseController
             echo json_encode($output);
         }
     }
-    public function installment()
+    public function installment($url = 'index', $id = null)
     {
+        if($url == 'invoice' && $id != null){
+            $query = $this->M_installment->getInvoiceInstallment($id);
+            $data = [
+                'title' => "Ansuran Pinjaman",
+                'menu' => 'Master',
+                'invoice' => $this->M_installment->getInvoiceInstallment($id),
+                'member' => $this->M_member->getMember($query['id_member']),
+                'admin' => $this->M_admin->getAdmin($query['id_admin']),
+            ];
+            return view('admin_root/installment/invoice_view', $data);
+        }
         $data = [
             'title' => "Data Ansuran",
             'menu' => 'Master',
@@ -1368,7 +1379,7 @@ class Main extends BaseController
                 $row = [];
 
                 $btn = " <td class=\"project-actions\">
-                    <a class=\"btn btn-primary btn-sm\" href=\"/main/loan/invoice/" . $list->id_installment . "\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/installment/invoice/" . $list->id_installment . "\">
                         <i class=\"fas fa-folder\">
                         </i>
                         View
@@ -1399,6 +1410,29 @@ class Main extends BaseController
             $output[$csrfName] = $csrfHash;
             echo json_encode($output);
         }
+    }
+    public function printinstallmentid($id)
+    {
+        $invoice = $query = $this->M_installment->getInvoiceInstallment($id);
+        $data = [
+            'title' => "Faktur Ansuran",
+            'menu' => 'Transaction',
+            'invoice' => $invoice,
+            'member' => $this->M_member->getMember($query['id_member']),
+            'admin' => $this->M_admin->getAdmin($query['id_admin']),
+        ];
+        $dompdf = new Dompdf();
+        $html = view('admin_root/installment/print_view', $data);
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream("sample.pdf", array("Attachment" => 0));
     }
     public function profile($url = 'index', $id = null)
     {

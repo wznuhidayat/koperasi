@@ -40,7 +40,6 @@ class M_installment extends Model
             // return $this->where(['id_installment' => $id])->first();
             $query = $this->db->table($this->table)->select('' . $this->table . '.*, id_member')
                 ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')
-
                 ->Where(['id_installment' => $id])->get()->getRowArray();
             return $query;
         }
