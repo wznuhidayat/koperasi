@@ -26,9 +26,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Tambah anggota</h3>
-                            <div class="float-sm-right">
-                                <a href="<?= base_url('main/member') ?>" class="btn btn-sm btn-info"><i class="nav-icon fas fa-arrow-left"></i> Back</a>
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Tambah anggota</h3>
+                                <div class="float-sm-right">
+                                    <a href="<?= base_url('main/member') ?>" class="btn btn-sm btn-info"><i class="nav-icon fas fa-arrow-left"></i> Back</a>
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-header -->

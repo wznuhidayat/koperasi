@@ -6,13 +6,13 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Anggota</h1>
+            <div class="col-sm-6">
+                    <h1><?= ucfirst($title) ?></h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
+                        <li class="breadcrumb-item"><a href="#"><?= ucfirst($menu) ?></a></li>
+                        <li class="breadcrumb-item active"><?= ucfirst($title) ?></li>
                     </ol>
                 </div>
             </div>
@@ -26,9 +26,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Tambah anggota</h3>
-                            <div class="float-sm-right">
-                                <a href="<?= base_url('main/typesaving') ?>" class="btn btn-sm btn-info"><i class="nav-icon fas fa-arrow-left"></i> Back</a>
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Tipe Simpanan</h3>
+                                <div class="float-sm-right">
+                                    <a href="<?= base_url('main/typesaving') ?>" class="btn btn-sm btn-info"><i class="nav-icon fas fa-arrow-left"></i> Back</a>
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-header -->

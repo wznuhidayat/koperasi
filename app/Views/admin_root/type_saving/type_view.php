@@ -6,13 +6,13 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Tipe Simpanan</h1>
+            <div class="col-sm-6">
+                    <h1><?= ucfirst($title) ?></h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
+                        <li class="breadcrumb-item"><a href="#"><?= ucfirst($menu) ?></a></li>
+                        <li class="breadcrumb-item active"><?= ucfirst($title) ?></li>
                     </ol>
                 </div>
             </div>
@@ -61,11 +61,7 @@
                                                         <td><?= $types["id_saving_type"] ?></td>
                                                         <td><?= $types["name_type"] ?></td>
                                                         <td class="project-actions">
-                                                            <a class="btn btn-primary btn-sm" href="#">
-                                                                <i class="fas fa-folder">
-                                                                </i>
-                                                                View
-                                                            </a>
+                                                           
                                                             <a class="btn btn-info btn-sm" href="/main/typesaving/edit/<?= $types['id_saving_type'] ?>">
                                                                 <i class="fas fa-pencil-alt">
                                                                 </i>

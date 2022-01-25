@@ -196,8 +196,10 @@ class Main extends BaseController
             }
             return redirect()->to('/main/member');
         } elseif ($url == 'delete' && $id != null) {
-            // $item = $this->M_member->getMember($id);
-
+            $item = $this->M_admin->getAdmin($id);
+            if ($item['img'] != 'default.png') {
+                unlink('img/admin/' . $item['img']);
+            }
             $this->M_member->delete($id);
             if ($this->M_member->affectedRows() > 0) {
                 session()->setFLashdata('deleted', 'Data telah dihapus!');
@@ -535,7 +537,7 @@ class Main extends BaseController
         } elseif ($url == 'edit' && $id != null) {
             $query_type = $this->M_type_saving->getType($id);
             $data = [
-                'title' => 'Edit Tipe',
+                'title' => 'Edit Tipe Simpanan',
                 'type' => $query_type,
                 'menu' => 'Master',
                 'validation' => \Config\Services::validation(),
@@ -585,7 +587,7 @@ class Main extends BaseController
             return redirect()->to('/main/typesaving');
         }
         $data = [
-            'title' => "Type Saving",
+            'title' => "Tipe Simpanan",
             'menu' => 'Master',
             'type' => $this->M_type_saving->getType(),
         ];
@@ -593,9 +595,12 @@ class Main extends BaseController
     }
     public function typeloan($url = 'index', $id = null)
     {
+        if (session('role') != 'root') {
+            return redirect()->to(site_url('main'));
+        }
         if ($url == 'create') {
             $data = [
-                'title' => 'Tipe Simpanan',
+                'title' => 'Tipe Pinjaman',
                 'menu' => 'Master',
                 'validation' => \Config\Services::validation()
             ];
@@ -655,7 +660,7 @@ class Main extends BaseController
         } elseif ($url == 'edit' && $id != null) {
             $query_type = $this->M_type_loan->getType($id);
             $data = [
-                'title' => 'Edit Tipe',
+                'title' => 'Edit Tipe Pinjaman',
                 'menu' => 'Master',
                 'type' => $query_type,
                 'validation' => \Config\Services::validation(),
@@ -713,7 +718,7 @@ class Main extends BaseController
             return redirect()->to('/main/typeloan');
         }
         $data = [
-            'title' => "Type loan",
+            'title' => "Tipe Pinjaman",
             'menu' => 'Master',
             'type' => $this->M_type_loan->getType(),
         ];

@@ -26,10 +26,13 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Tambah anggota</h3>
-                            <div class="float-sm-right">
-                                <a href="<?= base_url('main/member') ?>" class="btn btn-sm btn-info"><i class="nav-icon fas fa-arrow-left"></i> Back</a>
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Tambah anggota</h3>
+                                <div class="float-sm-right">
+                                    <a href="<?= base_url('main/member') ?>" class="btn btn-sm btn-info"><i class="nav-icon fas fa-arrow-left"></i> Back</a>
+                                </div>
                             </div>
+
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -53,7 +56,7 @@
                                 <div class="form-group">
                                     <label>Tanggal lahir</label>
                                     <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input <?= ($validation->hasError('birth')) ? 'is-invalid' : '' ?>" data-target="#reservationdate" name="birth"  value="<?= $member['date_of_birth'] ?>" />
+                                        <input type="text" class="form-control datetimepicker-input <?= ($validation->hasError('birth')) ? 'is-invalid' : '' ?>" data-target="#reservationdate" name="birth" value="<?= $member['date_of_birth'] ?>" />
                                         <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
@@ -67,10 +70,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="inputaddress">Alamat</label>
-                                    <textarea id="inputaddress" class="form-control <?= ($validation->hasError('address')) ? 'is-invalid' : '' ?>" rows="4" name="address" ><?= $member['address'] ?></textarea>
+                                    <textarea id="inputaddress" class="form-control <?= ($validation->hasError('address')) ? 'is-invalid' : '' ?>" rows="4" name="address"><?= $member['address'] ?></textarea>
                                     <span class="error invalid-feedback"><?= $validation->getError('address'); ?></span>
                                 </div>
-                               
+
 
                                 <button type="submit" class="btn btn-md btn-info"><i class="nav-icon fas fa-save"></i> Simpan</button>
                             </form>
