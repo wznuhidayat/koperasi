@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use CodeIgniter\Database\Query;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\Model;
 
@@ -35,6 +36,10 @@ class M_saving extends Model
     {
         $query = $this->db->table($this->table)->insert($data);
         return $query;
+    }
+    public function sumSaving()
+    {
+        return $this->db->table($this->table)->select('sum(amount) as totalAmount')->get()->getRowArray();   
     }
     public function getInvoice($id)
     {

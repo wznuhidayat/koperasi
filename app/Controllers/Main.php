@@ -39,8 +39,14 @@ class Main extends BaseController
     {
         $data = [
             'title' => "Dashboard",
-            'menu' => 'Dashboard'
+            'menu' => 'Dashboard',
+            'saving' => $this->M_saving->sumSaving(),
+            'loan' => $this->M_loan->sumloan(),
+            'withdraw' => $this->M_withdraw->sumwithdraw(),
+            'installment' => $this->M_installment->suminstallment(),
+
         ];
+        // dd($data);
         return view('dashboard', $data);
     }
     public function member($url = 'index', $id = null)
@@ -111,7 +117,7 @@ class Main extends BaseController
                 'date_of_birth' => $this->request->getPost('birth'),
                 'phone' => $this->request->getPost('phone'),
                 'address' => $this->request->getPost('address'),
-                'gender' => $this->request->getPost(('gender')),
+                'gender' => $this->request->getPost('gender'),
                 'created_at' => date('Y/m/d h:i:s'),
 
             ];
@@ -1521,5 +1527,191 @@ class Main extends BaseController
         // dd($data);
         return view('setting/profile/profile_view', $data);
     }
-   
+    public function admin($url = 'index', $id = null)
+    {
+        if ($url == 'create') {
+            $data = [
+                'title' => 'Add admin',
+                'menu' => 'admin',
+                'validation' => \Config\Services::validation()
+            ];
+            return view('admin/add_admin', $data);
+        } elseif ($url == 'save') {
+            if (!$this->validate([
+                'name' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Masukkan nama anggota baru!',
+                    ],
+
+                ],
+                'phone' => [
+                    'rules'  => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Silahkan masukkan nomor telp terlebih dahulu!',
+                        'numeric' => 'Anda hanya dapat memasukkan angka!'
+                    ],
+
+                ],
+                'gender' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Jenis kelamin belum anda pilih.',
+                    ],
+
+                ],
+                'role' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Role belum anda pilih.',
+                    ],
+
+                ],
+                'password' => [
+                    'rules' => 'required|min_length[8]',
+                    'errors' => [
+                        'matches' => 'Password yang anda masukkan tidak sesuai',
+                        'min_length' => 'Password yang anda masukkan kurang dari 8',
+                    ],
+
+                ],
+                'passconf' => [
+                    'rules' => 'matches[password]',
+                    'errors' => [
+                        'matches' => 'Password yang anda masukkan tidak sesuai',
+                    ],
+
+                ],
+            ])) {
+                // return ;
+                $validation = \Config\Services::validation();
+                return redirect()->to('/main/admin/create')->withInput()->with('validation', $validation);
+            }
+
+            $str = "";
+            $characters = array_merge(range('0', '9'));
+            $max = count($characters) - 1;
+            for ($i = 0; $i < 8; $i++) {
+                $rand = mt_rand(0, $max);
+                $str .= $characters[$rand];
+            }
+            $data = [
+                'id_admin' => $str,
+                'name' => $this->request->getPost('name'),
+                'phone' => $this->request->getPost('phone'),
+                'gender' => $this->request->getPost('gender'),
+                'role' => $this->request->getPost('role'),
+                'password' => md5($this->request->getPost('password')),
+                'img' => 'default.png',
+                'created_at' => date('Y/m/d h:i:s'),
+
+            ];
+            $this->M_admin->saveadmin($data);
+            if ($this->M_admin->affectedRows() > 0) {
+                session()->setFLashdata('success', 'Data telah disimpan.');
+            }
+            return redirect()->to('/main/admin');
+        } elseif ($url == 'edit' && $id != null) {
+            $query_admin = $this->M_admin->getadmin($id);
+            $data = [
+                'title' => 'Edit admin',
+                'admin' => $query_admin,
+                'menu' => 'admin',
+                'validation' => \Config\Services::validation(),
+            ];
+            return view('admin/edit_admin', $data);
+        } elseif ($url == 'update' && $id != null) {
+            $query_admin = $this->M_admin->getadmin($id);
+            if (!$this->validate([
+                'name' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Masukkan nama anggota baru!',
+                    ],
+
+                ],
+                'phone' => [
+                    'rules'  => 'required|numeric',
+                    'errors' => [
+                        'required' => 'Silahkan masukkan nomor telp terlebih dahulu!',
+                        'numeric' => 'Anda hanya dapat memasukkan angka!'
+                    ],
+
+                ],
+                'gender' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Jenis kelamin belum anda pilih.',
+                    ],
+
+                ],
+                'role' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Role belum anda pilih.',
+                    ],
+
+                ],
+                
+                'passconf' => [
+                    'rules' => 'matches[password]',
+                    'errors' => [
+                        'matches' => 'Password yang anda masukkan tidak sesuai',
+                    ],
+
+                ],
+
+            ])) {
+                // return ;
+                $validation = \Config\Services::validation();
+                return redirect()->to('/main/admin/edit', $id)->withInput()->with('validation', $validation);
+            }
+            if (empty($this->request->getPost('password'))) {
+                $pass = $query_admin['password'];
+            } else {
+                $pass = md5($this->request->getPost('password'));
+            }
+            $data = array(
+                'name' => $this->request->getPost('name'),
+                'phone' => $this->request->getPost('phone'),
+                'gender' => $this->request->getPost('gender'),
+                'role' => $this->request->getPost('role'),
+                'password' => $pass,
+                'created_at' => $query_admin["created_at"],
+            );
+            $this->M_admin->updateadmin($data, $this->request->getPost('id'));
+            if ($this->M_admin->affectedRows() > 0) {
+                session()->setFLashdata('edited', 'Data telah diubah.');
+            }
+            return redirect()->to('/main/admin');
+        } elseif ($url == 'delete' && $id != null) {
+            // $item = $this->M_admin->getadmin($id);
+
+            $this->M_admin->delete($id);
+            if ($this->M_admin->affectedRows() > 0) {
+                session()->setFLashdata('deleted', 'Data telah dihapus!');
+            }
+            return redirect()->to('/main/admin');
+        } elseif ($url == 'profile' && $id != null){
+            $data = [
+                'title' => "admin",
+                'menu' => 'admin',
+                'admin' => $this->M_admin->getadmin($id),
+                'saldo' => $this->saldo($id),
+                
+            ];
+            return view('admin/profile_view', $data);
+        }
+        $data = [
+            'title' => "admin",
+            'menu' => 'admin',
+            'admin' => $this->M_admin->getadmin(),
+            
+        ];
+        return view('admin/admin_view', $data);
+    }
+    public function day()
+    {
+       dd($this->M_saving->sumSaving());
+    }
 }   

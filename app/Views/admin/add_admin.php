@@ -7,12 +7,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Anggota</h1>
+                    <h1>Admin</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
+                        <li class="breadcrumb-item active">Admin</li>
                     </ol>
                 </div>
             </div>
@@ -26,14 +26,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Tambah anggota</h3>
-                            <div class="float-sm-right">
-                                <a href="<?= base_url('main/member') ?>" class="btn btn-sm btn-info"><i class="nav-icon fas fa-arrow-left"></i> Back</a>
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Tambah Admin</h3>
+                                <div class="float-sm-right">
+                                    <a href="<?= base_url('main/admin') ?>" class="btn btn-sm btn-info"><i class="nav-icon fas fa-arrow-left"></i> Back</a>
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <form action="/main/member/save" method="post">
+                            <form action="/main/admin/save" method="post">
                                 <?= csrf_field() ?>
                                 <div class="form-group">
                                     <label for="inputName">Nama</label>
@@ -50,27 +52,30 @@
                                     <span class="error invalid-feedback"><?= $validation->getError('gender'); ?></span>
                                 </div>
                                 <div class="form-group">
-                                    <label>Tanggal lahir</label>
-                                    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input <?= ($validation->hasError('birth')) ? 'is-invalid' : '' ?>" data-target="#reservationdate" name="birth" />
-                                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>
-                                        <span class="error invalid-feedback"><?= $validation->getError('birth'); ?></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label for="phone">Nomor Telp</label>
                                     <input type="text" id="phone" class="form-control <?= ($validation->hasError('phone')) ? 'is-invalid' : '' ?>" name="phone">
                                     <span class="error invalid-feedback"><?= $validation->getError('phone'); ?></span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputaddress">Alamat</label>
-                                    <textarea id="inputaddress" class="form-control <?= ($validation->hasError('address')) ? 'is-invalid' : '' ?>" rows="4" name="address"></textarea>
-                                    <span class="error invalid-feedback"><?= $validation->getError('address'); ?></span>
+                                    <label for="inputStatus">Role</label>
+                                    <select id="inputStatus" class="form-control custom-select <?= ($validation->hasError('role')) ? 'is-invalid' : '' ?>" name="role">
+                                        <option selected disabled>Select one</option>
+                                        <option value="root">Root</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                    <span class="error invalid-feedback"><?= $validation->getError('role'); ?></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputpass">Password</label>
+                                    <input type="password" id="inputpass" class="form-control  <?= ($validation->hasError('password')) ? 'is-invalid' : '' ?>" name="password">
+                                    <span class="error invalid-feedback"><?= $validation->getError('password'); ?></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="passconf">Konfirmasi Password</label>
+                                    <input type="password" id="passconf" class="form-control  <?= ($validation->hasError('passconf')) ? 'is-invalid' : '' ?>" name="passconf">
+                                    <span class="error invalid-feedback"><?= $validation->getError('passconf'); ?></span>
                                 </div>
                                 
-
                                 <button type="submit" class="btn btn-md btn-info"><i class="nav-icon fas fa-save"></i> Simpan</button>
                             </form>
                         </div>

@@ -44,7 +44,10 @@ class M_installment extends Model
             return $query;
         }
     }
-
+    public function sumInstallment()
+    {
+        return $this->db->table($this->table)->select('sum(amount) as totalAmount')->where('status','paid')->get()->getRowArray();   
+    }
     public function saveInstallment($data)
     {
         $query = $this->db->table($this->table)->insert($data);

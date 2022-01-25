@@ -18,7 +18,7 @@ class Auth extends BaseController
     }
     public function login()
     {
-        if(session('id_admin')){
+        if (session('id_admin')) {
             return redirect()->to(site_url('main'));
         }
         $data = [
@@ -58,22 +58,24 @@ class Auth extends BaseController
                     'id_admin'    => $data['id_admin'],
                     'name'     => $data['name'],
                     'img'   => $data['img'],
-                    'role'     => 'admin'
+                    'role'     => $data['role']
                 ];
                 session()->set($ses_data);
                 return redirect()->to('/main');
             } else {
+                session()->setFLashdata('amount-error', 'ID atau password tidak sesuai');
                 return redirect()->back()->with('error', 'Your ID or password is wrong!');
             }
         } else {
+            session()->setFLashdata('amount-error', 'ID tidak Terdaftar.');
             return redirect()->back()->with('error', 'ID is not registered');
         }
     }
-        public function logout()
-        {
-            session()->destroy();
-            return redirect()->to('/auth/login');
-        }
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('/auth/login');
+    }
     //     public function loginSeller()
     //     {
     //         return view('auth/login_seller');

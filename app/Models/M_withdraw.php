@@ -110,7 +110,10 @@ class M_withdraw extends Model
             return $this->dt->where(['' . $this->table . '.id_member' => $id])->countAllResults();
         }
     }
-
+    public function sumWithdraw()
+    {
+        return $this->db->table($this->table)->select('sum(amount) as totalAmount')->get()->getRowArray();   
+    }
     public function countAll($id = false)
     {
         if ($id === false) {

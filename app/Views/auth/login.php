@@ -5,6 +5,7 @@
   <div class="login-logo">
     <a href="<?= base_url() ?>/assets/template/index2.html"><b>Koperasi</b></a>
   </div>
+  <div class="flash-data-amount-error" data-flashdata="<?= session()->getFlashdata('amount-error'); ?>"></div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
@@ -42,10 +43,10 @@
 
       
 
-      <p class="mb-3 mt-2">
+      <!-- <p class="mb-3 mt-2">
         <a href="forgot-password.html">Lupa password?</a>
       </p>
-      
+       -->
     </div>
     <!-- /.login-card-body -->
   </div>

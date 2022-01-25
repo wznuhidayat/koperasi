@@ -18,11 +18,11 @@ class M_admin extends Model
             return $this->where(['id_admin' => $id])->first();
         }   
     }
-    // public function saveAdmin($data)
-    // {
-    //     $query = $this->db->table($this->table)->insert($data);
-    //     return $query;
-    // }
+    public function saveAdmin($data)
+    {
+        $query = $this->db->table($this->table)->insert($data);
+        return $query;
+    }
     // public function updateAdmin($data, $id){
     //     $query = $this->db->table($this->table)->update($data,['id_admin' => $id]);
     //     return $query;

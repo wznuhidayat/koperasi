@@ -12,7 +12,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="<?= base_url() ?>/assets/template/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                <img src="/img/admin/<?= session()->get('img'); ?>" class="img-circle elevation-2" alt="User Image" style="min-height: 34px;">
             </div>
             <div class="info">
                 <a href="#" class="d-block"><?= ucwords(session()->get('name'))?></a>
@@ -132,6 +132,15 @@
                             </a>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url('/main/admin')?>" class="nav-link  <?= $menu == 'admin' ? 'active' : '' ?>">
+
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Admin
+                        </p>
+                    </a>
                 </li>
             </ul>
         </nav>
