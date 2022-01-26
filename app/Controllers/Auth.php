@@ -63,12 +63,10 @@ class Auth extends BaseController
                 session()->set($ses_data);
                 return redirect()->to('/main');
             } else {
-                session()->setFLashdata('amount-error', 'ID atau password tidak sesuai');
-                return redirect()->back()->with('error', 'Your ID or password is wrong!');
+                return redirect()->back()->with('error', 'ID atau Password salah!');
             }
         } else {
-            session()->setFLashdata('amount-error', 'ID tidak Terdaftar.');
-            return redirect()->back()->with('error', 'ID is not registered');
+            return redirect()->back()->with('error', 'ID tidak terdaftar');
         }
     }
     public function logout()
@@ -76,36 +74,5 @@ class Auth extends BaseController
         session()->destroy();
         return redirect()->to('/auth/login');
     }
-    //     public function loginSeller()
-    //     {
-    //         return view('auth/login_seller');
-    //     }
-    //     public function loginSellerProcess()
-    //     {
-    //         $data = $this->M_seller->getSellerByEmail($this->request->getPost('email'));
-    //         if ($data) {
-    //             if ($data['password'] === md5($this->request->getPost('password'))) {
-    //                  $ses_data = [
-    //                     'id_seller'    => $data['id_seller'],
-    //                     'name'     => $data['name'],
-    //                     'email'     => $data['email'],
-    //                     'img'   => $data['img'],
-    //                     'role'     => 'seller'
-    //                 ];
-    //                 session()->set($ses_data);
-    //                 return redirect()->to('/seller');
-    //             } else {
-    //                 return redirect()->back()->with('error','Your email or password is wrong!');
-    //             }
-
-
-    //         } else {
-    //             return redirect()->back()->with('error','Email is not registered');
-    //         }
-    //     }
-    //     public function logoutSeller()
-    //     {
-    //         session()->destroy();
-    //         return redirect()->to('/auth/loginSeller');
-    //     }
+    
 }

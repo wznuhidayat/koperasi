@@ -61,25 +61,25 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item ">
                             <a href="<?= base_url('/main/addsaving')?>" class="nav-link <?= $request->uri->getSegment(2) == 'addsaving' ? 'active' : '' ?>">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="fas fa-money-check nav-icon"></i>
                                 <p>Setor Tunai</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="<?= base_url('/main/withdraw')?>" class="nav-link <?= $request->uri->getSegment(2) == 'withdraw' ? 'active' : '' ?>">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="fas fa-money-check-alt nav-icon"></i>
                                 <p>Penarikan</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="<?= base_url('/main/loan')?>" class="nav-link <?= $request->uri->getSegment(2) == 'loan' ? 'active' : '' ?>">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="fas fa-hand-holding-usd nav-icon"></i>
                                 <p>Pinjam Tunai</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="<?= base_url('/main/installmentpay')?>" class="nav-link <?= $request->uri->getSegment(2) == 'installmentpay' ? 'active' : '' ?>">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="fas fa-file-invoice-dollar nav-icon"></i>
                                 <p>Angsur Pinjaman</p>
                             </a>
                         </li>
@@ -88,7 +88,7 @@
                 </li>
                 <li class="nav-item  <?= $menu == 'Master' ? 'menu-is-opening menu-open' : '' ?>">
                     <a href="#" class="nav-link <?= $menu == 'Master' ? 'active' : '' ?>">
-                        <i class="nav-icon fas fa-copy"></i>
+                        <i class="nav-icon fas fa-database"></i>
                         <p>
                             Data Master
                             <i class="fas fa-angle-left right"></i>

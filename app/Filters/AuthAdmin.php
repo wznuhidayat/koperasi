@@ -4,7 +4,7 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Filters\FilterInterface;
 
-class Auth implements FilterInterface
+class AuthAdmin implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
@@ -19,9 +19,10 @@ class Auth implements FilterInterface
  
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
-        if(session()->get('role') == 'root'){
+        if(session()->get('role') == 'admin'){
             // maka redirct ke halaman login
             return redirect()->to('/main/index'); 
         }
+       
     }
 }

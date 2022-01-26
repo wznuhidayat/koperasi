@@ -7,6 +7,7 @@ use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
 use CodeIgniter\Filters\Honeypot;
 use \App\Filters\Auth;
+use \App\Filters\AuthAdmin;
 
 class Filters extends BaseConfig
 {
@@ -21,6 +22,7 @@ class Filters extends BaseConfig
         'toolbar'  => DebugToolbar::class,
         'honeypot' => Honeypot::class,
         'auth' => auth::class,
+        'authAdmin' => authAdmin::class,
     ];
 
     /**
@@ -31,11 +33,15 @@ class Filters extends BaseConfig
      */
     public $globals = [
         'before' => [
-            'auth' => ['except' => ['/auth/*']]
+            'auth' => ['except' => ['/auth/*']],
+            'authAdmin' => ['except' => ['/auth/*']]
             // 'honeypot',
             // 'csrf',
         ],
         'after' => [
+            'auth' => ['except' => ['/main/*']],
+            // 'authAdmin' => ['except' => ['/main/*']],
+            
             'toolbar',
             // 'honeypot',
         ],

@@ -3,16 +3,22 @@
 <?= $this->section('content') ?>
 <div class="login-box">
   <div class="login-logo">
-    <a href="<?= base_url() ?>/assets/template/index2.html"><b>Koperasi</b></a>
+    <h2>Koperasi</h2>
   </div>
-  <div class="flash-data-amount-error" data-flashdata="<?= session()->getFlashdata('amount-error'); ?>"></div>
+
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Login</p>
-
-      <form action="<?= site_url('auth/loginprocess')?>" method="post">
-      <?= csrf_field() ?>
+      <?php if (session()->getFlashdata('error')) : ?>
+        <div class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <h5><i class="icon fas fa-exclamation-triangle"></i> Error!</h5>
+          <?= session()->getFlashdata('error'); ?>
+        </div>
+      <?php endif ?>
+      <form action="<?= site_url('auth/loginprocess') ?>" method="post">
+        <?= csrf_field() ?>
         <div class="input-group mb-3">
           <input type="text" class="form-control <?= ($validation->hasError('id_admin')) ? 'is-invalid' : '' ?>" placeholder="ID Admin" name="id_admin" id="InputAdmin">
           <div class="input-group-append">
@@ -32,7 +38,7 @@
           <span id="exampleInputPassword1-error" class="error invalid-feedback"><?= $validation->getError('password'); ?></span>
         </div>
         <div class="row">
-          
+
           <!-- /.col -->
           <div class="col-12">
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
@@ -41,7 +47,7 @@
         </div>
       </form>
 
-      
+
 
       <!-- <p class="mb-3 mt-2">
         <a href="forgot-password.html">Lupa password?</a>
