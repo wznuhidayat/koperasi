@@ -580,6 +580,10 @@ class Main extends BaseController
             }
             return redirect()->to('/main/typesaving');
         } elseif ($url == 'delete' && $id != null) {
+            if($this->M_saving->getWhereType($id) != null){
+                session()->setFLashdata('amount-error', ' Gagal, Tipe telah terpakai!');
+                return redirect()->to('/main/typesaving');
+            }
             $this->M_type_saving->delete($id);
             if ($this->M_type_saving->affectedRows() > 0) {
                 session()->setFLashdata('deleted', 'Data telah dihapus!');
@@ -711,6 +715,10 @@ class Main extends BaseController
             }
             return redirect()->to('/main/typeloan');
         } elseif ($url == 'delete' && $id != null) {
+            if($this->M_loan->getWhereType($id) != null){
+                session()->setFLashdata('amount-error', ' Gagal, Tipe telah terpakai!');
+                return redirect()->to('/main/typeloan');
+            }
             $this->M_type_loan->delete($id);
             if ($this->M_type_loan->affectedRows() > 0) {
                 session()->setFLashdata('deleted', 'Data telah dihapus!');

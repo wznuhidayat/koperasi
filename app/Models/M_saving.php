@@ -32,6 +32,10 @@ class M_saving extends Model
     {
         return $this->db->table($this->table)->select('SUM(saving.amount) as saldo')->where(['id_member' => $id])->get()->getRowArray();
     }
+    public function getWhereType($id)
+    {
+        return $this->where(['id_type' => $id])->findAll();
+    }
     public function saveDeposit($data)
     {
         $query = $this->db->table($this->table)->insert($data);

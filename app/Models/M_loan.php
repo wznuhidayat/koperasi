@@ -23,6 +23,10 @@ class M_loan extends Model
         $query = $this->db->table($this->table)->insert($data);
         return $query;
     }
+    public function getWhereType($id)
+    {
+        return $this->where(['id_type' => $id])->findAll();
+    }
     public function getInvoice($id)
     {
         $query = $this->db->table($this->table)->select('' . $this->table . '.*,' . $this->table . '.created_at as loan_created,' . $this->table . '.name as loan_name,member.*, admin.name as admin_name, type_of_loan.loan_term as installment_term')

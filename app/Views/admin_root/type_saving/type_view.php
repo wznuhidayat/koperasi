@@ -18,6 +18,7 @@
             </div>
         </div><!-- /.container-fluid -->
     </section>
+    <div class="flash-data-amount-error" data-flashdata="<?= session()->getFlashdata('amount-error'); ?>"></div>
 
     <!-- Main content -->
     <section class="content">
