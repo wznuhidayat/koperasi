@@ -62,11 +62,7 @@
                                                         <td><?= $types["id_loan_type"] ?></td>
                                                         <td><?= $types["name_type"] ?></td>
                                                         <td class="project-actions">
-                                                            <a class="btn btn-primary btn-sm" href="#">
-                                                                <i class="fas fa-folder">
-                                                                </i>
-                                                                View
-                                                            </a>
+                                                           
                                                             <a class="btn btn-info btn-sm" href="/main/typeloan/edit/<?= $types['id_loan_type'] ?>">
                                                                 <i class="fas fa-pencil-alt">
                                                                 </i>

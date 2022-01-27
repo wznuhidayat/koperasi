@@ -7,6 +7,7 @@ use CodeIgniter\I18n\Time;
 use \DateTime;
 use Dompdf\Dompdf;
 use App\Models\M_admin;
+use App\Models\M_setting;
 use App\Models\M_member;
 use App\Models\M_type_saving;
 use App\Models\M_saving;
@@ -23,6 +24,7 @@ class Main extends BaseController
     public function __construct()
     {
         $this->M_admin = new M_admin();
+        $this->M_setting = new M_setting();
         $request = Services::request();
         $this->M_member = new M_member($request);
         $this->M_type_saving = new M_type_saving();
@@ -1723,8 +1725,52 @@ class Main extends BaseController
         ];
         return view('admin/admin_view', $data);
     }
-    public function day()
+    public function settings($url = 'index')
     {
-       dd($this->M_saving->sumSaving());
+        if ($url == 'update') {
+            $query_admin = $this->M_admin->getadmin($this->request->getPost('id'));
+          
+            if (!$this->validate([
+                'title' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Masukkan Nama Koperasi!',
+                    ],
+                ], 
+                'address' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Masukkan Alamat lengkap koperasi!',
+                    ],
+                ], 
+                'contact' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Massukkan Contact Koperasi!',
+                    ],
+                ], 
+            ])) {
+                // return ;
+                $validation = \Config\Services::validation();
+                session()->setFLashdata('amount-error', 'Data gagal telah diubah.');
+                return redirect()->to('/main/settings/index/')->withInput()->with('validation', $validation);
+            }
+            $data = array(
+                'title' => $this->request->getPost('title'),
+                'address' => $this->request->getPost('address'),
+                'contact' => $this->request->getPost('contact'),
+            );
+            $this->M_setting->updateadmin($data, 11111111);
+            if ($this->M_setting->affectedRows() > 0) {
+                session()->setFLashdata('success', 'Data telah diubah.');
+            }
+            return redirect()->to('/main/settings');
+        }
+        $data = [
+            'title' => "Setting",
+            'menu' => 'Aplikasi',
+            'setting' => $this->M_setting->getSetting(11111111)
+        ];
+        return view('setting/app/settings_view', $data);
     }
 }   
