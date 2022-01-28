@@ -30,18 +30,14 @@
           <!-- Main content -->
           <div class="invoice p-3 mb-3">
             <!-- Table row -->
-            <h2 class="text-center">Koperasi Indonesia</h2>
-            <h4 class="text-center">From
-              Admin, Inc.
-              795 Folsom Ave, Suite 600
-              San Francisco, CA 94107
-              Phone: (804) 123-5432
-              Email: info@almasaeedstudio.com</h4>
+            <h2 class="text-center"><?= $setting['title'] ?></h2>
+            <h4 class="text-center"><?= $setting['address'] ?><br>
+              <?= $setting['contact'] ?></h4>
             <hr>
             <div class="detail row">
               <div class="col-6 detail-left">
                 <p>Nama &emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp; : <?= $invoice['member_name'] ?> </p>
-                <p>Jenis Kelamin &emsp;  : <?= ($invoice['gender'] == 'male') ? "Laki-laki" : "Perempuan" ?> </p>
+                <p>Jenis Kelamin &emsp; : <?= ($invoice['gender'] == 'male') ? "Laki-laki" : "Perempuan" ?> </p>
                 <p>Tgl Lahir &emsp;&emsp;&emsp;&nbsp; : <?= tanggal(date($invoice['date_of_birth'])) ?> </p>
               </div>
               <div class="col-6 detail-right">
@@ -67,8 +63,8 @@
                       <td><?= $invoice['id_saving'] ?></td>
                       <td><?= $invoice['description'] ?></td>
                       <td>Rp. <?= number_format($saldo - $invoice['amount'], 0, ',', '.') ?></td>
-                      <td>Rp.  <?= number_format($invoice['amount'], 0, ',', '.') ?></td>
-                      <td>Rp.  <?= number_format($saldo , 0, ',', '.') ?></td>
+                      <td>Rp. <?= number_format($invoice['amount'], 0, ',', '.') ?></td>
+                      <td>Rp. <?= number_format($saldo, 0, ',', '.') ?></td>
                     </tr>
 
                   </tbody>
@@ -100,11 +96,9 @@
             <div class="row no-print">
               <div class="col-12">
                 <a href="/main/printsaving/<?= $invoice['id_saving']; ?>" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-                <button type="button" class="btn btn-success float-right"><i class="far fa-check-circle"></i> Done
+                <a href="/main/addsaving"  class="btn btn-success float-right"><i class="far fa-check-circle"></i></i> Done</a>
                 </button>
-                <button type="button" class="btn btn-info float-right" style="margin-right: 5px;">
-                  <i class="fas fa-print"></i> Print
-                </button>
+                
               </div>
             </div>
           </div>

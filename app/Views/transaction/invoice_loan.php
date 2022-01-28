@@ -30,13 +30,9 @@
           <!-- Main content -->
           <div class="invoice p-3 mb-3">
             <!-- Table row -->
-            <h2 class="text-center">Koperasi Indonesia</h2>
-            <h4 class="text-center">From
-              Admin, Inc.
-              795 Folsom Ave, Suite 600
-              San Francisco, CA 94107
-              Phone: (804) 123-5432
-              Email: info@almasaeedstudio.com</h4>
+            <h2 class="text-center"><?= $setting['title'] ?></h2>
+            <h4 class="text-center"><?= $setting['address'] ?><br>
+              <?= $setting['contact'] ?></h4>
             <hr>
             <div class="detail row">
               <div class="col-6 detail-left">
@@ -102,8 +98,7 @@
             <div class="row no-print">
               <div class="col-12">
                 <a href="/main/printloan/<?= $invoice['id_loan']; ?>" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-                <button type="button" class="btn btn-success float-right"><i class="far fa-check-circle"></i> Done
-                </button>
+                <a href="/main/addsaving"  class="btn btn-success float-right"><i class="far fa-check-circle"></i></i> Done</a>
                 
               </div>
             </div>

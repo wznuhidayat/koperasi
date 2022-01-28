@@ -67,14 +67,11 @@
 </head>
 
 <body>
-  <h2 class="text-center">Koperasi Indonesia</h2>
-  <h4 class="text-center">From
-    Admin, Inc.
-    795 Folsom Ave, Suite 600
-    San Francisco, CA 94107
+  <h2 class="text-center"><?= $setting['title'] ?></h2>
+  <h4 class="text-center">
+    <?= $setting['address'] ?>
     <br>
-    Phone: (804) 123-5432
-    Email: info@almasaeedstudio.com
+    <?= $setting['contact'] ?>
   </h4>
   <hr>
   <div class="detail">
@@ -107,8 +104,8 @@
             <td style="width: 10%;"><?= $invoice['id_loan'] ?></td>
             <td style="width: 20%;"><?= $invoice['name'] ?></td>
             <td style="width: 20%;">Rp. <span style="float: right;"><?= number_format($invoice['amount'], 0, ',', '.') ?></td>
-            <td style="width: 20%;"><?= $invoice['installment_term']; ?>  <span style="float: right;">kali</span></td>
-            <td style="width: 10%;"><span style="float: right;"><?= $invoice['installment_fee']; ?>  %</span></td>
+            <td style="width: 20%;"><?= $invoice['installment_term']; ?> <span style="float: right;">kali</span></td>
+            <td style="width: 10%;"><span style="float: right;"><?= $invoice['installment_fee']; ?> %</span></td>
             <td style="width: 20%;">Rp. <span style="float: right;"><?= number_format($invoice['installment_amount'], 0, ',', '.') ?> </span></td>
           </tr>
 
@@ -118,7 +115,7 @@
     <!-- /.col -->
   </div>
   <!-- /.row -->
-  
+
   <div class="signature">
     <p>Gresik, <?= tanggal(date($invoice['created_at'])) ?></p>
     <br><br><br><br>

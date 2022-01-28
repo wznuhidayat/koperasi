@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
+use App\Models\M_setting;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
@@ -36,7 +37,7 @@ class BaseController extends Controller
      * @var array
      */
     protected $helpers = ['form','dateindo_helper','date'];
-
+   
     /**
      * Constructor.
      */
@@ -44,7 +45,7 @@ class BaseController extends Controller
     {
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
-
+        
         $this->uri = service('uri');
         $request = \Config\Services::request();
         // Preload any models, libraries, etc, here.

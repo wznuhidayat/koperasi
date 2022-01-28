@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 <div class="login-box">
   <div class="login-logo">
-    <h2>Koperasi</h2>
+    <h2>Koperasi Indonesia</h2>
   </div>
 
   <!-- /.login-logo -->

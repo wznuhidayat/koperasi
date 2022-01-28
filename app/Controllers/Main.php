@@ -798,7 +798,8 @@ class Main extends BaseController
                 'title' => "Stor Tunai",
                 'menu' => 'Transaction',
                 'invoice' => $this->M_saving->getInvoice($id),
-                'saldo' => $this->saldo($query['id_member'])
+                'saldo' => $this->saldo($query['id_member']),
+                'setting' => $this->M_setting->getSetting(11111111)
             ];
             // dd($data);
             return view('transaction/invoice_save', $data);
@@ -866,7 +867,8 @@ class Main extends BaseController
                 'title' => "Penarikkan",
                 'menu' => 'Transaction',
                 'invoice' => $this->M_withdraw->getInvoice($id),
-                'saldo' => $this->saldo($query['id_member'])
+                'saldo' => $this->saldo($query['id_member']),
+                'setting' => $this->M_setting->getSetting(11111111)
             ];
             // dd($data);
             return view('transaction/invoice_view', $data);
@@ -883,8 +885,8 @@ class Main extends BaseController
         $query = $this->M_withdraw->getInvoice($id);
         $data = [
             'invoice' => $this->M_withdraw->getInvoice($id),
-            'saldo' => $this->saldo($query['id_member'])
-
+            'saldo' => $this->saldo($query['id_member']),
+            'setting' => $this->M_setting->getSetting(11111111)
         ];
         // $this->mypdf->genrate('transaction/print_withdraw',$this->M_withdraw->getInvoice($id));
         $dompdf = new Dompdf();
@@ -905,8 +907,8 @@ class Main extends BaseController
         $query = $this->M_saving->getInvoice($id);
         $data = [
             'invoice' => $this->M_saving->getInvoice($id),
-            'saldo' => $this->saldo($query['id_member'])
-
+            'saldo' => $this->saldo($query['id_member']),
+            'setting' => $this->M_setting->getSetting(11111111)
         ];
         $dompdf = new Dompdf();
         $html = view('transaction/print_saving', $data);
@@ -1021,6 +1023,7 @@ class Main extends BaseController
                 'title' => "Pinjam Tunai",
                 'menu' => 'Transaction',
                 'invoice' => $this->M_loan->getInvoice($id),
+                'setting' => $this->M_setting->getSetting(11111111)
             ];
             // dd($data);
             return view('transaction/invoice_loan', $data);
@@ -1044,6 +1047,7 @@ class Main extends BaseController
     {
         $data = [
             'invoice' => $this->M_loan->getInvoice($id),
+            'setting' => $this->M_setting->getSetting(11111111)
         ];
         $dompdf = new Dompdf();
         $html = view('transaction/print_loan', $data);
@@ -1091,7 +1095,8 @@ class Main extends BaseController
                 'menu' => 'Transaction',
                 'invoice' => $invoice,
                 'member' => $this->M_member->getMember($invoice[0]['id_member']),
-                'admin' => $this->M_admin->getAdmin($this->request->getPost('id_admin'))
+                'admin' => $this->M_admin->getAdmin($this->request->getPost('id_admin')),
+                'setting' => $this->M_setting->getSetting(11111111)
             ];
             // dd($data);
             return view('transaction/installment_pay/invoice_installment', $data);
@@ -1166,7 +1171,8 @@ class Main extends BaseController
             'menu' => 'Transaction',
             'invoice' => $invoice,
             'member' => $this->M_member->getMember($invoice[0]['id_member']),
-            'admin' => $this->M_admin->getAdmin($this->request->getPost('id_admin'))
+            'admin' => $this->M_admin->getAdmin($this->request->getPost('id_admin')),
+            'setting' => $this->M_setting->getSetting(11111111)
         ];
         $dompdf = new Dompdf();
         $html = view('transaction/installment_pay/print_installment', $data);
