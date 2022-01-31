@@ -10,7 +10,7 @@ class M_installment extends Model
     protected $table = 'installment';
     protected $primaryKey = 'id_installment';
     protected $useTimestamps = true;
-    protected $allowedFields = ['id_installment', 'id_loan', 'period', 'amount', 'status', 'paid_at'];
+    protected $allowedFields = ['id_installment', 'id_loan', 'period', 'amount', 'status', 'id_installmentpay'];
 
 
     protected $column_order = ['id_installment', 'id_installment', 'period', null, null, null];
@@ -31,6 +31,12 @@ class M_installment extends Model
                 ->Where(['id_member' => $id])->get()->getResultArray();
             return $query;
         }
+    }
+    public function getInstallmentByTransaction($id)
+    {
+        return $this->db->table($this->table)->select('' . $this->table . '.*, id_member,installmentpay.*' )
+        ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')
+        ->join('installmentpay', 'installmentpay.id_installmentpay=' . $this->table . '.id_installmentpay')->where(['' . $this->table . '.id_installmentpay' => $id])->get()->getResultArray();
     }
     public function getInvoiceInstallment($id = false)
     {
@@ -65,8 +71,9 @@ class M_installment extends Model
         parent::__construct();
         $this->db = db_connect();
         $this->request = $request;
-        $this->dt = $this->db->table($this->table)->select('' . $this->table . '.*, id_member')
-            ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan');
+        $this->dt = $this->db->table($this->table)->select('' . $this->table . '.*, id_member,installmentpay.*' )
+            ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')
+            ->join('installmentpay', 'installmentpay.id_installmentpay=' . $this->table . '.id_installmentpay','left');
     }
 
     private function getDatatablesQuery($id)

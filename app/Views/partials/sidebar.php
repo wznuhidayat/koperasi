@@ -15,7 +15,7 @@
                 <img src="/img/admin/<?= session()->get('img'); ?>" class="img-circle elevation-2" alt="User Image" style="min-height: 34px;">
             </div>
             <div class="info">
-                <a href="#" class="d-block"><?= ucwords(session()->get('name'))?></a>
+                <a href="#" class="d-block"><?= ucwords(session()->get('name')) ?></a>
             </div>
         </div>
 
@@ -25,7 +25,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="<?= base_url('/main')?>" class="nav-link <?= $menu == 'Dashboard' ? 'active' : '' ?>">
+                    <a href="<?= base_url('/main') ?>" class="nav-link <?= $menu == 'Dashboard' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -33,7 +33,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('/main/member')?>" class="nav-link  <?= $menu == 'Member' ? 'active' : '' ?>">
+                    <a href="<?= base_url('/main/member') ?>" class="nav-link  <?= $menu == 'Member' ? 'active' : '' ?>">
 
                         <i class="nav-icon fas fa-users"></i>
                         <p>
@@ -42,7 +42,7 @@
                     </a>
                 </li>
                 <!-- <li class="nav-item">
-                    <a href="<?= base_url('/main/typesaving')?>" class="nav-link  ">
+                    <a href="<?= base_url('/main/typesaving') ?>" class="nav-link  ">
 
                         <i class="nav-icon fas fa-hashtag"></i>
                         <p>
@@ -60,30 +60,30 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item ">
-                            <a href="<?= base_url('/main/addsaving')?>" class="nav-link <?= $request->uri->getSegment(2) == 'addsaving' ? 'active' : '' ?>">
+                            <a href="<?= base_url('/main/addsaving') ?>" class="nav-link <?= $request->uri->getSegment(2) == 'addsaving' ? 'active' : '' ?>">
                                 <i class="fas fa-money-check nav-icon"></i>
                                 <p>Setor Tunai</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('/main/withdraw')?>" class="nav-link <?= $request->uri->getSegment(2) == 'withdraw' ? 'active' : '' ?>">
+                            <a href="<?= base_url('/main/withdraw') ?>" class="nav-link <?= $request->uri->getSegment(2) == 'withdraw' ? 'active' : '' ?>">
                                 <i class="fas fa-money-check-alt nav-icon"></i>
                                 <p>Penarikan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('/main/loan')?>" class="nav-link <?= $request->uri->getSegment(2) == 'loan' ? 'active' : '' ?>">
+                            <a href="<?= base_url('/main/loan') ?>" class="nav-link <?= $request->uri->getSegment(2) == 'loan' ? 'active' : '' ?>">
                                 <i class="fas fa-hand-holding-usd nav-icon"></i>
                                 <p>Pinjam Tunai</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('/main/installmentpay')?>" class="nav-link <?= $request->uri->getSegment(2) == 'installmentpay' ? 'active' : '' ?>">
+                            <a href="<?= base_url('/main/installmentpay') ?>" class="nav-link <?= $request->uri->getSegment(2) == 'installmentpay' ? 'active' : '' ?>">
                                 <i class="fas fa-file-invoice-dollar nav-icon"></i>
                                 <p>Angsur Pinjaman</p>
                             </a>
                         </li>
-                       
+
                     </ul>
                 </li>
                 <li class="nav-item  <?= $menu == 'Master' ? 'menu-is-opening menu-open' : '' ?>">
@@ -95,53 +95,58 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item ">
-                            <a href="<?= base_url('/main/typesaving')?>" class="nav-link <?= $request->uri->getSegment(2) == 'typesaving' ? 'active' : '' ?>">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Jenis Simpanan</p>
-                            </a>
-                        </li>
+                        <?php if (session()->get('role') == 'root') { ?>
+                            <li class="nav-item ">
+                                <a href="<?= base_url('/main/typesaving') ?>" class="nav-link <?= $request->uri->getSegment(2) == 'typesaving' ? 'active' : '' ?>">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Jenis Simpanan</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url('/main/typeloan') ?>" class="nav-link <?= $request->uri->getSegment(2) == 'typeloan' ? 'active' : '' ?>">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Jenis Pinjaman</p>
+                                </a>
+                            </li>
+                        <?php } ?>
                         <li class="nav-item">
-                            <a href="<?= base_url('/main/typeloan')?>" class="nav-link <?= $request->uri->getSegment(2) == 'typeloan' ? 'active' : '' ?>">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Jenis Pinjaman</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= base_url('/main/saving')?>" class="nav-link <?= $request->uri->getSegment(2) == 'saving' ? 'active' : '' ?>">
+                            <a href="<?= base_url('/main/saving') ?>" class="nav-link <?= $request->uri->getSegment(2) == 'saving' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Simpanan</p>
                             </a>
                         </li>
+
                         <li class="nav-item">
-                            <a href="<?= base_url('/main/wd')?>" class="nav-link <?= $request->uri->getSegment(2) == 'wd' ? 'active' : '' ?>">
+                            <a href="<?= base_url('/main/wd') ?>" class="nav-link <?= $request->uri->getSegment(2) == 'wd' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Penarikan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('/main/allloan')?>" class="nav-link <?= $request->uri->getSegment(2) == 'allloan' ? 'active' : '' ?>">
+                            <a href="<?= base_url('/main/allloan') ?>" class="nav-link <?= $request->uri->getSegment(2) == 'allloan' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Pinjaman</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('/main/installment')?>" class="nav-link <?= $request->uri->getSegment(2) == 'installment' ? 'active' : '' ?>">
+                            <a href="<?= base_url('/main/installment') ?>" class="nav-link <?= $request->uri->getSegment(2) == 'installment' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Ansuran</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="<?= base_url('/main/admin')?>" class="nav-link  <?= $menu == 'admin' ? 'active' : '' ?>">
+                <?php if (session()->get('role') == 'root') { ?>
+                    <li class="nav-item">
+                        <a href="<?= base_url('/main/admin') ?>" class="nav-link  <?= $menu == 'admin' ? 'active' : '' ?>">
 
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            Admin
-                        </p>
-                    </a>
-                </li>
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Admin
+                            </p>
+                        </a>
+                    </li>
+                <?php } ?>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

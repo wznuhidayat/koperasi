@@ -14,6 +14,7 @@ use App\Models\M_saving;
 use App\Models\M_loan;
 use App\Models\M_withdraw;
 use App\Models\M_installment;
+use App\Models\M_installmentpay;
 use App\Models\M_installment_dt;
 use App\Models\M_type_loan;
 use Config\Services;
@@ -32,6 +33,7 @@ class Main extends BaseController
         $this->M_loan = new M_loan($request);
         $this->M_withdraw = new M_withdraw($request);
         $this->M_installment = new M_installment($request);
+        $this->M_installmentpay = new M_installmentpay();
         $this->M_installment_dt = new M_installment_dt($request);
         $this->M_type_loan = new M_type_loan();
         // $this->Mypdf = new Mypdf();
@@ -207,13 +209,13 @@ class Main extends BaseController
                 session()->setFLashdata('deleted', 'Data telah dihapus!');
             }
             return redirect()->to('/main/member');
-        } elseif ($url == 'profile' && $id != null){
+        } elseif ($url == 'profile' && $id != null) {
             $data = [
                 'title' => "Member",
                 'menu' => 'Member',
                 'member' => $this->M_member->getMember($id),
                 'saldo' => $this->saldo($id),
-                
+
             ];
             return view('member/profile_view', $data);
         }
@@ -221,7 +223,7 @@ class Main extends BaseController
             'title' => "Member",
             'menu' => 'Member',
             'member' => $this->M_member->getMember(),
-            
+
         ];
         return view('member/member_view', $data);
     }
@@ -254,7 +256,8 @@ class Main extends BaseController
                         </i>
                         Edit
                     </a>
-                    <a class=\"btn btn-danger btn-sm\" href=\"#\" onclick=\"rm_member(".$list->id_member.")\">
+                    
+                    <a class=\"btn btn-danger btn-sm\" href=\"#\" onclick=\"rm_member(" . $list->id_member . ")\">
                         <i class=\"fas fa-trash\">
                         
                         </i>
@@ -284,7 +287,8 @@ class Main extends BaseController
         }
     }
     //detail member datatable
-    public function savingid(){
+    public function savingid()
+    {
         $csrfName = csrf_token();
         $csrfHash = csrf_hash();
 
@@ -361,7 +365,7 @@ class Main extends BaseController
                     </a>
                 </td>";
 
-               
+
                 $row[] = $no;
                 $row[] = $list->id_withdraw;
                 $row[] = $list->member_name;
@@ -409,7 +413,7 @@ class Main extends BaseController
                     </a>
                 </td>";
 
-               
+
                 $row[] = $no;
                 $row[] = $list->id_loan;
                 $row[] = $list->member_name;
@@ -458,7 +462,7 @@ class Main extends BaseController
                     </a>
                 </td>";
 
-               
+
                 $row[] = $no;
                 $row[] = $list->id_installment;
                 $row[] = $list->member_name;
@@ -582,7 +586,7 @@ class Main extends BaseController
             }
             return redirect()->to('/main/typesaving');
         } elseif ($url == 'delete' && $id != null) {
-            if($this->M_saving->getWhereType($id) != null){
+            if ($this->M_saving->getWhereType($id) != null) {
                 session()->setFLashdata('amount-error', ' Gagal, Tipe telah terpakai!');
                 return redirect()->to('/main/typesaving');
             }
@@ -717,7 +721,7 @@ class Main extends BaseController
             }
             return redirect()->to('/main/typeloan');
         } elseif ($url == 'delete' && $id != null) {
-            if($this->M_loan->getWhereType($id) != null){
+            if ($this->M_loan->getWhereType($id) != null) {
                 session()->setFLashdata('amount-error', ' Gagal, Tipe telah terpakai!');
                 return redirect()->to('/main/typeloan');
             }
@@ -959,8 +963,8 @@ class Main extends BaseController
                 return redirect()->to('/main/loan')->withInput()->with('validation', $validation);
             }
             $query_installment = $this->M_installment->getInstallment($this->request->getPost('id_member'));
-            foreach($query_installment as $installment){
-                if($installment['status'] == 'unpaid'){
+            foreach ($query_installment as $installment) {
+                if ($installment['status'] == 'unpaid') {
                     session()->setFLashdata('amount-error', 'Gagal, karena pinjaman sebelumnya masih belum lunas');
                     $validation = \Config\Services::validation();
                     return redirect()->to('/main/loan')->withInput()->with('validation', $validation);
@@ -1007,8 +1011,7 @@ class Main extends BaseController
                     'period' => $d->format('Y') . $d->format('m'),
                     'amount' => $p + $b,
                     'status' => 'unpaid',
-                    'paid_at' => null,
-                    'id_admin' => null,
+                    'id_installmentpay' => null,
                 );
                 $this->M_installment->saveInstallment($data);
                 $i = $d->format('Y') . '-' . $d->format('m') . '-' . $d->format('d');
@@ -1062,8 +1065,23 @@ class Main extends BaseController
         // Output the generated PDF to Browser
         $dompdf->stream("sample.pdf", array("Attachment" => 0));
     }
-    public function InstallmentPay()
+    public function InstallmentPay($url = 'index', $id = null)
     {
+        if ($url == 'invoice' && $id != null) {
+            // $query = $this->M_installmentpay->getinstallment($id);
+            $query = $this->M_installment->getInstallmentByTransaction($id);
+            $query_admin = $this->M_admin->getAdmin($query[0]['id_admin']);
+            $data = [
+                'title' => "Faktur Ansuran",
+                'menu' => 'Transaction',
+                'invoice' => $query,
+                'member' => $this->M_member->getMember($query[0]['id_member']),
+                'admin' => $query_admin,
+                'setting' => $this->M_setting->getSetting(11111111)
+            ];
+            // dd($data);
+            return view('transaction/installment_pay/invoice_installment', $data);
+        }
         $data = [
             'title' => "Bayar Angsuran",
             'menu' => 'Transaction',
@@ -1073,33 +1091,42 @@ class Main extends BaseController
     public function invoiceInstallment()
     {
         $invoice = array();
+        $str = "";
+        $characters = array_merge(range('0', '9'));
+        $max = count($characters) - 1;
+        for ($i = 0; $i < 8; $i++) {
+            $rand = mt_rand(0, $max);
+            $str .= $characters[$rand];
+        }
+        $x = 0;
         foreach ($this->request->getPost('id') as $pay) {
             $inv = $this->M_installment->getInvoiceInstallment($pay);
             if ($inv['status'] == 'unpaid') {
+
+                if ($x == 0) {
+                    $dataTransaction = [
+                        'id_installmentpay' => $str,
+                        'id_admin' => $this->request->getPost('id_admin'),
+                        'created_at' => date('Y/m/d h:i:s'),
+                    ];
+                    $this->M_installmentpay->saveinstallment($dataTransaction);
+                }
                 $data = [
                     'id_installment' => intval($pay),
                     'status' => 'paid',
-                    'paid_at' => date('Y/m/d h:i:s'),
-                    'id_admin' => $this->request->getPost('id_admin')
+                    'id_installmentpay' => $str,
+
                 ];
                 $this->M_installment->pay($data, $pay);
                 $invoice[] = $inv;
+                $x++;
             }
         }
         if (count($invoice) == 0) {
             session()->setFLashdata('amount-error', ' Ansuran yang anda pilih telah lunas');
             return redirect()->to('/main/installmentpay')->withInput();
         } else {
-            $data = [
-                'title' => "Faktur Ansuran",
-                'menu' => 'Transaction',
-                'invoice' => $invoice,
-                'member' => $this->M_member->getMember($invoice[0]['id_member']),
-                'admin' => $this->M_admin->getAdmin($this->request->getPost('id_admin')),
-                'setting' => $this->M_setting->getSetting(11111111)
-            ];
-            // dd($data);
-            return view('transaction/installment_pay/invoice_installment', $data);
+            return redirect()->to('/main/InstallmentPay/invoice/' . $str);
         }
     }
     public function searchInstallment()
@@ -1111,14 +1138,14 @@ class Main extends BaseController
         $id_member = $this->request->getPost('id_member');
         $lastLoan = $this->M_loan->getLastRecord($id_member);
         if ($request->getMethod(true) === 'POST') {
-            if($lastLoan == null){
+            if ($lastLoan == null) {
                 $lists = $this->M_installment->getDatatables($id_member);
                 $recordsTotal = $this->M_installment->countAll($id_member);
                 $recordsFiltered = $this->M_installment->countFiltered($id_member);
-            }else{
-                $lists = $this->M_installment->getDatatables($id_member,$lastLoan['id_loan']);
-                $recordsTotal = $this->M_installment->countAll($id_member,$lastLoan['id_loan']);
-                $recordsFiltered = $this->M_installment->countFiltered($id_member,$lastLoan['id_loan']);
+            } else {
+                $lists = $this->M_installment->getDatatables($id_member, $lastLoan['id_loan']);
+                $recordsTotal = $this->M_installment->countAll($id_member, $lastLoan['id_loan']);
+                $recordsFiltered = $this->M_installment->countFiltered($id_member, $lastLoan['id_loan']);
             }
             $data = [];
             $no = $request->getPost('start');
@@ -1140,8 +1167,8 @@ class Main extends BaseController
                     $sts = "<td><span class='badge badge-danger'>Belum dibayar</span></td>";
                 }
                 $row[] = $sts;
-                if ($list->paid_at != null) {
-                    $paided = "<td >" . tanggal(date($list->paid_at)) . "</td>";
+                if ($list->id_installmentpay != null) {
+                    $paided = "<td >" . tanggal(date($list->created_at)) . "</td>";
                 } else {
                     $paided = "<td > - </td>";
                 }
@@ -1159,19 +1186,16 @@ class Main extends BaseController
             echo json_encode($output);
         }
     }
-    public function printinstallment()
+    public function printinstallment($id)
     {
-        $invoice = array();
-        foreach ($this->request->getPost('id') as $pay) {
-            $inv = $this->M_installment->getInvoiceInstallment($pay);
-            $invoice[] = $inv;
-        }
+        $query = $this->M_installment->getInstallmentByTransaction($id);
+        $query_admin = $this->M_admin->getAdmin($query[0]['id_admin']);
         $data = [
             'title' => "Faktur Ansuran",
             'menu' => 'Transaction',
-            'invoice' => $invoice,
-            'member' => $this->M_member->getMember($invoice[0]['id_member']),
-            'admin' => $this->M_admin->getAdmin($this->request->getPost('id_admin')),
+            'invoice' => $query,
+            'member' => $this->M_member->getMember($query[0]['id_member']),
+            'admin' => $query_admin,
             'setting' => $this->M_setting->getSetting(11111111)
         ];
         $dompdf = new Dompdf();
@@ -1196,7 +1220,8 @@ class Main extends BaseController
         ];
         return view('admin_root/saving/saving_view', $data);
     }
-    public function savinglist(){
+    public function savinglist()
+    {
         $csrfName = csrf_token();
         $csrfHash = csrf_hash();
 
@@ -1288,7 +1313,7 @@ class Main extends BaseController
                     </a>
                 </td>";
 
-               
+
                 $row[] = $no;
                 $row[] = $list->id_withdraw;
                 $row[] = $list->member_name;
@@ -1345,7 +1370,7 @@ class Main extends BaseController
                     </a>
                 </td>";
 
-               
+
                 $row[] = $no;
                 $row[] = $list->id_loan;
                 $row[] = $list->member_name;
@@ -1371,7 +1396,7 @@ class Main extends BaseController
     }
     public function installment($url = 'index', $id = null)
     {
-        if($url == 'invoice' && $id != null){
+        if ($url == 'invoice' && $id != null) {
             $query = $this->M_installment->getInvoiceInstallment($id);
             $data = [
                 'title' => "Ansuran Pinjaman",
@@ -1413,16 +1438,14 @@ class Main extends BaseController
                     </a>
                 </td>";
 
-               
+
                 $row[] = $no;
-                $row[] = $list->id_installment;
+                $row[] = $list->id_installmentpay;
                 $row[] = $list->member_name;
-                $row[] = $list->period;
                 $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
                 $row[] = $amt;
-                $created = "<td >" . tanggal(date($list->paid_at)) . "</td>";
-                $row[] = $created;
-                $row[] = $list->admin_name;
+                // $created = "<td >" . tanggal(date($list->paid_at)) . "</td>";
+                $row[] = $amt;
                 $row[] = $btn;
                 $row[] = '';
                 $data[] = $row;
@@ -1465,7 +1488,7 @@ class Main extends BaseController
     {
         if ($url == 'update' && $id != null) {
             $query_admin = $this->M_admin->getadmin($this->request->getPost('id'));
-          
+
             if (!$this->validate([
                 'name' => [
                     'rules' => 'required',
@@ -1473,7 +1496,7 @@ class Main extends BaseController
                         'required' => 'Masukkan nama anggota baru!',
                     ],
 
-                ], 
+                ],
                 'phone' => [
                     'rules'  => 'required|numeric',
                     'errors' => [
@@ -1508,7 +1531,7 @@ class Main extends BaseController
                 // return ;
                 $validation = \Config\Services::validation();
                 session()->setFLashdata('amount-error', 'Data gagal telah diubah.');
-                return redirect()->to('/main/profile/index/'. $id)->withInput()->with('validation', $validation);
+                return redirect()->to('/main/profile/index/' . $id)->withInput()->with('validation', $validation);
             }
             if (empty($this->request->getPost('password'))) {
                 $pass = $query_admin['password'];
@@ -1537,7 +1560,7 @@ class Main extends BaseController
             if ($this->M_admin->affectedRows() > 0) {
                 session()->setFLashdata('success', 'Data berhasil telah diubah.');
             }
-            return redirect()->to('/main/profile/index/'.$this->request->getPost('id'));
+            return redirect()->to('/main/profile/index/' . $this->request->getPost('id'));
         }
         $data = [
             'title' => "Profile",
@@ -1673,7 +1696,7 @@ class Main extends BaseController
                     ],
 
                 ],
-                
+
                 'passconf' => [
                     'rules' => 'matches[password]',
                     'errors' => [
@@ -1713,13 +1736,13 @@ class Main extends BaseController
                 session()->setFLashdata('deleted', 'Data telah dihapus!');
             }
             return redirect()->to('/main/admin');
-        } elseif ($url == 'profile' && $id != null){
+        } elseif ($url == 'profile' && $id != null) {
             $data = [
                 'title' => "admin",
                 'menu' => 'admin',
                 'admin' => $this->M_admin->getadmin($id),
                 'saldo' => $this->saldo($id),
-                
+
             ];
             return view('admin/profile_view', $data);
         }
@@ -1727,7 +1750,7 @@ class Main extends BaseController
             'title' => "admin",
             'menu' => 'admin',
             'admin' => $this->M_admin->getadmin(),
-            
+
         ];
         return view('admin/admin_view', $data);
     }
@@ -1735,26 +1758,26 @@ class Main extends BaseController
     {
         if ($url == 'update') {
             $query_admin = $this->M_admin->getadmin($this->request->getPost('id'));
-          
+
             if (!$this->validate([
                 'title' => [
                     'rules' => 'required',
                     'errors' => [
                         'required' => 'Masukkan Nama Koperasi!',
                     ],
-                ], 
+                ],
                 'address' => [
                     'rules' => 'required',
                     'errors' => [
                         'required' => 'Masukkan Alamat lengkap koperasi!',
                     ],
-                ], 
+                ],
                 'contact' => [
                     'rules' => 'required',
                     'errors' => [
                         'required' => 'Massukkan Contact Koperasi!',
                     ],
-                ], 
+                ],
             ])) {
                 // return ;
                 $validation = \Config\Services::validation();
@@ -1779,4 +1802,4 @@ class Main extends BaseController
         ];
         return view('setting/app/settings_view', $data);
     }
-}   
+}

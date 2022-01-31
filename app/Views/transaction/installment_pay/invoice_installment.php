@@ -43,7 +43,7 @@
                             <div class="col-6 detail-right">
                                 <p>No Telp &emsp;&emsp;&ensp;&nbsp; : <?= $member['phone'] ?> </p>
                                 <p>Transaksi &emsp;&emsp; : <b>Ansuran Pinjaman</b> </p>
-                                <p>Jam &emsp;&emsp;&emsp;&emsp;&nbsp; : <?= date('H:m', strtotime($invoice[0]['paid_at'])); ?> </p>
+                                <p>Jam &emsp;&emsp;&emsp;&emsp;&nbsp; : <?= date('H:m', strtotime($invoice[0]['created_at'])); ?> </p>
                             </div>
                         </div>
                         <div class="row">
@@ -94,15 +94,8 @@
                         <!-- this row will not appear when printing -->
                         <div class="row no-print">
                             <div class="col-12">
-                                <form action="/main/printinstallment/" method="POST">
-                                    <input type="hidden" name="id_admin" value="<?= $admin['id_admin'] ?>">
-                                    <?php foreach ($invoice as $invoices) : ?>
-                                        <input type="hidden" name="id[]" value="<?= $invoices['id_installment'] ?>">
-                                    <?php endforeach ?>
-                                    <input type="hidden" name="id_member" value="<?= $member['id_member'] ?>">
-                                    <button type="submit" class="btn btn-default"><i class="fas fa-print"></i></button>
-                                </form>
-                                <a href="/main/installmentpay" class="btn btn-success float-right"><i class="far fa-check-circle"></i></i> Done</a>
+                                <a href="/main/printinstallment/<?= $invoice[0]['id_installmentpay']; ?>" class="btn btn-success btn-default"><i class="fas fa-print"></i></a>
+                                <a href="/main/installmentpay" class="btn btn-success float-right"><i class="far fa-check-circle"></i>Done</a>
 
                             </div>
                         </div>

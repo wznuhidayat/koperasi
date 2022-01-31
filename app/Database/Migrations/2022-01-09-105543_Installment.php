@@ -30,14 +30,10 @@ class Installment extends Migration
 				'constraint' => ['paid', 'unpaid'],
 				'null'		=> true,
 			],
-			'paid_at'       => [
-				'type'       => 'DATETIME',
-				'null'		=> true,
-			],
-			'id_admin'          => [
+			'id_installmentpay'          => [
 				'type'           => 'INT',
 				'constraint'     => 8,
-				'null' => true
+				'null'		=> true,
 			],
 		
 			

@@ -69,11 +69,7 @@
                                                         <td><?= $admins["role"] ?></td>
                                                         <td><?= $admins["phone"] ?></td>
                                                         <td class="project-actions">
-                                                            <a class="btn btn-primary btn-sm" href="#">
-                                                                <i class="fas fa-folder">
-                                                                </i>
-                                                                View
-                                                            </a>
+                                                           
                                                             <a class="btn btn-info btn-sm" href="/main/admin/edit/<?= $admins['id_admin'] ?>">
                                                                 <i class="fas fa-pencil-alt">
                                                                 </i>

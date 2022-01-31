@@ -10,12 +10,12 @@ class M_installment_dt extends Model
     protected $table = 'installment';
     protected $primaryKey = 'id_installment';
     protected $useTimestamps = true;
-    protected $allowedFields = ['id_installment', 'id_loan', 'period', 'amount', 'status', 'paid_at'];
+    protected $allowedFields = ['id_installment', 'id_loan', 'period', 'amount', 'status', 'id_installmentpay'];
 
 
-    protected $column_order = [null, 'id_installment', 'member_name', 'period', null, null, 'admin_name'];
-    protected $column_search = ['period', 'id_installment'];
-    protected $order = ['period' => 'DESC'];
+    protected $column_order = [null, 'id_installmentpay', 'member_name', null];
+    protected $column_search = ['id_installmentpay'];
+    protected $order = ['id_installmentpay' => 'DESC'];
     protected $request;
     protected $db;
     protected $dt;
@@ -26,9 +26,8 @@ class M_installment_dt extends Model
         parent::__construct();
         $this->db = db_connect();
         $this->request = $request;
-        $this->dt = $this->db->table($this->table)->select('' . $this->table . '.*, (select member.name as name from loan join member on loan.id_member = member.id_member WHERE id_loan = installment.id_loan) as member_name, admin.name as admin_name')
-            ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')
-            ->join('admin', 'admin.id_admin=' . $this->table . '.id_admin');
+        $this->dt = $this->db->table($this->table)->select('id_installmentpay,' . $this->table . '.amount, (select member.name as name from loan join member on loan.id_member = member.id_member WHERE id_loan = installment.id_loan) as member_name')
+            ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')->groupBy('id_installmentpay');
     }
 
     private function getDatatablesQuery()
@@ -68,9 +67,9 @@ class M_installment_dt extends Model
             $this->getDatatablesQuery();
             if ($this->request->getPost('length') != -1)
                 $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
-            $query = $this->db->table($this->table)->select('' . $this->table . '.*, (select member.name as name from loan join member on loan.id_member = member.id_member WHERE id_loan = installment.id_loan) as member_name, admin.name as admin_name')
+            $query = $this->db->table($this->table)->select('id_installmentpay,' . $this->table . '.amount, (select member.name as name from loan join member on loan.id_member = member.id_member WHERE id_loan = installment.id_loan) as member_name')
                 ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')
-                ->join('admin', 'admin.id_admin=' . $this->table . '.id_admin')->getWhere(['id_member' => $id,'status' => 'paid']);
+                ->getWhere(['id_member' => $id,'status' => 'paid']);
             return $query->getResult();
         }
     }
@@ -82,9 +81,9 @@ class M_installment_dt extends Model
             return $this->dt->where(['status' => 'paid'])->countAllResults();
         } else {
             $this->getDatatablesQuery();
-            return $this->db->table($this->table)->select('' . $this->table . '.*, (select member.name as name from loan join member on loan.id_member = member.id_member WHERE id_loan = installment.id_loan) as member_name, admin.name as admin_name')
+            return $this->db->table($this->table)->select('id_installmentpay,' . $this->table . '.amount, (select member.name as name from loan join member on loan.id_member = member.id_member WHERE id_loan = installment.id_loan) as member_name')
                 ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')
-                ->join('admin', 'admin.id_admin=' . $this->table . '.id_admin')->where(['id_member' => $id,'status' => 'paid'])->countAllResults();
+                ->where(['id_member' => $id,'status' => 'paid'])->countAllResults();
         }
     }
 
@@ -94,9 +93,9 @@ class M_installment_dt extends Model
             $tbl_storage = $this->db->table($this->table)->where(['status' => 'paid']);
             return $tbl_storage->countAllResults();
         }else{
-            $tbl_storage = $this->db->table($this->table)->select('' . $this->table . '.*, (select member.name as name from loan join member on loan.id_member = member.id_member WHERE id_loan = installment.id_loan) as member_name, admin.name as admin_name')
+            $tbl_storage = $this->db->table($this->table)->select('id_installmentpay,' . $this->table . '.amount, (select member.name as name from loan join member on loan.id_member = member.id_member WHERE id_loan = installment.id_loan) as member_name')
             ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')
-            ->join('admin', 'admin.id_admin=' . $this->table . '.id_admin')->where(['id_member' => $id,'status' => 'paid']);
+            ->where(['id_member' => $id,'status' => 'paid']);
             return $tbl_storage->countAllResults();
         }
     }

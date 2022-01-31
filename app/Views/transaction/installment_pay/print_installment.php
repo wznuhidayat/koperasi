@@ -83,7 +83,7 @@
         <div class="detail-right">
             <p>No Telp &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?= $member['phone'] ?> </p>
             <p>Transaksi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <b>Ansura Pinjaman </p>
-            <p>Jam &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <?= date('H:m', strtotime($invoice[0]['paid_at'])); ?> </p>
+            <p>Jam &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <?= date('H:m', strtotime($invoice[0]['created_at'])); ?> </p>
         </div>
     </div>
     <div>
@@ -114,7 +114,7 @@
     <!-- /.row -->
 
     <div class="signature">
-        <p>Gresik, <?= tanggal(date($invoice[0]['paid_at'])) ?></p>
+        <p>Gresik, <?= tanggal(date($invoice[0]['created_at'])) ?></p>
         <br><br><br><br>
         <p>(................................)</p>
         <p><?= $admin['name']; ?></p>
