@@ -41,12 +41,10 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>ID Pinjaman</th>
+                                                    <th>ID Transaksi</th>
                                                     <th>Nama</th>
-                                                    <th>Jumlah Ansuran</th>
-                                                    <th>Nominal Pinjaman</th>
-                                                    <th>Tgl Pinjaman</th>
-                                                    <th>Admin</th>
+                                                    <th>Nama Admin</th>
+                                                    <th>Tgl Pembayaran</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -57,12 +55,10 @@
                                             <tfoot>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>ID Pinjaman</th>
+                                                    <th>ID Transaksi</th>
                                                     <th>Nama</th>
-                                                    <th>Jumlah Ansuran</th>
-                                                    <th>Nominal Pinjaman</th>
-                                                    <th>Tgl Pinjaman</th>
-                                                    <th>Admin</th>
+                                                    <th>Nama Admin</th>
+                                                    <th>Tgl Pembayaran</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </tfoot>
@@ -81,5 +77,5 @@
         </div>
         <!-- /.container-fluid -->
     </section>
- 
+
     <?= $this->endSection() ?>

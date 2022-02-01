@@ -13,6 +13,10 @@ class Installmentpay extends Migration
 				'type'           => 'INT',
 				'constraint'     => 8,
 			],
+			'id_member'          => [
+				'type'           => 'INT',
+				'constraint'     => 8,
+			],
 			'id_admin'          => [
 				'type'           => 'INT',
 				'constraint'     => 8,
@@ -24,6 +28,7 @@ class Installmentpay extends Migration
 			
 		]);
 		$this->forge->addKey('id_installmentpay', true);
+        $this->forge->addForeignKey('id_member','member','id_member');
         $this->forge->addForeignKey('id_admin','admin','id_admin');
 		$this->forge->createTable('installmentpay');
     }

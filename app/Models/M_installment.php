@@ -34,7 +34,7 @@ class M_installment extends Model
     }
     public function getInstallmentByTransaction($id)
     {
-        return $this->db->table($this->table)->select('' . $this->table . '.*, id_member,installmentpay.*' )
+        return $this->db->table($this->table)->select('' . $this->table . '.*, loan.id_member,installmentpay.id_admin,installmentpay.created_at' )
         ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')
         ->join('installmentpay', 'installmentpay.id_installmentpay=' . $this->table . '.id_installmentpay')->where(['' . $this->table . '.id_installmentpay' => $id])->get()->getResultArray();
     }
@@ -71,7 +71,7 @@ class M_installment extends Model
         parent::__construct();
         $this->db = db_connect();
         $this->request = $request;
-        $this->dt = $this->db->table($this->table)->select('' . $this->table . '.*, id_member,installmentpay.*' )
+        $this->dt = $this->db->table($this->table)->select('' . $this->table . '.*, loan.id_member, installmentpay.id_admin, installmentpay.created_at' )
             ->join('loan', 'loan.id_loan=' . $this->table . '.id_loan')
             ->join('installmentpay', 'installmentpay.id_installmentpay=' . $this->table . '.id_installmentpay','left');
     }
@@ -107,13 +107,13 @@ class M_installment extends Model
             $this->getDatatablesQuery($id);
             if ($this->request->getPost('length') != -1)
                 $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
-            $query = $this->dt->getWhere(['id_member' => $id]);
+            $query = $this->dt->getWhere(['loan.id_member' => $id]);
             return $query->getResult();
         } else {
             $this->getDatatablesQuery($id);
             if ($this->request->getPost('length') != -1)
                 $this->dt->limit($this->request->getPost('length'), $this->request->getPost('start'));
-            $query = $this->dt->getWhere(['' . $this->table . '.id_loan' => $loan, 'id_member' => $id]);
+            $query = $this->dt->getWhere(['' . $this->table . '.id_loan' => $loan, 'loan.id_member' => $id]);
             return $query->getResult();
         }
     }

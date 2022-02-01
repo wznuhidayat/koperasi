@@ -85,6 +85,7 @@
                             <div class="row">
                                 <div class="col-12 table-responsive">
                                     <form id="frm-example" method="POST" action="/main/invoiceinstallment">
+                                    <input type="hidden" id="id_member_hidden" name="id_member">
                                     <input type="hidden" id="id_admin" name="id_admin" value="<?= session()->get('id_admin') ?>">
                                         <table class="table table-bordered table-hover" id="listloantable">
                                             <thead>

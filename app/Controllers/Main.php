@@ -1107,6 +1107,8 @@ class Main extends BaseController
                     $dataTransaction = [
                         'id_installmentpay' => $str,
                         'id_admin' => $this->request->getPost('id_admin'),
+                        'id_member' => $this->request->getPost('id_member'),
+                        
                         'created_at' => date('Y/m/d h:i:s'),
                     ];
                     $this->M_installmentpay->saveinstallment($dataTransaction);
@@ -1431,7 +1433,7 @@ class Main extends BaseController
                 $row = [];
 
                 $btn = " <td class=\"project-actions\">
-                    <a class=\"btn btn-primary btn-sm\" href=\"/main/installment/invoice/" . $list->id_installment . "\">
+                    <a class=\"btn btn-primary btn-sm\" href=\"/main/InstallmentPay/invoice/" . $list->id_installmentpay . "\">
                         <i class=\"fas fa-folder\">
                         </i>
                         View
@@ -1442,10 +1444,9 @@ class Main extends BaseController
                 $row[] = $no;
                 $row[] = $list->id_installmentpay;
                 $row[] = $list->member_name;
-                $amt = " <td>Rp. " . number_format($list->amount, 0, ',', '.') . "</td>";
-                $row[] = $amt;
-                // $created = "<td >" . tanggal(date($list->paid_at)) . "</td>";
-                $row[] = $amt;
+                $created = "<td >" . tanggal(date($list->created_at)) . "</td>";
+                $row[] = $list->admin_name;
+                $row[] = $created;
                 $row[] = $btn;
                 $row[] = '';
                 $data[] = $row;
